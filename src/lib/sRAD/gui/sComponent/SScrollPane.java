@@ -13,6 +13,11 @@ public class SScrollPane extends JScrollPane {
         setProperties(x, y, width, height);
     }
 
+    public SScrollPane(int x, int y, int width, int height, Component component) {
+        setProperties(x, y, width, height);
+        setViewportView(component);
+    }
+
     public void setProperties(int x, int y, int width, int height){
         setBounds(x, y, width, height);
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -20,7 +25,7 @@ public class SScrollPane extends JScrollPane {
         verticalScrollBar.setUI(getCustomScroll());
         horizontalScrollBar.setUI(getCustomScroll());
         setBackground(DTII1);
-        setBorder(semiDarkGray2Border);
+        setBorder(DTII4Border);
     }
 
     //Advanced graphic builder

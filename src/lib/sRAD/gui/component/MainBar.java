@@ -14,17 +14,13 @@ import static lib.sRAD.gui.component.Resource.*;
 public class MainBar extends SPanel {
 
     private final SPanel mainPanel;
-
     private final ImageIcon iBtExitOn = new ImageIcon("resources/mainBar/btExitOn.png");
     private final ImageIcon iBtExitOff = new ImageIcon("resources/mainBar/btExitOff.png");
     private final ImageIcon iBtMinOff = new ImageIcon("resources/mainBar/btMinOff.png");
     private final ImageIcon iBtMinOn = new ImageIcon("resources/mainBar/btMinOn.png");
-
     private final SLabel lLogo = new SLabel();
     private final SLabel lTitle = new SLabel();
-
     private final SButton btExit = new SButton();
-
     private int x0 = 0;
     private int y0 = 0;
 
@@ -33,7 +29,8 @@ public class MainBar extends SPanel {
     }
 
     public MainBar(SFrame frame, int screenWidth, Boolean move, Color backgroundColor, Color borderColor) {
-        mainPanel = new SPanel(0, 0, screenWidth, 27, backgroundColor, null);
+        super();
+        mainPanel = new SPanel(0, 0, screenWidth, 27, backgroundColor, null, null);
 
         if(move){
             mainPanel.addMouseMotionListener(new MouseMotionListener() {
@@ -125,7 +122,7 @@ public class MainBar extends SPanel {
     }
 
     public void setTitle(String title) {
-        lTitle.setProperties(350, 0, 570, 28, title, fontTitleMini, Theme.fmb, SwingConstants.CENTER);
+        lTitle.setProperties(370, 0, 570, 28, title, fontTitleMini, Theme.mbFg, SwingConstants.CENTER);
     }
 
 }

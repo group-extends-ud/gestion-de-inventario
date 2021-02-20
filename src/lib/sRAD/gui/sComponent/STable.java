@@ -2,7 +2,6 @@ package lib.sRAD.gui.sComponent;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -64,7 +63,7 @@ public class STable extends JScrollPane {
 
         setBackground(DTII4);
         viewport.setBackground(DTII1);
-        setBorder(semiDarkGray2Border);
+        setBorder(DTII4Border);
         verticalScrollBar.setUI(getCustomScroll());
         horizontalScrollBar.setUI(getCustomScroll());
     }

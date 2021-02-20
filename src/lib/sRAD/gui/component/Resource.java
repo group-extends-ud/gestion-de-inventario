@@ -84,8 +84,8 @@ public class Resource {
     public final static Color darkWhite = new Color(187,187,187); //main color font
 // -----------------------------------------FONT------------------------------------------------------------------------
     //Windows standard
-    public final static Font fontTitle = new Font("Arial", Font.BOLD, 28);
-    public final static Font fontTitle1 = new Font("Gill Sans MT Condensed", Font.PLAIN, 64);
+    public final static Font fontTitle = new Font("Gill Sans MT Condensed", Font.BOLD, 64);
+    public final static Font fontTitle1 = new Font("Arial", Font.BOLD, 28);
     public final static Font fontTitle2 = new Font("Arial", Font.BOLD, 18);
     public final static Font fontTitleMini = new Font("Arial", Font.PLAIN, 14); //used in title of mainBar, buttons
     public final static Font fontSubtitle = new Font("Gill Sans MT Condensed", Font.PLAIN, 32);
@@ -112,14 +112,17 @@ public class Resource {
     public final static Cursor handCursor = new Cursor(12);
     public final static Cursor moveCursor = new Cursor(13);
 
-//----------------------------------------BORDER----------------------------------------------------------------
+//----------------------------------------BORDER (B)----------------------------------------------------------------
     //standard
     public final static Border blackBorder = BorderFactory.createLineBorder(black, 2, false);
+
+    //Dark Theme based on Intellij Idea
     public final static Border transparentBorder = BorderFactory.createLineBorder(transparent, 2, false);
     public final static Border blackBorderTransparent = BorderFactory.createLineBorder(blackTransparent, 2, false);
-    public final static Border semiDarkGrayBlueBorder = BorderFactory.createLineBorder(DTII1, 2, false);
+    public final static Border DTII1Border = BorderFactory.createLineBorder(DTII1, 2, false);
     public final static Border grayBorder = BorderFactory.createLineBorder(gray, 2, false);
-    public final static Border semiDarkGray2Border = BorderFactory.createLineBorder(DTII4, 2, false);
+    public final static Border DTII4Border = BorderFactory.createLineBorder(DTII4, 2, false);
+    public final static Border DTII4BorderRounded = BorderFactory.createLineBorder(DTII4, 2, true);
     public final static Border darkGrayBorder = BorderFactory.createLineBorder(darkGray, 2, false);
 
     //tema amigable
