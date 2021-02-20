@@ -125,6 +125,7 @@ public class Resource {
     public final static Border DTII4BorderRounded = BorderFactory.createLineBorder(DTII4, 2, true);
     public final static Border darkGrayBorder = BorderFactory.createLineBorder(darkGray, 2, false);
 
+
     //tema amigable
     public final static Border ta2Border = BorderFactory.createLineBorder(ta2, 2, false);
     public final static Border ta4Border = BorderFactory.createLineBorder(ta4, 2, false);

@@ -19,8 +19,8 @@ public class Controller extends SFrame {
     private SLabel lBackground;
 
     private Controller() {
-        //cargar recursos
-        lCajas = new SLabel(0, 30, new ImageIcon("resources/loginBackground.jpg"));
+        //cargar recursos y ajustes
+        lCajas = new SLabel(0, 0, new ImageIcon("resources/loginBackground.jpg"));
 
         //iniciar gui
         lBackground = lCajas;
@@ -29,7 +29,6 @@ public class Controller extends SFrame {
         add(pLogin);
         add(lBackground);
 
-        setMainBar("Gestor de inventario");
         setProperties();
     }
 

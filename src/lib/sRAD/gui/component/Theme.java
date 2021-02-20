@@ -21,4 +21,7 @@ public class Theme {
     public static Color fFg = darkWhite; //foreground text
     //main bar
     public static Color mbFg = gray; //foreground
+    //tabbed pane
+    public static Color tpBg = wp4;
+    public static Color tpFg = black;
 }
