@@ -24,28 +24,41 @@ public class Controller extends SFrame {
         lCajas = new SLabel(0, 0, new ImageIcon("resources/loginBackground.jpg"));
         lLineas = new SLabel(0, 0, new ImageIcon("resources/appWallpaper.png"));
 
-        //iniciar gui
-        lBackground = lCajas;
+        setProperties();
+        reset();
+    }
+
+    public void reset() {
+        //borra
+        remove(lLineas);
+        if (View.view != null) {
+            remove(View.view.tpTabs);
+            remove(View.view.btAdd);
+            remove(View.view.btClose);
+            if (View.view.btRemove != null) {
+                remove(View.view.btRemove);
+                remove(View.view.btSetting);
+            }
+        }
+
+        //dibuja
         pLogin = new PLogin();
 
         add(pLogin);
-        add(lBackground);
+        add(lCajas);
 
-        setProperties();
+        repaint();
     }
 
     protected static void ingresar(int estado) {
-        controller.remove(controller.lBackground);
+        controller.remove(controller.lCajas);
         controller.remove(controller.pLogin);
         switch (estado) {
             case DataBase.USUARIO:
                 View.init();
                 break;
-            case DataBase.ADMINISTRADOR:
-                ViewAdmin.init();
-                break;
             default:
-                init();
+                ViewAdmin.init();
                 break;
         }
         controller.add(controller.lLineas);
@@ -53,7 +66,12 @@ public class Controller extends SFrame {
     }
 
     public static void init() {
-        controller = new Controller();
+        if(controller == null) {
+            controller = new Controller();
+        }
+        else {
+            controller.reset();
+        }
     }
 
     public static void agregar(Component component) {
