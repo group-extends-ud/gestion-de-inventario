@@ -15,7 +15,7 @@ public class DataBase {
      * INVALIDO si no corresponde a ninguna cuenta.
      */
     public static int validarIngreso(String nombre, String password) {
-        return USUARIO; //falta implementar
+        return ADMINISTRADOR; //falta implementar
     }
 
 }

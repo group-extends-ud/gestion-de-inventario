@@ -1,9 +1,6 @@
 package app.gui;
 
-import lib.sRAD.gui.sComponent.SLabel;
-import lib.sRAD.gui.sComponent.SPanel;
-import lib.sRAD.gui.sComponent.SScrollPane;
-import lib.sRAD.gui.sComponent.STabbedPane;
+import lib.sRAD.gui.sComponent.*;
 
 import javax.swing.*;
 
@@ -16,7 +13,6 @@ public class View {
     protected SPanel pEstadistica;
 
     protected View() {
-        SLabel lBackground = new SLabel(0, 0, new ImageIcon("resources/appWallpaper.png"));
 
         pMovimiento = new SPanel(SPanel.INTERNO, 0, 0, 848, 608);
         SScrollPane spMovimiento = new SScrollPane(216, 90, 864, 624, pMovimiento);
@@ -24,8 +20,10 @@ public class View {
         tpTabs = new STabbedPane(STabbedPane.DECORADO, 216, 30, 866, 656);
         tpTabs.addTab("Movimientos", spMovimiento);
 
+        SButton btAdd = new SButton(1140, 210, new ImageIcon("resources/add.png"));
+        Controller.agregar(btAdd);
+
         Controller.agregar(tpTabs);
-        Controller.agregar(lBackground);
     }
 
     public static void init() {

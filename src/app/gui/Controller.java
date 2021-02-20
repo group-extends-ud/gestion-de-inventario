@@ -14,6 +14,7 @@ public class Controller extends SFrame {
     public static Controller controller;
     //recursos
     private SLabel lCajas;
+    private SLabel lLineas;
     //componentes
     private SPanel pLogin;
     private SLabel lBackground;
@@ -21,6 +22,7 @@ public class Controller extends SFrame {
     private Controller() {
         //cargar recursos y ajustes
         lCajas = new SLabel(0, 0, new ImageIcon("resources/loginBackground.jpg"));
+        lLineas = new SLabel(0, 0, new ImageIcon("resources/appWallpaper.png"));
 
         //iniciar gui
         lBackground = lCajas;
@@ -46,6 +48,7 @@ public class Controller extends SFrame {
                 init();
                 break;
         }
+        controller.add(controller.lLineas);
         controller.repaint();
     }
 
