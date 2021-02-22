@@ -12,15 +12,17 @@ import static lib.sRAD.gui.component.Resource.fontTitle;
 public class Controller extends SFrame {
 
     public static Controller controller;
-    //recursos
+    // recursos
     private SLabel lCajas;
     private SLabel lLineas;
-    //componentes
+    // componentes
     private SPanel pLogin;
     private SLabel lBackground;
 
+    private static DataBase data;
+
     private Controller() {
-        //cargar recursos y ajustes
+        // cargar recursos y ajustes
         lCajas = new SLabel(0, 0, new ImageIcon("resources/loginBackground.jpg"));
         lLineas = new SLabel(0, 0, new ImageIcon("resources/appWallpaper.png"));
 
@@ -29,7 +31,7 @@ public class Controller extends SFrame {
     }
 
     public void reset() {
-        //borra
+        // borra
         remove(lLineas);
         if (View.view != null) {
             remove(View.view.tpTabs);
@@ -41,7 +43,7 @@ public class Controller extends SFrame {
             }
         }
 
-        //dibuja
+        // dibuja
         pLogin = new PLogin();
 
         add(pLogin);
@@ -51,6 +53,14 @@ public class Controller extends SFrame {
     }
 
     protected static void ingresar(int estado) {
+
+        try {
+            DataBase.query("SELECT * FROM producto;");
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         controller.remove(controller.lCajas);
         controller.remove(controller.pLogin);
         switch (estado) {
@@ -87,8 +97,6 @@ class PLogin extends SPanel {
     public PLogin() {
 
         super(SPanel.EXTERNO, 433, 105, 433, 530);
-
-        DataBase data = new DataBase();
 
         SLabel lLogin = new SLabel(160, 52, 150, 50, "LOGIN", fontTitle);
         add(lLogin);

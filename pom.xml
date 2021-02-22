@@ -21,13 +21,6 @@
   <dependencies>
 
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <version>42.2.16</version>
@@ -38,12 +31,6 @@
   <build>
 
     <sourceDirectory>src</sourceDirectory>
-
-    <resources>
-      <resource>
-        <directory>resources</directory>
-      </resource>
-    </resources>
 
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
