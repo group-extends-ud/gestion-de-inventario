@@ -1,21 +1,49 @@
 package app;
 
+import java.util.Properties;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class DataBase {
 
-    public static final int ADMINISTRADOR = 2;
-    public static final int USUARIO = 1;
-    public static final int INVALIDO = 0;
+    private static Connection connection;
+    private static DataBase dataBase;
 
-    /**
-     * Valida si los datos corresponden a alguna cuenta registrada válida, para permitir acceso a personal autorizado.
-     * @param nombre nombre del usuario.
-     * @param password contrasenia del usuario.
-     * @return ADMINISTRADOR si los datos corresponden a una cuenta de administrador.
-     * USUARIO si los datos corresponden a una cuenta de cajero.
-     * INVALIDO si no corresponde a ninguna cuenta.
-     */
-    public static int validarIngreso(String nombre, String password) {
-        return ADMINISTRADOR; //falta implementar
+    private DataBase(String user, String password) throws SQLException, ClassNotFoundException {
+        Class.forName("org.postgresql.Driver");
+
+        Properties properties = new Properties();
+
+        properties.setProperty("user", user);
+        properties.setProperty("password", password);
+        
+        
+        connection = DriverManager.getConnection("jdbc:postgresql://localhost/Sales System", properties);
+    }
+
+    public static void query(String query) throws SQLException {
+
+        Statement statement = connection.createStatement();
+
+        ResultSet response = statement.executeQuery(query);
+
+        while(response.next()) {
+            System.out.println(response.getString("nombre"));
+        }
+
+        response.close();
+        statement.close();
+    }
+
+    public static int validarIngreso(String username, String password) {
+        return 1;
+    }
+
+    public static void connect(String user, String password) throws ClassNotFoundException, SQLException {
+        dataBase = new DataBase(user, password);
     }
 
 }
