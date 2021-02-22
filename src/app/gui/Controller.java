@@ -54,7 +54,7 @@ public class Controller extends SFrame {
         controller.remove(controller.lCajas);
         controller.remove(controller.pLogin);
         switch (estado) {
-            case DataBase.USUARIO:
+            case 2:
                 View.init();
                 break;
             default:
@@ -85,7 +85,10 @@ public class Controller extends SFrame {
 class PLogin extends SPanel {
 
     public PLogin() {
+
         super(SPanel.EXTERNO, 433, 105, 433, 530);
+
+        DataBase data = new DataBase();
 
         SLabel lLogin = new SLabel(160, 52, 150, 50, "LOGIN", fontTitle);
         add(lLogin);
