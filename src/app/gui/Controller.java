@@ -7,6 +7,7 @@ import javax.swing.*;
 
 import java.awt.*;
 
+import static lib.sRAD.gui.component.Resource.LST;
 import static lib.sRAD.gui.component.Resource.fontTitle;
 
 public class Controller extends SFrame {
@@ -95,10 +96,9 @@ public class Controller extends SFrame {
 class PLogin extends SPanel {
 
     public PLogin() {
-
         super(SPanel.EXTERNO, 433, 105, 433, 530);
 
-        SLabel lLogin = new SLabel(160, 52, 150, 50, "LOGIN", fontTitle);
+        SLabel lLogin = new SLabel(160, 52, 150, 50, "LOGIN", LST);
         add(lLogin);
 
         SLabel lUsuario = new SLabel(90, 160, 250, 28, "Usuario");

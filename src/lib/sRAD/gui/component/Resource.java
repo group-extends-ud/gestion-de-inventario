@@ -98,6 +98,7 @@ public class Resource {
     public final static Font fontTextBold = new Font("Calibri", Font.BOLD, 18);
 
     //Linux standard
+    public final static Font LST = new Font("Gill Sans MT Condensed", Font.BOLD, 40);//linux standard title
     public final static Font fontTextLinux = new Font("Liberation Serif", Font.PLAIN, 18);
     public final static Font fontTextBoldLinux = new Font("Liberation Serif", Font.BOLD, 18);
 

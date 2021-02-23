@@ -24,6 +24,14 @@ public class View {
         tpTabs.addTab("Movimientos", spMovimiento);
 
         btAdd = new SButton(1140, 200, new ImageIcon("resources/add.png"));
+        btAdd.addActionListener( (e) -> {
+            if (tpTabs.isEnabledAt(0) || tpTabs.isEnabledAt(2)) {
+                addMovimiento();
+            }
+            else {
+                addItem();
+            }
+        });
         Controller.agregar(btAdd);
 
         btClose = new SButton(1140, 500, new ImageIcon("resources/close.png"));
@@ -33,6 +41,14 @@ public class View {
         Controller.agregar(btClose);
 
         Controller.agregar(tpTabs);
+    }
+
+    public void addItem() {
+
+    }
+
+    public void addMovimiento() {
+
     }
 
     public static void init() {

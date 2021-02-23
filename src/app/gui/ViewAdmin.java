@@ -18,13 +18,45 @@ public class ViewAdmin extends View{
         SScrollPane spEstadistica = new SScrollPane(216, 90, 864, 624, pEstadistica);
 
         btRemove = new SButton(1140, 300, new ImageIcon("resources/delete.png"));
+        btRemove.addActionListener( (e) -> {
+            if (tpTabs.isEnabledAt(0) || tpTabs.isEnabledAt(2)) {
+                removerMovimiento();
+            }
+            else {
+                removerItem();
+            }
+        });
         Controller.agregar(btRemove);
 
         btSetting = new SButton(1140, 400, new ImageIcon("resources/ajustar.png"));
+        btSetting.addActionListener( (e) -> {
+            if (tpTabs.isEnabledAt(0) || tpTabs.isEnabledAt(2)) {
+                ajustarMovimiento();
+            }
+            else {
+                ajustarItem();
+            }
+        });
         Controller.agregar(btSetting);
 
         tpTabs.addTab("Inventario", spInventario);
         tpTabs.addTab("Estadística", spEstadistica);
+
+    }
+
+    private void ajustarItem() {
+
+    }
+
+    private void ajustarMovimiento() {
+
+    }
+
+    public void removerItem() {
+
+    }
+
+    public void removerMovimiento() {
 
     }
 
