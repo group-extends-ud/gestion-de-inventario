@@ -34,7 +34,28 @@ public class BackController {
     }
 
     public static void insertarProducto(String nombre, Double precio, int stock, int stockMinimo) {
-        //por implementar :D
+        //por implementar
+    }
+
+    public static String[] getNombresProductos() {
+        //por implementar
+        String[] productos = {"Arroz", "Papa", "Néctar"}; //valores para hacer pruebas (mientras se implementa)
+        return productos;
+    }
+
+    public static double getPrecio(String nombreProducto) {
+        //por implementar
+        System.out.println(nombreProducto);//para hacer pruebas
+        return 1000.0;
+    }
+
+    public static int getStock(String nombreProducto) {
+        //por implementar
+        return 0;
+    }
+
+    public static void insertarMovimiento(String nombreProducto, int cantidad) {
+        //por implementar
     }
 }
 
