@@ -14,10 +14,10 @@ import static lib.sRAD.gui.component.Resource.*;
 public class MainBar extends SPanel {
 
     private final SPanel mainPanel;
-    private final ImageIcon iBtExitOn = new ImageIcon("resources/mainBar/btExitOn.png");
-    private final ImageIcon iBtExitOff = new ImageIcon("resources/mainBar/btExitOff.png");
-    private final ImageIcon iBtMinOff = new ImageIcon("resources/mainBar/btMinOff.png");
-    private final ImageIcon iBtMinOn = new ImageIcon("resources/mainBar/btMinOn.png");
+    private final ImageIcon iBtExitOn = new ImageIcon("resources/sRAD/mainBar/btExitOn.png");
+    private final ImageIcon iBtExitOff = new ImageIcon("resources/sRAD/mainBar/btExitOff.png");
+    private final ImageIcon iBtMinOff = new ImageIcon("resources/sRAD/mainBar/btMinOff.png");
+    private final ImageIcon iBtMinOn = new ImageIcon("resources/sRAD/mainBar/btMinOn.png");
     private final SLabel lLogo = new SLabel();
     private final SLabel lTitle = new SLabel();
     private final SButton btExit = new SButton();

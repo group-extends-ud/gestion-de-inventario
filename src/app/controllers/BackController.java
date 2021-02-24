@@ -17,7 +17,7 @@ public class BackController {
     public static void init(String[] args) throws ClassNotFoundException, SQLException {
         controller = new BackController(args[0], args[1]);
     }
-
+/*
     public static void getProductos() throws SQLException {
 
         ResultSet response = database.getAll("Producto");
@@ -28,11 +28,14 @@ public class BackController {
 
         response.close();
     }
-
+*/
     public static int validarIngreso(String user, String password) {
         return 1;
     }
 
+    public static void insertarProducto(String nombre, Double precio, int stock, int stockMinimo) {
+        //por implementar :D
+    }
 }
 
 class DatabaseController {

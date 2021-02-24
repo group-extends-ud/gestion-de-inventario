@@ -8,17 +8,15 @@ import javax.swing.*;
 import java.awt.*;
 
 import static lib.sRAD.gui.component.Resource.LST;
-import static lib.sRAD.gui.component.Resource.fontTitle;
 
 public class Controller extends SFrame {
 
     public static Controller controller;
     // recursos
-    private SLabel lCajas;
-    private SLabel lLineas;
+    private final SLabel lCajas;
+    private final SLabel lLineas;
     // componentes
     private SPanel pLogin;
-    private SLabel lBackground;
 
     private Controller() {
         // cargar recursos y ajustes
@@ -55,13 +53,10 @@ public class Controller extends SFrame {
 
         controller.remove(controller.lCajas);
         controller.remove(controller.pLogin);
-        switch (estado) {
-            case 2:
-                View.init();
-                break;
-            default:
-                ViewAdmin.init();
-                break;
+        if (estado == 2) {
+            View.init();
+        } else {
+            ViewAdmin.init();
         }
         controller.add(controller.lLineas);
         controller.repaint();
@@ -111,7 +106,7 @@ class PLogin extends SPanel {
                 Controller.ingresar(estado);
             }
             else {
-                JOptionPane.showMessageDialog(null, "Datos incorrectos", "Error", 0);
+                JOptionPane.showMessageDialog(null, "Datos incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
                 tfUsuario.setText("");
                 tfPassword.setText("");
             }

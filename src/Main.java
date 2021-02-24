@@ -10,7 +10,7 @@ public class Main {
 
         BackController.init(args);
 
-        BackController.getProductos();
+        //BackController.getProductos();
 
 	    Controller.init();
     }

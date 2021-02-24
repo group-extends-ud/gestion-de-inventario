@@ -1,7 +1,6 @@
 package lib.sRAD.gui.sComponent;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 
 import static lib.sRAD.gui.component.Theme.*;

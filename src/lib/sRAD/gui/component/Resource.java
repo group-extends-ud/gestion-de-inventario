@@ -83,15 +83,15 @@ public class Resource {
     public final static Color lightBlueGray = new Color(104,150,186); //numbers font
     public final static Color darkWhite = new Color(187,187,187); //main color font
 // -----------------------------------------FONT------------------------------------------------------------------------
-    //Windows standard
+    //Windows standard (es windows porque funciona en windows, es decir, no se ha basado en fuentes del SO)
     public final static Font fontTitle = new Font("Gill Sans MT Condensed", Font.BOLD, 64);
     public final static Font fontTitle1 = new Font("Arial", Font.BOLD, 28);
     public final static Font fontTitle2 = new Font("Arial", Font.BOLD, 18);
     public final static Font fontTitleMini = new Font("Arial", Font.PLAIN, 14); //used in title of mainBar, buttons
-    public final static Font fontSubtitle = new Font("Gill Sans MT Condensed", Font.PLAIN, 32);
     public final static Font fontVersion = new Font("Arial", Font.PLAIN, 14);
 
     public final static Font fontText = new Font("Arial", Font.PLAIN, 17);
+    public final static Font WSFS = new Font("Arial", Font.ITALIC, 20); //windows standard font subtitle
     public final static Font fontEcuation = new Font("Arial Narrow", Font.ITALIC, 20);
     public final static Font fontTextMini = new Font("Arial Narrow", Font.PLAIN, 14);
     public final static Font fontTextBig = new Font("Arial", Font.PLAIN, 18);
@@ -125,7 +125,6 @@ public class Resource {
     public final static Border DTII4Border = BorderFactory.createLineBorder(DTII4, 2, false);
     public final static Border DTII4BorderRounded = BorderFactory.createLineBorder(DTII4, 2, true);
     public final static Border darkGrayBorder = BorderFactory.createLineBorder(darkGray, 2, false);
-
 
     //tema amigable
     public final static Border ta2Border = BorderFactory.createLineBorder(ta2, 2, false);
