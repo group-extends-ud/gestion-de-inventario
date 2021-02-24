@@ -13,6 +13,9 @@ DROP TABLE IF EXISTS FacturaProducto CASCADE
 DROP TABLE IF EXISTS Producto CASCADE
 ;
 
+DROP TABLE IF EXISTS Usuario CASCADE
+;
+
 /* Create Tables */
 
 CREATE TABLE Cliente
@@ -118,7 +121,9 @@ COMMENT ON TABLE FacturaProducto
 ;
 
 COMMENT ON TABLE Producto
-	IS 'tabla donde se almacenan todos los productos disponibles en la tienda'
+	IS 'Tabla donde se almacenan todos los productos disponibles en la tienda'
 ;
 
-INSERT INTO producto(IDProducto, Nombre, Precio, Strock) VALUES(1, 'Arroz', 1020, 50);
+COMMENT ON TABLE Cliente
+	IS 'Tabla que almacena los usuarios Empleado o Administrador de la tienda'
+;

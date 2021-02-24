@@ -8,10 +8,10 @@ import app.DataBase;
 public class BackController {
 
     public static BackController controller;
-    private static DataBase database;
+    private static DatabaseController database;
 
     private BackController(String user, String password) throws ClassNotFoundException, SQLException {
-        database = new DataBase(user, password);
+        database = new DatabaseController(user, password);
     }
 
     public static void init(String[] args) throws ClassNotFoundException, SQLException {
