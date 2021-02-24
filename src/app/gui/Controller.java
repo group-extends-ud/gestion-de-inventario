@@ -1,6 +1,7 @@
 package app.gui;
 
 import app.controllers.BackController;
+import lib.sRAD.gui.component.MainBar;
 import lib.sRAD.gui.sComponent.*;
 
 import javax.swing.*;
@@ -19,6 +20,10 @@ public class Controller extends SFrame {
     private SPanel pLogin;
 
     private Controller() {
+        //añade botones básicos de la ventana
+        add(MainBar.getBtExit());
+        add(MainBar.getBtMin(this));
+
         // cargar recursos y ajustes
         lCajas = new SLabel(0, 0, new ImageIcon("resources/loginBackground.jpg"));
         lLineas = new SLabel(0, 0, new ImageIcon("resources/appWallpaper.png"));
