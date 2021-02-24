@@ -102,7 +102,7 @@ public class DataBase {
 
             case "Producto" -> "IDProducto = ?";
 
-            default -> this.getIDTable("Factura") + this.getIDTable("Producto");
+            default -> this.getIDTable("Factura") + " AND " + this.getIDTable("Producto");
 
         };
 

@@ -2,7 +2,7 @@ package app.inventario;
 
 import java.util.Date;
 
-public class Factura {
+public class Factura extends General {
 
     private String idfactura;
     private Date fecha;
@@ -44,9 +44,23 @@ public class Factura {
         this.productos = productos;
     }
 
+    public static String[] toArrayAtributes() {
+
+        return toArrayAtributes(Factura.class.getDeclaredFields());
+
+    }
+
+    public Object[] toArray() {
+
+        Object[] objects = { idfactura, fecha, cliente, productos };
+
+        return objects;
+
+    }
+
 }
 
-class FacturaProducto {
+class FacturaProducto extends General {
 
     private String valor;
     private int cantidad;
@@ -77,6 +91,21 @@ class FacturaProducto {
     }
     public void setProducto(Producto producto) {
         this.producto = producto;
+    }
+
+    public static String[] toArrayAtributes() {
+
+        return toArrayAtributes(FacturaProducto.class.getDeclaredFields());
+
+    }
+
+    @Override
+    public Object[] toArray() {
+
+        Object[] objects = { valor, cantidad, producto };
+
+        return objects;
+
     }
 
 }

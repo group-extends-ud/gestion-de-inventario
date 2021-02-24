@@ -1,6 +1,6 @@
 package app.inventario;
 
-public class Usuario {
+public class Usuario extends General {
 
     private String userName;
     private boolean isAdmin;
@@ -22,6 +22,21 @@ public class Usuario {
     }
     public void setAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
+    }
+
+    public static String[] toArrayAtributes() {
+
+        return toArrayAtributes(Usuario.class.getDeclaredFields());
+
+    }
+
+    @Override
+    public Object[] toArray() {
+
+        Object[] objects = { userName, isAdmin };
+
+        return objects;
+
     }
     
 }

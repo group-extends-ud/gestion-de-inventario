@@ -2,8 +2,14 @@ package app.controllers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import app.DataBase;
+import app.inventario.Cliente;
+import app.inventario.Factura;
+import app.inventario.General;
+import app.inventario.Producto;
+import app.inventario.Usuario;
 
 public class BackController {
 
@@ -21,7 +27,7 @@ public class BackController {
         controller = new BackController(args[0], args[1]);
     }
 
-    public static void getAll(Table table) throws SQLException {
+    public <T> T[] getAll(Table table) throws SQLException {
         ResultSet response = switch (table) {
 
             case PRODUCTO -> database.Producto();
@@ -30,16 +36,29 @@ public class BackController {
 
             case FACTURA -> database.Factura();
 
+            case USUARIO -> database.Usuario();
+
             default -> throw new SQLException();
         };
 
-        while(response.next()) {
+        return BuildModels.<T>BuildMultiple(table, response);
+    }
 
-            System.out.println(response.getString(2));
+    public <T> T getById(Table table, String id) throws SQLException {
+        ResultSet response = switch (table) {
 
-        }
+            case PRODUCTO -> database.Producto(id);
 
-        response.close();
+            case CLIENTE -> database.Cliente(id);
+
+            case FACTURA -> database.Factura(id);
+
+            case USUARIO -> database.Usuario(id);
+
+            default -> throw new SQLException();
+        };
+
+        return BuildModels.<T>BuildOne(table, response);
     }
 
     public static int validarIngreso(String user, String password) {
@@ -125,6 +144,140 @@ class DatabaseController {
     public ResultSet Usuario(String id) throws SQLException {
 
         return this.database.getByID("Usuario", id);
+
+    }
+
+}
+
+class BuildModels {
+
+    public static <T> T BuildOne(BackController.Table className, ResultSet response) throws SQLException {
+
+        String[] atributes;
+        General object = null;
+
+        while(response.next()) {
+
+            object = switch(className) {
+
+                case CLIENTE -> {
+                    atributes = Cliente.toArrayAtributes();
+                    yield new Cliente
+                    (
+                        response.getString(atributes[0]),
+                        response.getString(atributes[1]),
+                        response.getString(atributes[2])
+                    );
+                }
+    
+                case FACTURA -> {
+                    atributes = Factura.toArrayAtributes();
+    
+                    yield null /*new Factura
+                    (
+                        response.getString(atributes[0]),
+                        response.getDate(atributes[1]),
+                        response.getString(atributes[2]),
+                        response.getString(atributes[3])
+                    )*/;
+                }
+    
+                case PRODUCTO -> {
+                    atributes = Producto.toArrayAtributes();
+    
+                    yield new Producto
+                    (
+                        response.getString(atributes[0]),
+                        response.getString(atributes[1]),
+                        response.getString(atributes[2]),
+                        response.getInt(atributes[3]),
+                        response.getInt(atributes[4])
+                    );
+                }
+    
+                case USUARIO -> {
+                    atributes = Usuario.toArrayAtributes();
+    
+                    yield new Usuario
+                    (
+                        response.getString(atributes[0]),
+                        response.getBoolean(atributes[1])
+                    );
+                }
+    
+                default -> null;
+    
+            };
+
+        }
+
+        return (T)object;
+
+    }
+
+    public static <T> T[] BuildMultiple(BackController.Table className, ResultSet response) throws SQLException {
+
+        String[] atributes;
+        ArrayList<General> objects = new ArrayList<General>();
+
+        while(response.next()) {
+
+            objects.add(switch(className) {
+
+                case CLIENTE -> {
+                    atributes = Cliente.toArrayAtributes();
+                    yield new Cliente
+                    (
+                        response.getString(atributes[0]),
+                        response.getString(atributes[1]),
+                        response.getString(atributes[2])
+                    );
+                }
+    
+                case FACTURA -> {
+                    atributes = Factura.toArrayAtributes();
+    
+                    yield null /*new Factura
+                    (
+                        response.getString(atributes[0]),
+                        response.getDate(atributes[1]),
+                        response.getString(atributes[2]),
+                        response.getString(atributes[3])
+                    )*/;
+                }
+    
+                case PRODUCTO -> {
+                    atributes = Producto.toArrayAtributes();
+    
+                    yield new Producto
+                    (
+                        response.getString(atributes[0]),
+                        response.getString(atributes[1]),
+                        response.getString(atributes[2]),
+                        response.getInt(atributes[3]),
+                        response.getInt(atributes[4])
+                    );
+                }
+    
+                case USUARIO -> {
+                    atributes = Usuario.toArrayAtributes();
+    
+                    yield new Usuario
+                    (
+                        response.getString(atributes[0]),
+                        response.getBoolean(atributes[1])
+                    );
+                }
+    
+                default -> null;
+    
+            });
+
+        }
+
+
+
+        return (T[]) objects.toArray();
 
     }
 

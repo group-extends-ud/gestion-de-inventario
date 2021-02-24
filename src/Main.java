@@ -1,4 +1,5 @@
 import app.gui.Controller;
+import app.inventario.Producto;
 
 import java.sql.SQLException;
 
@@ -11,7 +12,9 @@ public class Main {
 
         BackController.init(args);
 
-        BackController.getAll(Table.PRODUCTO);
+        Producto producto = BackController.controller.<Producto>getById(Table.PRODUCTO, "1");
+
+        System.out.println(producto.getNombre());
 
 	    Controller.init();
     }

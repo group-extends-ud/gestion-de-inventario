@@ -1,6 +1,6 @@
 package app.inventario;
 
-public class Producto {
+public class Producto extends General {
 
     private String idproducto, nombre, precio;
     private int stock, stockMinimo;
@@ -46,6 +46,21 @@ public class Producto {
     }
     public void setStockMinimo(int stockMinimo) {
         this.stockMinimo = stockMinimo;
+    }
+
+    public static String[] toArrayAtributes() {
+
+        return toArrayAtributes(Producto.class.getDeclaredFields());
+
+    }
+
+    @Override
+    public Object[] toArray() {
+
+        Object[] objects = { idproducto, nombre, precio, stock, stockMinimo };
+
+        return objects;
+
     }
 
 }

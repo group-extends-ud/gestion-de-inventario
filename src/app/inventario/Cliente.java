@@ -1,6 +1,6 @@
 package app.inventario;
 
-public class Cliente {
+public class Cliente extends General {
 
     private String idcliente, nombre, apellido;
 
@@ -30,5 +30,21 @@ public class Cliente {
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }
+
+    public static String[] toArrayAtributes() {
+
+        return toArrayAtributes(Cliente.class.getDeclaredFields());
+
+    }
+
+    @Override
+    public Object[] toArray() {
+
+        Object[] objects = { idcliente, nombre, apellido };
+
+        return objects;
+
+    }
+    
 
 }
