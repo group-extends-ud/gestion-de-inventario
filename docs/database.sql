@@ -55,7 +55,7 @@ CREATE TABLE Producto
 
 CREATE TABLE Usuario
 (
-	Email varchar(50) NOT NULL,
+	UserName varchar(50) NOT NULL,
 	Pass varchar(50) NOT NULL,
 	IsAdmin boolean NOT NULL DEFAULT false
 )

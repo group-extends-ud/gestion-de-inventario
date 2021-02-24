@@ -1,25 +1,29 @@
 package app.gui;
 
 import app.controllers.BackController;
+import lib.sRAD.gui.component.MainBar;
 import lib.sRAD.gui.sComponent.*;
 
 import javax.swing.*;
 
 import java.awt.*;
 
-import static lib.sRAD.gui.component.Resource.fontTitle;
+import static lib.sRAD.gui.component.Resource.LST;
 
 public class Controller extends SFrame {
 
     public static Controller controller;
     // recursos
-    private SLabel lCajas;
-    private SLabel lLineas;
+    private final SLabel lCajas;
+    private final SLabel lLineas;
     // componentes
     private SPanel pLogin;
-    private SLabel lBackground;
 
     private Controller() {
+        //añade botones básicos de la ventana
+        add(MainBar.getBtExit());
+        add(MainBar.getBtMin(this));
+
         // cargar recursos y ajustes
         lCajas = new SLabel(0, 0, new ImageIcon("resources/loginBackground.jpg"));
         lLineas = new SLabel(0, 0, new ImageIcon("resources/appWallpaper.png"));
@@ -54,13 +58,10 @@ public class Controller extends SFrame {
 
         controller.remove(controller.lCajas);
         controller.remove(controller.pLogin);
-        switch (estado) {
-            case 2:
-                View.init();
-                break;
-            default:
-                ViewAdmin.init();
-                break;
+        if (estado == 2) {
+            View.init();
+        } else {
+            ViewAdmin.init();
         }
         controller.add(controller.lLineas);
         controller.repaint();
@@ -86,10 +87,9 @@ public class Controller extends SFrame {
 class PLogin extends SPanel {
 
     public PLogin() {
-
         super(SPanel.EXTERNO, 433, 105, 433, 530);
 
-        SLabel lLogin = new SLabel(160, 52, 150, 50, "LOGIN", fontTitle);
+        SLabel lLogin = new SLabel(160, 52, 150, 50, "LOGIN", LST);
         add(lLogin);
 
         SLabel lUsuario = new SLabel(90, 160, 250, 28, "Usuario");
@@ -111,7 +111,7 @@ class PLogin extends SPanel {
                 Controller.ingresar(estado);
             }
             else {
-                JOptionPane.showMessageDialog(null, "Datos incorrectos", "Error", 0);
+                JOptionPane.showMessageDialog(null, "Datos incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
                 tfUsuario.setText("");
                 tfPassword.setText("");
             }
