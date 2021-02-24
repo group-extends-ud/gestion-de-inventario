@@ -3,6 +3,7 @@ import app.gui.Controller;
 import java.sql.SQLException;
 
 import app.controllers.BackController;
+import app.controllers.BackController.Table;
 
 public class Main {
 
@@ -10,7 +11,7 @@ public class Main {
 
         BackController.init(args);
 
-        BackController.getProductos();
+        BackController.getAll(Table.PRODUCTO);
 
 	    Controller.init();
     }

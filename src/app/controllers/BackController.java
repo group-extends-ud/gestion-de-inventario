@@ -9,6 +9,9 @@ public class BackController {
 
     public static BackController controller;
     private static DatabaseController database;
+    public static enum Table {
+        PRODUCTO, CLIENTE, USUARIO, FACTURA
+    }
 
     private BackController(String user, String password) throws ClassNotFoundException, SQLException {
         database = new DatabaseController(user, password);
@@ -18,12 +21,22 @@ public class BackController {
         controller = new BackController(args[0], args[1]);
     }
 
-    public static void getProductos() throws SQLException {
+    public static void getAll(Table table) throws SQLException {
+        ResultSet response = switch (table) {
 
-        ResultSet response = database.getAll("Producto");
+            case PRODUCTO -> database.Producto();
+
+            case CLIENTE -> database.Cliente();
+
+            case FACTURA -> database.Factura();
+
+            default -> throw new SQLException();
+        };
 
         while(response.next()) {
-            System.out.println(response.getString("Nombre"));
+
+            System.out.println(response.getString(2));
+
         }
 
         response.close();
@@ -76,6 +89,18 @@ class DatabaseController {
     public ResultSet Cliente(String id) throws SQLException {
 
         return this.database.getByID("Cliente", id);
+
+    }
+
+    public ResultSet Usuario() throws SQLException {
+
+        return this.database.getAll("Usuario");
+
+    }
+
+    public ResultSet Usuario(String id) throws SQLException {
+
+        return this.database.getByID("Usuario", id);
 
     }
 
