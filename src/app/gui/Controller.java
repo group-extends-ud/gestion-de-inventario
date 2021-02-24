@@ -1,6 +1,6 @@
 package app.gui;
 
-import app.DataBase;
+import app.controllers.BackController;
 import lib.sRAD.gui.sComponent.*;
 
 import javax.swing.*;
@@ -19,8 +19,6 @@ public class Controller extends SFrame {
     // componentes
     private SPanel pLogin;
     private SLabel lBackground;
-
-    private static DataBase data;
 
     private Controller() {
         // cargar recursos y ajustes
@@ -54,13 +52,6 @@ public class Controller extends SFrame {
     }
 
     protected static void ingresar(int estado) {
-
-        try {
-            DataBase.query("SELECT * FROM producto;");
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
 
         controller.remove(controller.lCajas);
         controller.remove(controller.pLogin);
@@ -115,7 +106,7 @@ class PLogin extends SPanel {
 
         SButton btIniciar = new SButton(120, 400, 200, 50, "Iniciar sesión");
         btIniciar.addActionListener(e -> {
-            int estado = DataBase.validarIngreso(tfUsuario.getText(), tfPassword.getClave());
+            int estado = BackController.validarIngreso(tfUsuario.getText(), tfPassword.getClave());
             if(estado > 0) {
                 Controller.ingresar(estado);
             }

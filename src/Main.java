@@ -1,13 +1,16 @@
 import app.gui.Controller;
-import app.DataBase;
+
+import java.sql.SQLException;
+
+import app.controllers.BackController;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException, SQLException {
 
-        try {
-            DataBase.connect(args[0], args[1]);
-        } catch (Exception e) {}
+        BackController.init(args);
+
+        BackController.getProductos();
 
 	    Controller.init();
     }
