@@ -2,8 +2,15 @@ package app.controllers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import app.DataBase;
+import app.inventario.Cliente;
+import app.inventario.Factura;
+import app.inventario.FacturaProducto;
+import app.inventario.General;
+import app.inventario.Producto;
+import app.inventario.Usuario;
 
 public class BackController {
 
@@ -17,18 +24,157 @@ public class BackController {
     public static void init(String[] args) throws ClassNotFoundException, SQLException {
         controller = new BackController(args[0], args[1]);
     }
-/*
-    public static void getProductos() throws SQLException {
 
-        ResultSet response = database.getAll("Producto");
+    public ArrayList<Producto> Producto() throws SQLException {
 
-        while(response.next()) {
-            System.out.println(response.getString("Nombre"));
-        }
+        return database.<Producto>getAll(DatabaseController.Table.PRODUCTO);
 
-        response.close();
     }
-*/
+
+    public Producto Producto(String id) throws SQLException {
+
+        return database.<Producto>getById(DatabaseController.Table.PRODUCTO, id);
+
+    }
+
+    public Producto Producto(Producto producto) throws SQLException {
+
+        return database.insert(DatabaseController.Table.PRODUCTO, producto);
+
+    }
+
+    public void updateProducto(Producto producto) throws SQLException {
+
+        database.update(DatabaseController.Table.PRODUCTO, producto);
+
+    }
+
+    public void deleteProducto(String id) throws SQLException {
+
+        database.delete(DatabaseController.Table.PRODUCTO, id);
+
+    }
+
+    public ArrayList<Cliente> Cliente() throws SQLException {
+
+        return database.<Cliente>getAll(DatabaseController.Table.CLIENTE);
+
+    }
+
+    public Cliente Cliente(String id) throws SQLException {
+
+        return database.<Cliente>getById(DatabaseController.Table.CLIENTE, id);
+
+    }
+
+    public Cliente Cliente(Cliente cliente) throws SQLException {
+
+        return database.insert(DatabaseController.Table.CLIENTE, cliente);
+
+    }
+
+    public void updateCliente(Cliente cliente) throws SQLException {
+
+        database.update(DatabaseController.Table.CLIENTE, cliente);
+
+    }
+
+    public void deleteCliente(String id) throws SQLException {
+
+        database.delete(DatabaseController.Table.CLIENTE, id);
+
+    }
+
+    public ArrayList<Usuario> Usuario() throws SQLException {
+
+        return database.<Usuario>getAll(DatabaseController.Table.USUARIO);
+
+    }
+
+    public Usuario Usuario(String id) throws SQLException {
+
+        return database.<Usuario>getById(DatabaseController.Table.USUARIO, id);
+
+    }
+
+    public Usuario Usuario(Usuario usuario) throws SQLException {
+
+        return database.insert(DatabaseController.Table.USUARIO, usuario);
+
+    }
+
+    public void updateUsuario(Usuario usuario) throws SQLException {
+
+        database.update(DatabaseController.Table.USUARIO, usuario);
+
+    }
+
+    public void deleteUsuario(String id) throws SQLException {
+
+        database.delete(DatabaseController.Table.USUARIO, id);
+
+    }
+
+    public ArrayList<Factura> Factura() throws SQLException {
+
+        return database.<Factura>getAll(DatabaseController.Table.FACTURA);
+
+    }
+
+    public Factura Factura(String id) throws SQLException {
+
+        return database.<Factura>getById(DatabaseController.Table.FACTURA, id);
+
+    }
+
+    public Factura Factura(Factura factura) throws SQLException {
+
+        return database.insert(DatabaseController.Table.FACTURA, factura);
+
+    }
+
+    public void updateFactura(Factura factura) throws SQLException {
+
+        database.update(DatabaseController.Table.FACTURA, factura);
+
+    }
+
+    public void deleteFactura(String id) throws SQLException {
+
+        database.delete(DatabaseController.Table.FACTURA, id);
+
+    }
+
+    public ArrayList<FacturaProducto> FacturaProducto() throws SQLException {
+
+        return database.<FacturaProducto>getAll(DatabaseController.Table.FACTURAPRODUCTO);
+
+    }
+
+    public FacturaProducto FacturaProducto(String id) throws SQLException {
+
+        return database.<FacturaProducto>getById(DatabaseController.Table.FACTURAPRODUCTO, id);
+
+    }
+
+    public FacturaProducto FacturaProducto(FacturaProducto facturaProducto) throws SQLException {
+
+        return database.insert(DatabaseController.Table.FACTURAPRODUCTO, facturaProducto);
+
+    }
+
+    public void updateFacturaProducto(FacturaProducto facturaProducto) throws SQLException {
+
+        database.update(DatabaseController.Table.FACTURAPRODUCTO, facturaProducto);
+
+    }
+
+    public void deleteFacturaProducto(String id) throws SQLException {
+
+        database.delete(DatabaseController.Table.FACTURAPRODUCTO, id);
+
+    }
+
     public static int validarIngreso(String user, String password) {
         return 1;
     }
@@ -39,7 +185,7 @@ public class BackController {
 
     public static String[] getNombresProductos() {
         //por implementar
-        String[] productos = {"Arroz", "Papa", "Néctar"}; //valores para hacer pruebas (mientras se implementa)
+        String[] productos = { "Arroz", "Papa", "Néctar" }; //valores para hacer pruebas (mientras se implementa)
         return productos;
     }
 
@@ -63,44 +209,282 @@ class DatabaseController {
 
     private DataBase database;
 
+    public static enum Table {
+        PRODUCTO, CLIENTE, USUARIO, FACTURA, FACTURAPRODUCTO
+    }
+
     public DatabaseController(String user, String password) throws ClassNotFoundException, SQLException {
         this.database = new DataBase(user, password);
     }
 
-    public ResultSet Producto() throws SQLException {
+    public <T> ArrayList<T> getAll(Table table) throws SQLException {
 
-        return this.database.getAll("Producto");
+        ResultSet response = switch(table) {
+
+            case PRODUCTO -> this.database.getAll(
+                Producto.class.getSimpleName()
+            );
+
+            case CLIENTE -> this.database.getAll(
+                Cliente.class.getSimpleName()
+            );
+
+            case FACTURA -> this.database.getAll(
+                Factura.class.getSimpleName()
+            );
+
+            case USUARIO -> this.database.getAll(
+                Usuario.class.getSimpleName()
+            );
+
+            case  FACTURAPRODUCTO -> this.database.getAll(
+                FacturaProducto.class.getSimpleName()
+            );
+
+            default -> throw new IllegalArgumentException("Unexpected value: " + table);
+
+        };
+
+        return BuildModels.BuildMultiple(table, response);
 
     }
 
-    public ResultSet Producto(String id) throws SQLException {
+    public <T> T getById(Table table, String id) throws SQLException {
 
-        return this.database.getByID("Producto", id);
+        ResultSet response = switch(table) {
+
+            case PRODUCTO -> this.database.getByID(
+                Producto.class.getSimpleName(),
+                id
+            );
+
+            case CLIENTE -> this.database.getByID(
+                Cliente.class.getSimpleName(),
+                id
+            );
+
+            case FACTURA -> this.database.getByID(
+                Factura.class.getSimpleName(),
+                id
+            );
+
+            case USUARIO -> this.database.getByID(
+                Usuario.class.getSimpleName(),
+                id
+            );
+
+            case  FACTURAPRODUCTO -> this.database.getByID(
+                FacturaProducto.class.getSimpleName(),
+                id
+            );
+
+            default -> throw new IllegalArgumentException("Unexpected value: " + table);
+
+        };
+
+        return BuildModels.BuildOne(table, response);
 
     }
 
-    public ResultSet Factura() throws SQLException {
+    public <T> T insert(Table table, General general) throws SQLException {
 
-        return this.database.getAll("Factura");
+        ResultSet response = switch (table) {
+
+            case PRODUCTO -> database.insert(Producto.class.getSimpleName(), Producto.toArrayAtributes(), general.toArray());
+
+            case CLIENTE -> database.insert(Cliente.class.getSimpleName(), Cliente.toArrayAtributes(), general.toArray());
+
+            case FACTURA -> database.insert(Factura.class.getSimpleName(), Factura.toArrayAtributes(), general.toArray());
+
+            case USUARIO -> database.insert(Usuario.class.getSimpleName(), Usuario.toArrayAtributes(), general.toArray());
+
+            case FACTURAPRODUCTO -> database.insert(FacturaProducto.class.getSimpleName(), FacturaProducto.toArrayAtributes(), general.toArray());
+
+            default -> throw new IllegalArgumentException("Unexpected value: " + table);
+
+        };
+
+        return BuildModels.BuildOne(table, response);
 
     }
 
-    public ResultSet Factura(String id) throws SQLException {
+    public void update(Table table, General general) throws SQLException {
 
-        return this.database.getByID("Factura", id);
+        ResultSet response = switch (table) {
+
+            case PRODUCTO -> database.update(Producto.class.getSimpleName(), Producto.toArrayAtributes(), general.toArray());
+
+            case CLIENTE -> database.update(Cliente.class.getSimpleName(), Cliente.toArrayAtributes(), general.toArray());
+
+            case FACTURA -> database.update(Factura.class.getSimpleName(), Factura.toArrayAtributes(), general.toArray());
+
+            case USUARIO -> database.update(Usuario.class.getSimpleName(), Usuario.toArrayAtributes(), general.toArray());
+
+            case FACTURAPRODUCTO -> database.update(FacturaProducto.class.getSimpleName(), FacturaProducto.toArrayAtributes(), general.toArray());
+
+            default -> throw new IllegalArgumentException("Unexpected value: " + table);
+        };
+
+        response.close();
 
     }
 
-    public ResultSet Cliente() throws SQLException {
+    public void delete(Table table, String id) throws SQLException {
 
-        return this.database.getAll("Cliente");
+        ResultSet response = switch (table) {
+
+            case PRODUCTO -> database.delete(Producto.class.getSimpleName(), id);
+
+            case CLIENTE -> database.delete(Cliente.class.getSimpleName(), id);
+
+            case FACTURA -> database.delete(Factura.class.getSimpleName(), id);
+
+            case USUARIO -> database.delete(Usuario.class.getSimpleName(), id);
+
+            case FACTURAPRODUCTO -> database.delete(FacturaProducto.class.getSimpleName(), id);
+
+            default -> throw new IllegalArgumentException("Unexpected value: " + table);
+        };
+
+        response.close();
 
     }
 
-    public ResultSet Cliente(String id) throws SQLException {
+    private static class BuildModels {
 
-        return this.database.getByID("Cliente", id);
-
+        public static <T> T BuildOne(DatabaseController.Table className, ResultSet response) throws SQLException {
+    
+            String[] atributes;
+            General object = null;
+    
+            while(response.next()) {
+    
+                object = switch(className) {
+    
+                    case CLIENTE -> {
+                        atributes = Cliente.toArrayAtributes();
+                        yield new Cliente
+                        (
+                            response.getString(atributes[0]),
+                            response.getString(atributes[1]),
+                            response.getString(atributes[2])
+                        );
+                    }
+        
+                    case FACTURA -> {
+                        atributes = Factura.toArrayAtributes();
+                        
+        
+                        yield null /*new Factura
+                        (
+                            response.getString(atributes[0]),
+                            response.getDate(atributes[1]),
+                            response.getString(atributes[2]),
+                            response.getString(atributes[3])
+                        )*/;
+                    }
+        
+                    case PRODUCTO -> {
+                        atributes = Producto.toArrayAtributes();
+        
+                        yield new Producto
+                        (
+                            response.getString(atributes[0]),
+                            response.getString(atributes[1]),
+                            response.getString(atributes[2]),
+                            response.getInt(atributes[3]),
+                            response.getInt(atributes[4])
+                        );
+                    }
+        
+                    case USUARIO -> {
+                        atributes = Usuario.toArrayAtributes();
+        
+                        yield new Usuario
+                        (
+                            response.getString(atributes[0]),
+                            response.getBoolean(atributes[1])
+                        );
+                    }
+        
+                    default -> throw new IllegalArgumentException("Unexpected value: " + className);
+        
+                };
+    
+            }
+    
+            response.close();
+    
+            return (T)object;
+    
+        }
+    
+        public static <T> ArrayList<T> BuildMultiple(DatabaseController.Table className, ResultSet response) throws SQLException {
+    
+            String[] atributes;
+            ArrayList<T> objects = new ArrayList<T>();
+    
+            while(response.next()) {
+    
+                objects.add((T)switch(className) {
+    
+                    case CLIENTE -> {
+                        atributes = Cliente.toArrayAtributes();
+                        yield new Cliente
+                        (
+                            response.getString(atributes[0]),
+                            response.getString(atributes[1]),
+                            response.getString(atributes[2])
+                        );
+                    }
+        
+                    case FACTURA -> {
+                        atributes = Factura.toArrayAtributes();
+        
+                        yield null /*new Factura
+                        (
+                            response.getString(atributes[0]),
+                            response.getDate(atributes[1]),
+                            response.getString(atributes[2]),
+                            response.getString(atributes[3])
+                        )*/;
+                    }
+        
+                    case PRODUCTO -> {
+                        atributes = Producto.toArrayAtributes();
+        
+                        yield new Producto
+                        (
+                            response.getString(atributes[0]),
+                            response.getString(atributes[1]),
+                            response.getString(atributes[2]),
+                            response.getInt(atributes[3]),
+                            response.getInt(atributes[4])
+                        );
+                    }
+        
+                    case USUARIO -> {
+                        atributes = Usuario.toArrayAtributes();
+        
+                        yield new Usuario
+                        (
+                            response.getString(atributes[0]),
+                            response.getBoolean(atributes[1])
+                        );
+                    }
+        
+                    default -> throw new IllegalArgumentException("Unexpected value: " + className);
+        
+                });
+    
+            }
+    
+            response.close();
+    
+            return objects;
+    
+        }
+    
     }
 
 }

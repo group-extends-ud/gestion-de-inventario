@@ -1,14 +1,13 @@
 package app.inventario;
 
-public class User {
-     private String idcliente, nombre, apellido;
-     private boolean isAdmin;
+public class Cliente extends General {
 
-    public User(String idcliente, String nombre, String apellido, boolean Admin) {
+    private String idcliente, nombre, apellido;
+
+    public Cliente(String idcliente, String nombre, String apellido) {
         this.idcliente = idcliente;
         this.nombre = nombre;
         this.apellido = apellido;
-        this.isAdmin = Admin;
     }
 
     public String getIdcliente() {
@@ -32,8 +31,20 @@ public class User {
         this.apellido = apellido;
     }
 
-    public boolean isIsAdmin() {
-        return isAdmin;
+    public static String[] toArrayAtributes() {
+
+        return toArrayAtributes(Cliente.class.getDeclaredFields());
+
     }
+
+    @Override
+    public Object[] toArray() {
+
+        Object[] objects = { nombre, apellido, idcliente };
+
+        return objects;
+
+    }
+    
 
 }
