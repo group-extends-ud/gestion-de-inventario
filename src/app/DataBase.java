@@ -1,6 +1,7 @@
 package app;
 
 import java.util.Properties;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -41,7 +42,12 @@ public class DataBase {
         PreparedStatement statement = this.connection.prepareStatement(query);
 
         for(int i = 0; i < objects.length; ++i) {
-            className = objects[i].getClass().getSimpleName();
+
+            try {
+                className = objects[i].getClass().getSimpleName();
+            } catch (NullPointerException e) {
+                className = "Null";
+            }
 
             switch(className) {
 
@@ -60,12 +66,16 @@ public class DataBase {
                 case "String" -> statement.setString(i + 1, (String) objects[i]);
 
                 case "Boolean" -> statement.setBoolean(i + 1, (Boolean) objects[i]);
+
+                case "BigDecimal" -> statement.setBigDecimal(i + 1, (BigDecimal) (objects[i]));
             
-                default -> statement.setNull(i + 1, 0);
+                default -> {}
     
             }
 
         }
+
+        System.out.println(query);
 
 
         ResultSet response = statement.executeQuery();
@@ -94,18 +104,54 @@ public class DataBase {
 
     }
 
+    public ResultSet getRelation(String table, String idFactura)throws SQLException {
+
+        String query = "SELECT * FROM " + table + " WHERE " + this.getIDFacturaProducto()[0] + ';';
+
+        Object[] elements = { idFactura };
+
+        return this.query(query, elements);
+
+    }
+
+    public ResultSet getUniqueRelation(String table, String idFactura, String idProducto) throws SQLException {
+
+        String[] keys = this.getIDFacturaProducto();
+
+        String query = "SELECT * FROM " + table + " WHERE " + keys[0] + " AND " + keys[1] + ';';
+
+        Object[] elements = { idFactura, idProducto };
+
+        return this.query(query, elements);
+
+    }
+
     public ResultSet insert(String table, String[] atributes, Object[] objects) throws SQLException {
+
+        Object[] provisional;
+
+        for(int i = 0; i < objects.length; i++) {
+            if(objects[i] == null) {
+                objects = remueveElement(objects, i);
+                provisional = remueveElement(atributes, i);
+                atributes = new String[provisional.length];
+                for(int j = 0; j < provisional.length; ++j) {
+                    atributes[j] = (String) provisional[j];
+                }
+                i = 0;
+            }
+        }
 
         String query = "INSERT INTO " + table +"(";
 
         for(int i = 0; i < atributes.length; ++i) {
-            query += atributes[i] + ((i < atributes.length - 1)? ", " : ") ");
+            query += atributes[i] + ((i < atributes.length - 1)? ((atributes.length == 1)? ')' : ", ") : ") ");
         }
 
         query += "VALUES(";
 
         for(int i = 0; i < objects.length; ++i) {
-            query += '?' + ((i < atributes.length - 1)? ", " : ");");
+            query += '?' + ((i < objects.length - 1)? ((objects.length == 1)? ")" : ", ") : ") RETURNING *;");
         }
 
         return this.query(query, objects);
@@ -114,10 +160,16 @@ public class DataBase {
 
     public ResultSet update(String table, String[] atributes, Object[] objects) throws SQLException {
 
+        for(int i = 0; i < objects.length - 1; i++) {
+            Object burbuja = objects[i];
+            objects[i] = objects[i + 1];
+            objects[i + 1] = burbuja;
+        }
+
         String query = "UPDATE " + table + " SET ";
 
         for(int i = 1; i < atributes.length; ++i) {
-            query += atributes[i] + " =  ?" + ((i < objects.length - 1)? ", " : " WHERE " + this.getIDTable(table) + ';');
+            query += atributes[i] + " =  ?" + ((i < objects.length - 1)? ", " : " WHERE " + this.getIDTable(table) + " RETURNING *;");
         }
 
         return this.query(query, objects);
@@ -126,7 +178,7 @@ public class DataBase {
 
     public ResultSet delete(String table, String id) throws SQLException {
 
-        String query = "DELETE * FROM " + table + " WHERE " + this.getIDTable(table);
+        String query = "DELETE FROM " + table + " WHERE " + this.getIDTable(table) + " RETURNING *;";
 
         String[] objects = { id };
 
@@ -142,7 +194,9 @@ public class DataBase {
 
             case "Producto" -> "idproducto = ?";
 
-            default -> "idfactura = ?";
+            case "Factura" -> "idfactura = ?";
+
+            default -> throw new IllegalArgumentException("Unexpected value: " + table);
 
         };
 
@@ -154,5 +208,16 @@ public class DataBase {
 
         return ids;
     }
+
+    private Object[]  remueveElement(Object[] objects, int i) {
+        Object[] newObjects = new Object[objects.length - 1];
+         if (i > 0){
+               System.arraycopy(objects, 0, newObjects, 0, i);
+         }
+         if (newObjects.length > i){
+          System.arraycopy(objects, i + 1, newObjects, i, newObjects.length - i);
+         }
+         return newObjects;
+       }
 
 }

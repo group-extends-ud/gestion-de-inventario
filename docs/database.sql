@@ -89,7 +89,7 @@ ALTER TABLE Producto ADD CONSTRAINT PK_Producto
 ;
 
 ALTER TABLE Usuario ADD CONSTRAINT PK_Usuario
-	PRIMARY KEY (Email)
+	PRIMARY KEY (UserName)
 ;
 
 /* Create Foreign Key Constraints */
