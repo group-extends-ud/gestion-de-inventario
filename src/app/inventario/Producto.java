@@ -60,7 +60,7 @@ public class Producto extends General {
     @Override
     public Object[] toArray() {
 
-        Object[] objects = { idproducto, nombre, precio, stock, stockminimo };
+        Object[] objects = { Integer.parseInt(idproducto), nombre, precio, stock, stockminimo };
 
         return objects;
 

@@ -65,9 +65,22 @@ public class Factura extends General {
 
     }
 
+    public int getCantidad() {
+        return items.size();
+    }
+
+    public long getCostoTotal() {
+        long costoTotal = 0;
+        for(FacturaProducto item : items) {
+            costoTotal += item.getValor().longValue();
+        }
+
+        return costoTotal;
+    }
+
     public Object[] toArray() {
 
-        Object[] objects = { idfactura, fecha, (idcliente != null)? idcliente.getIdcliente(): null };
+        Object[] objects = { Integer.parseInt(idfactura), fecha, (idcliente != null)? idcliente.getIdcliente(): null };
 
         return objects;
 

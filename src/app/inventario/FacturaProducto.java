@@ -53,7 +53,7 @@ public class FacturaProducto extends General {
     @Override
     public Object[] toArray() {
 
-        Object[] objects = { cantidad, valor, idfactura.getIdfactura(), idproducto.getIdproducto() };
+        Object[] objects = { cantidad, valor, Integer.parseInt(idfactura.getIdfactura()), Integer.parseInt(idproducto.getIdproducto()) };
 
         return objects;
 

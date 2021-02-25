@@ -75,9 +75,6 @@ public class DataBase {
 
         }
 
-        System.out.println(query);
-
-
         ResultSet response = statement.executeQuery();
 
         statement.close();

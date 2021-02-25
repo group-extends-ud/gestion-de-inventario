@@ -8,12 +8,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 import app.DataBase;
-import app.inventario.Cliente;
-import app.inventario.Factura;
-import app.inventario.FacturaProducto;
-import app.inventario.General;
-import app.inventario.Producto;
-import app.inventario.Usuario;
+import app.inventario.*;
 
 public class BackController {
 
@@ -46,16 +41,14 @@ public class BackController {
 
     }
 
-    public void updateProducto(Producto producto) throws SQLException {
+    public static void updateProducto(Producto producto) throws SQLException {
 
         database.update(DatabaseController.Table.PRODUCTO, producto);
 
     }
 
-    public void deleteProducto(String id) throws SQLException {
-
+    public static void deleteProducto(String id) throws SQLException {
         database.delete(DatabaseController.Table.PRODUCTO, id);
-
     }
 
     public ArrayList<Cliente> Cliente() throws SQLException, ParseException {
@@ -182,29 +175,53 @@ public class BackController {
         return 1;
     }
 
-    public static void insertarProducto(String nombre, Double precio, int stock, int stockMinimo) {
-        // por implementar
+    public static void insertarProducto(String nombre, Double precio, int stock, int stockMinimo) throws SQLException {
+        controller.Producto(new Producto(null, nombre, new BigDecimal(precio), stockMinimo, stockMinimo));
     }
 
-    public static String[] getNombresProductos() {
-        // por implementar
-        String[] productos = { "Arroz", "Papa", "Néctar" }; // valores para hacer pruebas (mientras se implementa)
+    public static String[] getNombresProductos() throws SQLException, ParseException {
+
+        ArrayList<Producto> provisional = controller.Producto(); 
+
+        String[] productos = new String[provisional.size()];
+
+        for(int i = 0; i < provisional.size(); ++i) {
+            productos[i]= provisional.get(i).getNombre();
+        }
+
         return productos;
     }
 
-    public static double getPrecio(String nombreProducto) {
-        // por implementar
-        System.out.println(nombreProducto);// para hacer pruebas
-        return 1000.0;
+    public static double getPrecio(String idProducto) throws SQLException, ParseException {
+
+        return controller.Producto(idProducto).getPrecio().doubleValue();
+
     }
 
-    public static int getStock(String nombreProducto) {
-        // por implementar
-        return 0;
+    public static int getStock(String idProducto) throws SQLException, ParseException {
+        
+        return controller.Producto(idProducto).getStock();
+        
     }
 
-    public static void insertarMovimiento(String nombreProducto, int cantidad) {
-        // por implementar
+    public static void insertarMovimiento(String idProducto, int cantidad) {
+        
+        //controller.Factura();
+
+    }
+
+    public static BigDecimal toBigDecimal(String precio) throws ParseException {
+
+        precio = precio.substring(2, precio.length());
+
+        NumberFormat format = NumberFormat.getInstance();
+
+        BigDecimal price = null;
+
+        price = new BigDecimal(format.parse(precio).doubleValue());
+
+        return price;
+
     }
 }
 
@@ -365,20 +382,6 @@ class DatabaseController {
 
     private static class BuildModels {
 
-        private static BigDecimal toBigDecimal(String precio) throws ParseException {
-
-            precio = precio.substring(2, precio.length());
-
-            NumberFormat format = NumberFormat.getInstance();
-
-            BigDecimal price = null;
-
-            price = new BigDecimal(format.parse(precio).doubleValue());
-
-            return price;
-
-        }
-
         public static <T> T BuildOne(DatabaseController.Table className, ResultSet response)
                 throws SQLException, ParseException {
 
@@ -418,7 +421,7 @@ class DatabaseController {
                         yield new Producto(
                             response.getString(atributes[0]),
                             response.getString(atributes[1]),
-                            toBigDecimal(response.getString(atributes[2])),
+                            BackController.toBigDecimal(response.getString(atributes[2])),
                             response.getInt(atributes[3]),
                             response.getInt(atributes[4])
                         );
@@ -440,7 +443,7 @@ class DatabaseController {
 
                         yield new FacturaProducto(
                             response.getInt(atributes[0]),
-                            toBigDecimal(response.getString(atributes[1])),
+                            BackController.toBigDecimal(response.getString(atributes[1])),
                             null,
                             producto
                         );
@@ -497,7 +500,7 @@ class DatabaseController {
                         yield new Producto(
                                 response.getString(atributes[0]),
                                 response.getString(atributes[1]),
-                                toBigDecimal(response.getString(atributes[2])),
+                                BackController.toBigDecimal(response.getString(atributes[2])),
                                 response.getInt(atributes[3]),
                                 response.getInt(atributes[4])
                             );
@@ -519,7 +522,7 @@ class DatabaseController {
 
                         yield new FacturaProducto(
                             response.getInt(atributes[0]),
-                            toBigDecimal(response.getString(atributes[1])),
+                            BackController.toBigDecimal(response.getString(atributes[1])),
                             null,
                             producto
                             
