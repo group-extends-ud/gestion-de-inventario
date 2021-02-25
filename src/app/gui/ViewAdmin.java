@@ -48,6 +48,11 @@ public class ViewAdmin extends View{
         tpTabs.addTab("Inventario", spInventario);
         tpTabs.addTab("Estadística", spEstadistica);
 
+        actualizar();
+    }
+
+    public void actualizar() {
+        super.actualizar();
     }
 
     private void ajustarItem() {
@@ -155,6 +160,7 @@ public class ViewAdmin extends View{
                 try {
                     BackController.updateMovimiento(new Movimiento(Integer.parseInt(tfID.getText()), Integer.parseInt(tfProducto.getText()),
                             Integer.parseInt(tfCantidad.getText()), Integer.parseInt(tfCostoUnitario.getText()), Integer.parseInt(tfCostoTotal.getText())));
+                    actualizar();
                 } catch (Exception throwables) {
                     JOptionPane.showMessageDialog(null, "No se pudo modificar el movimiento indicado, por favor verifique" +
                             " los datos ingresados", "Error", JOptionPane.ERROR_MESSAGE);
@@ -227,6 +233,7 @@ public class ViewAdmin extends View{
             if (!tfID.getText().isEmpty()) {
                 try {
                     BackController.deleteMovimiento(tfID.getText());
+                    actualizar();
                 } catch (SQLException throwables) {
                     JOptionPane.showMessageDialog(null, "No se pudo eliminar el movimiento indicado, por favor verifique" +
                             " los datos ingresados", "Error", JOptionPane.ERROR_MESSAGE);
@@ -249,5 +256,4 @@ public class ViewAdmin extends View{
     public static void init() {
         view = new ViewAdmin();
     }
-
 }

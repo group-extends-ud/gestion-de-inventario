@@ -28,6 +28,11 @@ public class BackController {
         //por implementar
     }
 
+    public static ArrayList<Movimiento> Movimiento() {
+        //por implementar
+        return null;
+    }
+
     public ArrayList<Producto> Producto() throws SQLException {
 
         return database.<Producto>getAll(DatabaseController.Table.PRODUCTO);

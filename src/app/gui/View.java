@@ -1,11 +1,14 @@
 package app.gui;
 
 import app.controllers.BackController;
+import app.inventario.Movimiento;
+import app.inventario.Producto;
 import lib.sRAD.gui.component.VentanaEmergente;
 import lib.sRAD.gui.sComponent.*;
 
 import javax.swing.*;
 
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -47,6 +50,27 @@ public class View {
         Controller.agregar(btClose);
 
         Controller.agregar(tpTabs);
+
+        actualizar();
+    }
+
+    public void actualizar() {
+        //pMovimiento
+        pMovimiento.removeAll();
+        ArrayList<Movimiento> movimientos = BackController.Movimiento();
+        if (movimientos != null && !movimientos.isEmpty()) {
+            SLabel encabezado = new SLabel(32, 32, 800, 28, "%20s%20s%20s%20s%20s".formatted(
+                    "id", "id del producto", "cantidad", "costo unitario", "costo total"));
+            pMovimiento.add(encabezado);
+            for (int i=0; i<movimientos.size(); i++) {
+                Movimiento movimiento = movimientos.get(i);
+                SLabel lMovimiento = new SLabel(32, i*32+64, 800, 28, "%20d%20d%20d%20d%20d".formatted(
+                        movimiento.getId(), movimiento.getIdProducto(), movimiento.getCantidad(), movimiento.getCostoUnitario(),
+                        movimiento.getCostoTotal()));
+                pMovimiento.add(lMovimiento);
+            }
+        }
+        pMovimiento.repaint();
     }
 
     public void addItem() {
@@ -151,6 +175,7 @@ public class View {
         btConfirm.addActionListener( (e) -> {
             if (cantidad.get()>0 && cantidad.get()>BackController.getStock(cbTipo.getItemAt(cbTipo.getSelectedIndex()).toString())) {
                 BackController.insertarMovimiento(cbTipo.getItemAt(cbTipo.getSelectedIndex()).toString(), cantidad.get());
+                actualizar();
             }
             else {
                 JOptionPane.showMessageDialog(null, "Por favor ingrese valores válidos", "Error", JOptionPane.ERROR_MESSAGE);
