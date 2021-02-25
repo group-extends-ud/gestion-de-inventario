@@ -11,6 +11,14 @@ public class Movimiento {
     private int costoTotal;
     private String descripcion;
 
+    public Movimiento(int id, int idProducto, int cantidad, int costoUnitario, int costoTotal) {
+        this.id = id;
+        this.idProducto = idProducto;
+        this.cantidad = cantidad;
+        this.costoUnitario = costoUnitario;
+        this.costoTotal = costoTotal;
+    }
+
     public int getId() {
         return id;
     }

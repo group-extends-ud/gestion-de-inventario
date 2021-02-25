@@ -5,12 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import app.DataBase;
-import app.inventario.Cliente;
-import app.inventario.Factura;
-import app.inventario.FacturaProducto;
-import app.inventario.General;
-import app.inventario.Producto;
-import app.inventario.Usuario;
+import app.inventario.*;
 
 public class BackController {
 
@@ -26,6 +21,10 @@ public class BackController {
     }
 
     public static void deleteMovimiento(String ID) throws SQLException {
+        //por implementar
+    }
+
+    public static void updateMovimiento(Movimiento movimiento) {
         //por implementar
     }
 
@@ -45,7 +44,7 @@ public class BackController {
         return database.insert(DatabaseController.Table.PRODUCTO, producto);
     }
 
-    public void updateProducto(Producto producto) throws SQLException {
+    public static void updateProducto(Producto producto) throws SQLException {
 
         database.update(DatabaseController.Table.PRODUCTO, producto);
 
