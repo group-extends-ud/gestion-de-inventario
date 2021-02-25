@@ -14,6 +14,9 @@ public class FacturaProducto extends General {
         this.valor = valor;
         this.idfactura = idfactura;
         this.idproducto = idproducto;
+
+        if(valor.compareTo(idproducto.getPrecio().multiply(new BigDecimal(cantidad))) != 0) this.valor = idproducto.getPrecio().multiply(new BigDecimal(cantidad));
+
     }
 
     public int getCantidad() {
