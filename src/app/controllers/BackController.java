@@ -3,6 +3,7 @@ package app.controllers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import app.DataBase;
 import app.inventario.Cliente;
@@ -27,7 +28,7 @@ public class BackController {
         controller = new BackController(args[0], args[1]);
     }
 
-    public <T> T[] getAll(Table table) throws SQLException {
+    public <T> ArrayList<T> getAll(Table table) throws SQLException {
         ResultSet response = switch (table) {
 
             case PRODUCTO -> database.Producto();
@@ -215,10 +216,10 @@ class BuildModels {
 
     }
 
-    public static <T> T[] BuildMultiple(BackController.Table className, ResultSet response) throws SQLException {
+    public static <T> ArrayList<T> BuildMultiple(BackController.Table className, ResultSet response) throws SQLException {
 
         String[] atributes;
-        ArrayList<General> objects = new ArrayList<General>();
+        ArrayList<T> objects = new ArrayList<T>();
 
         while(response.next()) {
 
@@ -226,7 +227,7 @@ class BuildModels {
 
                 case CLIENTE -> {
                     atributes = Cliente.toArrayAtributes();
-                    yield new Cliente
+                    yield (T)new Cliente
                     (
                         response.getString(atributes[0]),
                         response.getString(atributes[1]),
@@ -237,7 +238,7 @@ class BuildModels {
                 case FACTURA -> {
                     atributes = Factura.toArrayAtributes();
     
-                    yield null /*new Factura
+                    yield (T)null /*new Factura
                     (
                         response.getString(atributes[0]),
                         response.getDate(atributes[1]),
@@ -249,7 +250,7 @@ class BuildModels {
                 case PRODUCTO -> {
                     atributes = Producto.toArrayAtributes();
     
-                    yield new Producto
+                    yield (T)new Producto
                     (
                         response.getString(atributes[0]),
                         response.getString(atributes[1]),
@@ -262,7 +263,7 @@ class BuildModels {
                 case USUARIO -> {
                     atributes = Usuario.toArrayAtributes();
     
-                    yield new Usuario
+                    yield (T)new Usuario
                     (
                         response.getString(atributes[0]),
                         response.getBoolean(atributes[1])
@@ -277,7 +278,7 @@ class BuildModels {
 
 
 
-        return (T[]) objects.toArray();
+        return objects;
 
     }
 
