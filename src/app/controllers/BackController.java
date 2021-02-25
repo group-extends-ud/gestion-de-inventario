@@ -38,9 +38,7 @@ public class BackController {
     }
 
     public Producto Producto(Producto producto) throws SQLException {
-
         return database.insert(DatabaseController.Table.PRODUCTO, producto);
-
     }
 
     public void updateProducto(Producto producto) throws SQLException {
@@ -181,10 +179,12 @@ public class BackController {
 
     public static void insertarProducto(String nombre, Double precio, int stock, int stockMinimo) {
         //por implementar
+        //la idea es que el cliente no esté ingresando id, sino que la base de datos asigne uno automáticamente
     }
 
     public static String[] getNombresProductos() {
         //por implementar
+        //para que el usuario tenga una lista de todos los productos al realizar el movimiento
         String[] productos = { "Arroz", "Papa", "Néctar" }; //valores para hacer pruebas (mientras se implementa)
         return productos;
     }
@@ -202,6 +202,7 @@ public class BackController {
 
     public static void insertarMovimiento(String nombreProducto, int cantidad) {
         //por implementar
+        //la misma dinámica que el método insertarProducto (id automático de la que el BackController se encarga)
     }
 }
 
