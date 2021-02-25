@@ -7,13 +7,13 @@ public class Factura extends General {
     private String idfactura;
     private Date fecha;
     private Cliente cliente;
-    private FacturaProducto[] productos;
+    private FacturaProducto[] items;
 
-    public Factura(String idfactura, Date fecha, Cliente cliente, FacturaProducto[] productos) {
+    public Factura(String idfactura, Date fecha, Cliente cliente, FacturaProducto[] items) {
         this.idfactura = idfactura;
         this.fecha = fecha;
         this.cliente = cliente;
-        this.productos = productos;
+        this.items = items;
     }
 
     public String getIdfactura() {
@@ -37,11 +37,11 @@ public class Factura extends General {
         this.cliente = cliente;
     }
 
-    public FacturaProducto[] getProductos() {
-        return productos;
+    public FacturaProducto[] getItems() {
+        return items;
     }
-    public void setProductos(FacturaProducto[] productos) {
-        this.productos = productos;
+    public void setItems(FacturaProducto[] items) {
+        this.items = items;
     }
 
     public static String[] toArrayAtributes() {
@@ -52,57 +52,7 @@ public class Factura extends General {
 
     public Object[] toArray() {
 
-        Object[] objects = { idfactura, fecha, cliente, productos };
-
-        return objects;
-
-    }
-
-}
-
-class FacturaProducto extends General {
-
-    private String valor;
-    private int cantidad;
-    private Producto producto;
-
-    public FacturaProducto(String valor, int cantidad, Producto producto) {
-        this.valor = valor;
-        this.cantidad = cantidad;
-        this.producto = producto;
-    }
-
-    public String getValor() {
-        return valor;
-    }
-    public void setValor(String valor) {
-        this.valor = valor;
-    }
-
-    public int getCantidad() {
-        return cantidad;
-    }
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    public Producto getProducto() {
-        return producto;
-    }
-    public void setProducto(Producto producto) {
-        this.producto = producto;
-    }
-
-    public static String[] toArrayAtributes() {
-
-        return toArrayAtributes(FacturaProducto.class.getDeclaredFields());
-
-    }
-
-    @Override
-    public Object[] toArray() {
-
-        Object[] objects = { valor, cantidad, producto };
+        Object[] objects = { fecha, cliente, items, idfactura };
 
         return objects;
 

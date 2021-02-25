@@ -73,6 +73,7 @@ public class DataBase {
         statement.close();
 
         return response;
+
     }
 
     public ResultSet getAll(String table) throws SQLException {
@@ -80,6 +81,7 @@ public class DataBase {
         String query = "SELECT * FROM " + table + ';';
 
         return this.query(query);
+
     }
 
     public ResultSet getByID(String table, String id) throws SQLException {
@@ -92,20 +94,65 @@ public class DataBase {
 
     }
 
+    public ResultSet insert(String table, String[] atributes, Object[] objects) throws SQLException {
+
+        String query = "INSERT INTO " + table +"(";
+
+        for(int i = 0; i < atributes.length; ++i) {
+            query += atributes[i] + ((i < atributes.length - 1)? ", " : ") ");
+        }
+
+        query += "VALUES(";
+
+        for(int i = 0; i < objects.length; ++i) {
+            query += '?' + ((i < atributes.length - 1)? ", " : ");");
+        }
+
+        return this.query(query, objects);
+
+    }
+
+    public ResultSet update(String table, String[] atributes, Object[] objects) throws SQLException {
+
+        String query = "UPDATE " + table + " SET ";
+
+        for(int i = 1; i < atributes.length; ++i) {
+            query += atributes[i] + " =  ?" + ((i < objects.length - 1)? ", " : " WHERE " + this.getIDTable(table) + ';');
+        }
+
+        return this.query(query, objects);
+
+    }
+
+    public ResultSet delete(String table, String id) throws SQLException {
+
+        String query = "DELETE * FROM " + table + " WHERE " + this.getIDTable(table);
+
+        String[] objects = { id };
+
+        return this.query(query, objects);
+
+    }
+
     private String getIDTable(String table) {
 
         return switch(table) {
 
-            case "Cliente" -> "IDCliente = ?";
+            case "Cliente" -> "idcliente = ?";
 
-            case "Factura" -> "IDFactura = ?";
+            case "Producto" -> "idproducto = ?";
 
-            case "Producto" -> "IDProducto = ?";
-
-            default -> this.getIDTable("Factura") + " AND " + this.getIDTable("Producto");
+            default -> "idfactura = ?";
 
         };
 
+    }
+
+    private String[] getIDFacturaProducto() {
+
+        String[] ids = { this.getIDTable("Factura"), this.getIDTable("Producto") };
+
+        return ids;
     }
 
 }

@@ -40,7 +40,7 @@ public class Cliente extends General {
     @Override
     public Object[] toArray() {
 
-        Object[] objects = { idcliente, nombre, apellido };
+        Object[] objects = { nombre, apellido, idcliente };
 
         return objects;
 

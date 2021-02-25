@@ -57,7 +57,7 @@ public class Producto extends General {
     @Override
     public Object[] toArray() {
 
-        Object[] objects = { idproducto, nombre, precio, stock, stockMinimo };
+        Object[] objects = { nombre, precio, stock, stockMinimo, idproducto };
 
         return objects;
 

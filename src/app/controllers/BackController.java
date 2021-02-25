@@ -3,7 +3,6 @@ package app.controllers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import app.DataBase;
 import app.inventario.Cliente;
@@ -17,7 +16,7 @@ public class BackController {
     public static BackController controller;
     private static DatabaseController database;
     public static enum Table {
-        PRODUCTO, CLIENTE, USUARIO, FACTURA
+        PRODUCTO, CLIENTE, USUARIO, FACTURA, FACTURAPRODUCTO
     }
 
     private BackController(String user, String password) throws ClassNotFoundException, SQLException {
@@ -38,6 +37,8 @@ public class BackController {
             case FACTURA -> database.Factura();
 
             case USUARIO -> database.Usuario();
+
+            case FACTURAPRODUCTO -> database.Factura();
 
             default -> throw new SQLException();
         };
@@ -62,6 +63,69 @@ public class BackController {
         return BuildModels.<T>BuildOne(table, response);
     }
 
+    public void Create(Table table, General general) throws SQLException {
+
+        ResultSet response = switch (table) {
+
+            case PRODUCTO -> database.Producto(general.toArray());
+
+            case CLIENTE -> database.Cliente();
+
+            case FACTURA -> database.Factura();
+
+            case USUARIO -> database.Usuario();
+
+            case FACTURAPRODUCTO -> database.Factura();
+
+            default -> throw new SQLException();
+        };
+
+        response.close();
+
+    }
+
+    public void Update(Table table, General general) throws SQLException {
+
+        ResultSet response = switch (table) {
+
+            case PRODUCTO -> database.UpdateProducto(general.toArray());
+
+            case CLIENTE -> database.UpdateCliente(general.toArray());
+
+            case FACTURA -> database.UpdateFactura(general.toArray());
+
+            case USUARIO -> database.UpdateUsuario(general.toArray());
+
+            case FACTURAPRODUCTO -> database.Factura();
+
+            default -> throw new SQLException();
+        };
+
+        response.close();
+
+    }
+
+    public void DeleteProducto(Table table, String id) throws SQLException {
+
+        ResultSet response = switch (table) {
+
+            case PRODUCTO -> database.DeleteProducto(id);
+
+            case CLIENTE -> database.DeleteCliente(id);
+
+            case FACTURA -> database.DeleteFactura(id);
+
+            case USUARIO -> database.DeleteUsuario(id);
+
+            case FACTURAPRODUCTO -> database.Factura();
+
+            default -> throw new SQLException();
+        };
+
+        response.close();
+
+    }
+
     public static int validarIngreso(String user, String password) {
         return 1;
     }
@@ -72,7 +136,7 @@ public class BackController {
 
     public static String[] getNombresProductos() {
         //por implementar
-        String[] productos = {"Arroz", "Papa", "Néctar"}; //valores para hacer pruebas (mientras se implementa)
+        String[] productos = { "Arroz", "Papa", "Néctar" }; //valores para hacer pruebas (mientras se implementa)
         return productos;
     }
 
@@ -102,49 +166,185 @@ class DatabaseController {
 
     public ResultSet Producto() throws SQLException {
 
-        return this.database.getAll("Producto");
+        return this.database.getAll(
+            "Producto"
+        );
 
     }
 
     public ResultSet Producto(String id) throws SQLException {
 
-        return this.database.getByID("Producto", id);
+        return this.database.getByID(
+            "Producto",
+            id
+        );
+
+    }
+
+    public ResultSet Producto(Object[] objects) throws SQLException {
+
+        return this.database.insert(
+            "Producto",
+            Producto.toArrayAtributes(),
+            objects
+        );
+
+    }
+
+    public ResultSet UpdateProducto(Object[] objects) throws SQLException {
+
+        return this.database.update(
+            "Producto",
+            Producto.toArrayAtributes(),
+            objects
+        );
+
+    }
+
+    public ResultSet DeleteProducto(String id) throws SQLException {
+
+        return this.database.delete(
+            "Producto",
+            id
+        );
 
     }
 
     public ResultSet Factura() throws SQLException {
 
-        return this.database.getAll("Factura");
+        return this.database.getAll(
+            "Factura"
+        );
 
     }
 
     public ResultSet Factura(String id) throws SQLException {
 
-        return this.database.getByID("Factura", id);
+        return this.database.getByID(
+            "Factura",
+            id
+        );
+
+    }
+
+    public ResultSet Factura(Object[] objects) throws SQLException {
+
+        return this.database.insert(
+            "Factura",
+            Factura.toArrayAtributes(),
+            objects
+        );
+        
+    }
+
+    public ResultSet UpdateFactura(Object[] objects) throws SQLException {
+
+        return this.database.update(
+            "Factura",
+            Factura.toArrayAtributes(),
+            objects
+        );
+
+    }
+
+    public ResultSet DeleteFactura(String id) throws SQLException {
+
+        return this.database.delete(
+            "Factura",
+            id
+        );
 
     }
 
     public ResultSet Cliente() throws SQLException {
 
-        return this.database.getAll("Cliente");
+        return this.database.getAll(
+            "Cliente"
+        );
 
     }
 
     public ResultSet Cliente(String id) throws SQLException {
 
-        return this.database.getByID("Cliente", id);
+        return this.database.getByID(
+            "Cliente",
+            id
+        );
+
+    }
+
+    public ResultSet Cliente(Object[] objects) throws SQLException {
+
+        return this.database.insert(
+            "Cliente",
+            Cliente.toArrayAtributes(),
+            objects
+        );
+        
+    }
+
+    public ResultSet UpdateCliente(Object[] objects) throws SQLException {
+
+        return this.database.update(
+            "Cliente",
+            Cliente.toArrayAtributes(),
+            objects
+        );
+
+    }
+
+    public ResultSet DeleteCliente(String id) throws SQLException {
+
+        return this.database.delete(
+            "Cliente",
+            id
+        );
 
     }
 
     public ResultSet Usuario() throws SQLException {
 
-        return this.database.getAll("Usuario");
+        return this.database.getAll(
+            "Usuario"
+        );
 
     }
 
     public ResultSet Usuario(String id) throws SQLException {
 
-        return this.database.getByID("Usuario", id);
+        return this.database.getByID(
+            "Usuario",
+            id
+        );
+
+    }
+
+    public ResultSet Usuario(Object[] objects) throws SQLException {
+
+        return this.database.insert(
+            "Usuario",
+            Usuario.toArrayAtributes(),
+            objects
+        );
+        
+    }
+
+    public ResultSet UpdateUsuario(Object[] objects) throws SQLException {
+
+        return this.database.update(
+            "Usuario",
+            Usuario.toArrayAtributes(),
+            objects
+        );
+
+    }
+
+    public ResultSet DeleteUsuario(String id) throws SQLException {
+
+        return this.database.delete(
+            "Usuario",
+            id
+        );
 
     }
 
@@ -173,6 +373,7 @@ class BuildModels {
     
                 case FACTURA -> {
                     atributes = Factura.toArrayAtributes();
+                    
     
                     yield null /*new Factura
                     (
@@ -223,11 +424,11 @@ class BuildModels {
 
         while(response.next()) {
 
-            objects.add(switch(className) {
+            objects.add((T)switch(className) {
 
                 case CLIENTE -> {
                     atributes = Cliente.toArrayAtributes();
-                    yield (T)new Cliente
+                    yield new Cliente
                     (
                         response.getString(atributes[0]),
                         response.getString(atributes[1]),
@@ -238,7 +439,7 @@ class BuildModels {
                 case FACTURA -> {
                     atributes = Factura.toArrayAtributes();
     
-                    yield (T)null /*new Factura
+                    yield null /*new Factura
                     (
                         response.getString(atributes[0]),
                         response.getDate(atributes[1]),
@@ -250,7 +451,7 @@ class BuildModels {
                 case PRODUCTO -> {
                     atributes = Producto.toArrayAtributes();
     
-                    yield (T)new Producto
+                    yield new Producto
                     (
                         response.getString(atributes[0]),
                         response.getString(atributes[1]),
@@ -263,7 +464,7 @@ class BuildModels {
                 case USUARIO -> {
                     atributes = Usuario.toArrayAtributes();
     
-                    yield (T)new Usuario
+                    yield new Usuario
                     (
                         response.getString(atributes[0]),
                         response.getBoolean(atributes[1])
@@ -276,7 +477,7 @@ class BuildModels {
 
         }
 
-
+        response.close();
 
         return objects;
 
