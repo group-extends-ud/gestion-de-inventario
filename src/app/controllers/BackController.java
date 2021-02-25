@@ -25,6 +25,10 @@ public class BackController {
         controller = new BackController(args[0], args[1]);
     }
 
+    public static void deleteMovimiento(String ID) throws SQLException {
+        //por implementar
+    }
+
     public ArrayList<Producto> Producto() throws SQLException {
 
         return database.<Producto>getAll(DatabaseController.Table.PRODUCTO);
@@ -47,10 +51,8 @@ public class BackController {
 
     }
 
-    public void deleteProducto(String id) throws SQLException {
-
+    public static void deleteProducto(String id) throws SQLException {
         database.delete(DatabaseController.Table.PRODUCTO, id);
-
     }
 
     public ArrayList<Cliente> Cliente() throws SQLException {
