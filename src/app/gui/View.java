@@ -201,8 +201,12 @@ public class View {
         pEstadistica.removeAll();
         SLabel masVendido = new SLabel(32, 32, 500, 28, "Producto más vendido " + ((Producto)mas[0]).getNombre() + " con un total de " + mas[1]);
         SLabel menosVendido = new SLabel(32, 60, 500, 28, "Producto menos vendido " + ((Producto)menos[0]).getNombre() + " con un total de " + menos[1]);
+
+        SLabel jsons = new SLabel(32, 92, 500, 28, "¿Quieres Guardar en Json?");
+
         pEstadistica.add(masVendido);
         pEstadistica.add(menosVendido);
+        pEstadistica.add(jsons);
         pEstadistica.repaint();
     }
 
