@@ -642,7 +642,7 @@ class DatabaseController {
                         yield new Producto(
                             response.getInt(atributes[0]),
                             response.getString(atributes[1]),
-                            Double.valueOf(response.getString(atributes[2])),
+                            toDouble(response.getString(atributes[2])),
                             response.getInt(atributes[3]),
                             response.getInt(atributes[4])
                         );
