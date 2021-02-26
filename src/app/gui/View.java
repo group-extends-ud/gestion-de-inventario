@@ -153,7 +153,9 @@ public class View {
                 Image iAdd = new ImageIcon("resources/add.png").getImage().getScaledInstance(28, 28, Image.SCALE_DEFAULT);
                 SButton btAdd = new SButton(760, i * 32 + 64, new ImageIcon(iAdd));
                 btAdd.addActionListener((e)-> {
-                    addToCarrito(producto);
+                    if(!(producto.getStock() <= 0)) {
+                        addToCarrito(producto);
+                    }
                 });
 
                 pInventario.add(lProducto);
@@ -265,7 +267,7 @@ public class View {
 
         SButton btConfirm = new SButton(50, 112, 100, 32, "AÑADIR");
         btConfirm.addActionListener( (e) -> {
-            if (!tfCantidad.getText().isEmpty()) {
+            if (!tfCantidad.getText().isEmpty() && Integer.parseInt(tfCantidad.getText()) < producto.getStock()) {
                 try {
                     carrito.add(new FacturaProducto(Integer.parseInt(tfCantidad.getText()), -1, producto));
                     actualizar();
