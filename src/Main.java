@@ -16,8 +16,6 @@ public class Main {
 
         BackController.init(args);
 
-        BackController.controller.Producto(new Producto(null, "Yuca", 230000, 10, 5));
-
 	    Controller.init();
     }
 }
