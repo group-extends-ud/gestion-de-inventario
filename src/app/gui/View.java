@@ -231,7 +231,7 @@ public class View {
             });
             pInterno.add(btConfirm);
         }
-        
+
         SButton btClose = new SButton(32, 62, 100, 32, "CERRAR");
         btClose.addActionListener( (e) -> ventana.cerrar());
         pInterno.add(btClose);
