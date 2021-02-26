@@ -301,7 +301,7 @@ public class View {
     }
 
     private void ajustarItem(int id) {
-        VentanaEmergente ventana = new VentanaEmergente(Controller.controller, 340, 340);
+        VentanaEmergente ventana = new VentanaEmergente(Controller.controller, 340, 320);
 
         SLabel lInsertar = new SLabel(32, 32, 200, 28, "Modificar un producto");
         ventana.add(lInsertar);
