@@ -127,3 +127,20 @@ COMMENT ON TABLE Producto
 COMMENT ON TABLE Cliente
 	IS 'Tabla que almacena los usuarios Empleado o Administrador de la tienda'
 ;
+
+/* Create Triggers */
+
+CREATE OR REPLACE FUNCTION updateStock() RETURNS TRIGGER AS $add_reg$
+    DECLARE
+        newCantidad int;
+	BEGIN
+	    SELECT stock FROM Producto WHERE IDProducto = NEW.IDProducto INTO newCantidad;
+	    UPDATE Producto SET Stock = newCantidad - NEW.Cantidad WHERE IDProducto = NEW.IDProducto;
+
+        RETURN NULL;
+    END;
+$add_reg$ LANGUAGE plpgsql;
+
+CREATE TRIGGER updateStock
+    AFTER INSERT ON FacturaProducto
+    FOR EACH ROW EXECUTE PROCEDURE updateStock();

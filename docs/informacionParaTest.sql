@@ -21,3 +21,7 @@ INSERT INTO producto(IDProducto, nombre, precio, stock, stockMinimo) VALUES(19,'
 --clientes
 INSERT INTO cliente(idCliente, nombre, apellido) VALUES(1, 'DEFAULT', 'N/A');
 --facturas
+
+--usuarios
+INSERT INTO usuario(UserName, Pass, IsAdmin) VALUES('admin', 1234, true);
+INSERT INTO usuario(UserName, Pass, IsAdmin) VALUES('employee', 1234, false);
