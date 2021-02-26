@@ -1,16 +1,19 @@
 package app.inventario;
 
+import java.math.BigDecimal;
+
 public class Producto extends General {
 
-    private String idproducto, nombre, precio;
-    private int stock, stockMinimo;
+    private String idproducto, nombre;
+    private BigDecimal precio;
+    private int stock, stockminimo;
 
-    public Producto(String idproducto, String nombre, String precio, int stock, int StockMinimo) {
+    public Producto(String idproducto, String nombre, BigDecimal precio, int stock, int stockminimo) {
         this.idproducto = idproducto;
         this.nombre = nombre;
         this.precio = precio;
         this.stock = stock;
-        this.stockMinimo = stockMinimo;
+        this.stockminimo = stockminimo;
     }
 
     public String getIdproducto() {
@@ -27,10 +30,10 @@ public class Producto extends General {
         this.nombre = nombre;
     }
 
-    public String getPrecio() {
+    public BigDecimal getPrecio() {
         return precio;
     }
-    public void setPrecio(String precio) {
+    public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
 
@@ -42,10 +45,10 @@ public class Producto extends General {
     }
 
     public int getStockMinimo() {
-        return stockMinimo;
+        return stockminimo;
     }
-    public void setStockMinimo(int stockMinimo) {
-        this.stockMinimo = stockMinimo;
+    public void setStockMinimo(int stockminimo) {
+        this.stockminimo = stockminimo;
     }
 
     public static String[] toArrayAtributes() {
@@ -57,7 +60,7 @@ public class Producto extends General {
     @Override
     public Object[] toArray() {
 
-        Object[] objects = { nombre, precio, stock, stockMinimo, idproducto };
+        Object[] objects = { Integer.parseInt(idproducto), nombre, precio, stock, stockminimo };
 
         return objects;
 

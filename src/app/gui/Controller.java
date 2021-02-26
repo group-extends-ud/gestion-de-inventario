@@ -7,6 +7,8 @@ import lib.sRAD.gui.sComponent.*;
 import javax.swing.*;
 
 import java.awt.*;
+import java.sql.SQLException;
+import java.text.ParseException;
 
 import static lib.sRAD.gui.component.Resource.LST;
 
@@ -20,7 +22,7 @@ public class Controller extends SFrame {
     private SPanel pLogin;
 
     private Controller() {
-        //añade botones básicos de la ventana
+        // añade botones básicos de la ventana
         add(MainBar.getBtExit());
         add(MainBar.getBtMin(this));
 
@@ -54,7 +56,7 @@ public class Controller extends SFrame {
         repaint();
     }
 
-    protected static void ingresar(int estado) {
+    protected static void ingresar(int estado) throws SQLException, ParseException {
 
         controller.remove(controller.lCajas);
         controller.remove(controller.pLogin);
@@ -108,7 +110,12 @@ class PLogin extends SPanel {
         btIniciar.addActionListener(e -> {
             int estado = BackController.validarIngreso(tfUsuario.getText(), tfPassword.getClave());
             if(estado > 0) {
-                Controller.ingresar(estado);
+                try {
+                    Controller.ingresar(estado);
+                } catch (SQLException | ParseException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
             }
             else {
                 JOptionPane.showMessageDialog(null, "Datos incorrectos", "Error", JOptionPane.ERROR_MESSAGE);

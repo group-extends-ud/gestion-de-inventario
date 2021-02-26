@@ -1,7 +1,10 @@
 package app.controllers;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import app.DataBase;
@@ -20,33 +23,22 @@ public class BackController {
         controller = new BackController(args[0], args[1]);
     }
 
-    public static void deleteMovimiento(String ID) throws SQLException {
-        //por implementar
-    }
-
-    public static void updateMovimiento(Movimiento movimiento) {
-        //por implementar
-    }
-
-    public static ArrayList<Movimiento> Movimiento() {
-        //por implementar
-        return null;
-    }
-
-    public ArrayList<Producto> Producto() throws SQLException {
+    public ArrayList<Producto> Producto() throws SQLException, ParseException {
 
         return database.<Producto>getAll(DatabaseController.Table.PRODUCTO);
 
     }
 
-    public Producto Producto(String id) throws SQLException {
+    public Producto Producto(String id) throws SQLException, ParseException {
 
         return database.<Producto>getById(DatabaseController.Table.PRODUCTO, id);
 
     }
 
-    public Producto Producto(Producto producto) throws SQLException {
-        return database.insert(DatabaseController.Table.PRODUCTO, producto);
+    public void Producto(Producto producto) throws SQLException {
+
+        database.insert(DatabaseController.Table.PRODUCTO, producto);
+
     }
 
     public static void updateProducto(Producto producto) throws SQLException {
@@ -59,21 +51,21 @@ public class BackController {
         database.delete(DatabaseController.Table.PRODUCTO, id);
     }
 
-    public ArrayList<Cliente> Cliente() throws SQLException {
+    public ArrayList<Cliente> Cliente() throws SQLException, ParseException {
 
         return database.<Cliente>getAll(DatabaseController.Table.CLIENTE);
 
     }
 
-    public Cliente Cliente(String id) throws SQLException {
+    public Cliente Cliente(String id) throws SQLException, ParseException {
 
         return database.<Cliente>getById(DatabaseController.Table.CLIENTE, id);
 
     }
 
-    public Cliente Cliente(Cliente cliente) throws SQLException {
+    public void Cliente(Cliente cliente) throws SQLException {
 
-        return database.insert(DatabaseController.Table.CLIENTE, cliente);
+        database.insert(DatabaseController.Table.CLIENTE, cliente);
 
     }
 
@@ -89,21 +81,21 @@ public class BackController {
 
     }
 
-    public ArrayList<Usuario> Usuario() throws SQLException {
+    public ArrayList<Usuario> Usuario() throws SQLException, ParseException {
 
         return database.<Usuario>getAll(DatabaseController.Table.USUARIO);
 
     }
 
-    public Usuario Usuario(String id) throws SQLException {
+    public Usuario Usuario(String id) throws SQLException, ParseException {
 
         return database.<Usuario>getById(DatabaseController.Table.USUARIO, id);
 
     }
 
-    public Usuario Usuario(Usuario usuario) throws SQLException {
+    public void Usuario(Usuario usuario) throws SQLException {
 
-        return database.insert(DatabaseController.Table.USUARIO, usuario);
+        database.insert(DatabaseController.Table.USUARIO, usuario);
 
     }
 
@@ -119,21 +111,21 @@ public class BackController {
 
     }
 
-    public ArrayList<Factura> Factura() throws SQLException {
+    public ArrayList<Factura> Factura() throws SQLException, ParseException {
 
         return database.<Factura>getAll(DatabaseController.Table.FACTURA);
 
     }
 
-    public Factura Factura(String id) throws SQLException {
+    public Factura Factura(String id) throws SQLException, ParseException {
 
         return database.<Factura>getById(DatabaseController.Table.FACTURA, id);
 
     }
 
-    public Factura Factura(Factura factura) throws SQLException {
+    public void Factura(Factura factura) throws SQLException {
 
-        return database.insert(DatabaseController.Table.FACTURA, factura);
+        database.insert(DatabaseController.Table.FACTURA, factura);
 
     }
 
@@ -149,21 +141,21 @@ public class BackController {
 
     }
 
-    public ArrayList<FacturaProducto> FacturaProducto() throws SQLException {
+    public ArrayList<FacturaProducto> FacturaProducto(String idFactura) throws SQLException, ParseException {
 
-        return database.<FacturaProducto>getAll(DatabaseController.Table.FACTURAPRODUCTO);
-
-    }
-
-    public FacturaProducto FacturaProducto(String id) throws SQLException {
-
-        return database.<FacturaProducto>getById(DatabaseController.Table.FACTURAPRODUCTO, id);
+        return database.getRelation(idFactura);
 
     }
 
-    public FacturaProducto FacturaProducto(FacturaProducto facturaProducto) throws SQLException {
+    public FacturaProducto FacturaProducto(String idFactura, String idProducto) throws SQLException, ParseException {
 
-        return database.insert(DatabaseController.Table.FACTURAPRODUCTO, facturaProducto);
+        return database.getRelationUnique(idFactura, idProducto);
+
+    }
+
+    public void FacturaProducto(FacturaProducto facturaProducto) throws SQLException {
+
+        database.insert(DatabaseController.Table.FACTURAPRODUCTO, facturaProducto);
 
     }
 
@@ -183,32 +175,53 @@ public class BackController {
         return 1;
     }
 
-    public static void insertarProducto(String nombre, Double precio, int stock, int stockMinimo) {
-        //por implementar
-        //la idea es que el cliente no esté ingresando id, sino que la base de datos asigne uno automáticamente
+    public static void insertarProducto(String nombre, Double precio, int stock, int stockMinimo) throws SQLException {
+        controller.Producto(new Producto(null, nombre, new BigDecimal(precio), stockMinimo, stockMinimo));
     }
 
-    public static String[] getNombresProductos() {
-        //por implementar
-        //para que el usuario tenga una lista de todos los productos al realizar el movimiento
-        String[] productos = { "Arroz", "Papa", "Néctar" }; //valores para hacer pruebas (mientras se implementa)
+    public static String[] getNombresProductos() throws SQLException, ParseException {
+
+        ArrayList<Producto> provisional = controller.Producto(); 
+
+        String[] productos = new String[provisional.size()];
+
+        for(int i = 0; i < provisional.size(); ++i) {
+            productos[i]= provisional.get(i).getNombre();
+        }
+
         return productos;
     }
 
-    public static double getPrecio(String nombreProducto) {
-        //por implementar
-        System.out.println(nombreProducto);//para hacer pruebas
-        return 1000.0;
+    public static double getPrecio(String idProducto) throws SQLException, ParseException {
+
+        return controller.Producto(idProducto).getPrecio().doubleValue();
+
     }
 
-    public static int getStock(String nombreProducto) {
-        //por implementar
-        return 0;
+    public static int getStock(String idProducto) throws SQLException, ParseException {
+        
+        return controller.Producto(idProducto).getStock();
+        
     }
 
-    public static void insertarMovimiento(String nombreProducto, int cantidad) {
-        //por implementar
-        //la misma dinámica que el método insertarProducto (id automático de la que el BackController se encarga)
+    public static void insertarMovimiento(String idProducto, int cantidad) {
+        
+        //controller.Factura();
+
+    }
+
+    public static BigDecimal toBigDecimal(String precio) throws ParseException {
+
+        precio = precio.substring(2, precio.length());
+
+        NumberFormat format = NumberFormat.getInstance();
+
+        BigDecimal price = null;
+
+        price = new BigDecimal(format.parse(precio).doubleValue());
+
+        return price;
+
     }
 }
 
@@ -224,29 +237,17 @@ class DatabaseController {
         this.database = new DataBase(user, password);
     }
 
-    public <T> ArrayList<T> getAll(Table table) throws SQLException {
+    public <T> ArrayList<T> getAll(Table table) throws SQLException, ParseException {
 
-        ResultSet response = switch(table) {
+        ResultSet response = switch (table) {
 
-            case PRODUCTO -> this.database.getAll(
-                Producto.class.getSimpleName()
-            );
+            case PRODUCTO -> this.database.getAll(Producto.class.getSimpleName());
 
-            case CLIENTE -> this.database.getAll(
-                Cliente.class.getSimpleName()
-            );
+            case CLIENTE -> this.database.getAll(Cliente.class.getSimpleName());
 
-            case FACTURA -> this.database.getAll(
-                Factura.class.getSimpleName()
-            );
+            case FACTURA -> this.database.getAll(Factura.class.getSimpleName());
 
-            case USUARIO -> this.database.getAll(
-                Usuario.class.getSimpleName()
-            );
-
-            case  FACTURAPRODUCTO -> this.database.getAll(
-                FacturaProducto.class.getSimpleName()
-            );
+            case USUARIO -> this.database.getAll(Usuario.class.getSimpleName());
 
             default -> throw new IllegalArgumentException("Unexpected value: " + table);
 
@@ -256,34 +257,36 @@ class DatabaseController {
 
     }
 
-    public <T> T getById(Table table, String id) throws SQLException {
+    public ArrayList<FacturaProducto> getRelation(String idFactura) throws SQLException, ParseException {
 
-        ResultSet response = switch(table) {
+        ResultSet response = this.database.getRelation(FacturaProducto.class.getSimpleName(), idFactura);
 
-            case PRODUCTO -> this.database.getByID(
-                Producto.class.getSimpleName(),
-                id
-            );
+        return BuildModels.<FacturaProducto>BuildMultiple(Table.FACTURAPRODUCTO, response);
 
-            case CLIENTE -> this.database.getByID(
-                Cliente.class.getSimpleName(),
-                id
-            );
+    }
 
-            case FACTURA -> this.database.getByID(
-                Factura.class.getSimpleName(),
-                id
-            );
+    public FacturaProducto getRelationUnique(String idFactura, String idProducto) throws SQLException, ParseException {
 
-            case USUARIO -> this.database.getByID(
-                Usuario.class.getSimpleName(),
-                id
-            );
+        ResultSet response = this.database.getUniqueRelation(FacturaProducto.class.getSimpleName(), idFactura,
+                idProducto);
 
-            case  FACTURAPRODUCTO -> this.database.getByID(
-                FacturaProducto.class.getSimpleName(),
-                id
-            );
+        return BuildModels.<FacturaProducto>BuildOne(Table.FACTURAPRODUCTO, response);
+
+    }
+
+    public <T> T getById(Table table, String id) throws SQLException, ParseException {
+
+        ResultSet response = switch (table) {
+
+            case PRODUCTO -> this.database.getByID(Producto.class.getSimpleName(), id);
+
+            case CLIENTE -> this.database.getByID(Cliente.class.getSimpleName(), id);
+
+            case FACTURA -> this.database.getByID(Factura.class.getSimpleName(), id);
+
+            case USUARIO -> this.database.getByID(Usuario.class.getSimpleName(), id);
+
+            case FACTURAPRODUCTO -> this.database.getByID(FacturaProducto.class.getSimpleName(), id);
 
             default -> throw new IllegalArgumentException("Unexpected value: " + table);
 
@@ -293,25 +296,40 @@ class DatabaseController {
 
     }
 
-    public <T> T insert(Table table, General general) throws SQLException {
+    public void insert(Table table, General general) throws SQLException {
 
         ResultSet response = switch (table) {
 
-            case PRODUCTO -> database.insert(Producto.class.getSimpleName(), Producto.toArrayAtributes(), general.toArray());
+            case PRODUCTO -> database.insert(Producto.class.getSimpleName(), Producto.toArrayAtributes(),
+                    general.toArray());
 
-            case CLIENTE -> database.insert(Cliente.class.getSimpleName(), Cliente.toArrayAtributes(), general.toArray());
+            case CLIENTE -> database.insert(Cliente.class.getSimpleName(), Cliente.toArrayAtributes(),
+                    general.toArray());
 
-            case FACTURA -> database.insert(Factura.class.getSimpleName(), Factura.toArrayAtributes(), general.toArray());
+            case FACTURA -> {
+                database.insert(Factura.class.getSimpleName(), Factura.toArrayAtributes(),
+                    general.toArray());
 
-            case USUARIO -> database.insert(Usuario.class.getSimpleName(), Usuario.toArrayAtributes(), general.toArray());
+                for(FacturaProducto item : ((Factura)general).getItems()) {
+                    insert(Table.FACTURAPRODUCTO, item);
+                }
 
-            case FACTURAPRODUCTO -> database.insert(FacturaProducto.class.getSimpleName(), FacturaProducto.toArrayAtributes(), general.toArray());
+                yield this.database.getAll(Factura.class.getSimpleName());
+            }
+
+            case USUARIO -> database.insert(Usuario.class.getSimpleName(), Usuario.toArrayAtributes(),
+                    general.toArray());
+
+                    
+
+            case FACTURAPRODUCTO -> database.insert(FacturaProducto.class.getSimpleName(),
+                    FacturaProducto.toArrayAtributes(), general.toArray());
 
             default -> throw new IllegalArgumentException("Unexpected value: " + table);
 
         };
 
-        return BuildModels.BuildOne(table, response);
+        response.close();
 
     }
 
@@ -319,15 +337,20 @@ class DatabaseController {
 
         ResultSet response = switch (table) {
 
-            case PRODUCTO -> database.update(Producto.class.getSimpleName(), Producto.toArrayAtributes(), general.toArray());
+            case PRODUCTO -> database.update(Producto.class.getSimpleName(), Producto.toArrayAtributes(),
+                    general.toArray());
 
-            case CLIENTE -> database.update(Cliente.class.getSimpleName(), Cliente.toArrayAtributes(), general.toArray());
+            case CLIENTE -> database.update(Cliente.class.getSimpleName(), Cliente.toArrayAtributes(),
+                    general.toArray());
 
-            case FACTURA -> database.update(Factura.class.getSimpleName(), Factura.toArrayAtributes(), general.toArray());
+            case FACTURA -> database.update(Factura.class.getSimpleName(), Factura.toArrayAtributes(),
+                    general.toArray());
 
-            case USUARIO -> database.update(Usuario.class.getSimpleName(), Usuario.toArrayAtributes(), general.toArray());
+            case USUARIO -> database.update(Usuario.class.getSimpleName(), Usuario.toArrayAtributes(),
+                    general.toArray());
 
-            case FACTURAPRODUCTO -> database.update(FacturaProducto.class.getSimpleName(), FacturaProducto.toArrayAtributes(), general.toArray());
+            case FACTURAPRODUCTO -> database.update(FacturaProducto.class.getSimpleName(),
+                    FacturaProducto.toArrayAtributes(), general.toArray());
 
             default -> throw new IllegalArgumentException("Unexpected value: " + table);
         };
@@ -359,124 +382,150 @@ class DatabaseController {
 
     private static class BuildModels {
 
-        public static <T> T BuildOne(DatabaseController.Table className, ResultSet response) throws SQLException {
-    
+        public static <T> T BuildOne(DatabaseController.Table className, ResultSet response)
+                throws SQLException, ParseException {
+
             String[] atributes;
             General object = null;
-    
-            while(response.next()) {
-    
-                object = switch(className) {
-    
+
+            while (response.next()) {
+
+                object = switch (className) {
+
                     case CLIENTE -> {
                         atributes = Cliente.toArrayAtributes();
-                        yield new Cliente
-                        (
+                        yield new Cliente(
                             response.getString(atributes[0]),
                             response.getString(atributes[1]),
                             response.getString(atributes[2])
                         );
                     }
-        
+
                     case FACTURA -> {
                         atributes = Factura.toArrayAtributes();
-                        
-        
-                        yield null /*new Factura
-                        (
+
+                        Cliente cliente = BackController.controller.Cliente(response.getString(atributes[2]));
+                        ArrayList<FacturaProducto> items = BackController.controller.FacturaProducto(response.getString(atributes[0]));
+
+                        yield new Factura(
                             response.getString(atributes[0]),
                             response.getDate(atributes[1]),
-                            response.getString(atributes[2]),
-                            response.getString(atributes[3])
-                        )*/;
+                            cliente,
+                            items
+                        );
                     }
-        
+
                     case PRODUCTO -> {
                         atributes = Producto.toArrayAtributes();
-        
-                        yield new Producto
-                        (
+
+                        yield new Producto(
                             response.getString(atributes[0]),
                             response.getString(atributes[1]),
-                            response.getString(atributes[2]),
+                            BackController.toBigDecimal(response.getString(atributes[2])),
                             response.getInt(atributes[3]),
                             response.getInt(atributes[4])
                         );
                     }
-        
+
                     case USUARIO -> {
                         atributes = Usuario.toArrayAtributes();
-        
-                        yield new Usuario
-                        (
+
+                        yield new Usuario(
                             response.getString(atributes[0]),
                             response.getBoolean(atributes[1])
                         );
                     }
-        
+
+                    case FACTURAPRODUCTO -> {
+                        atributes = FacturaProducto.toArrayAtributes();
+
+                        Producto producto = BackController.controller.Producto(response.getString(atributes[3]));
+
+                        yield new FacturaProducto(
+                            response.getInt(atributes[0]),
+                            BackController.toBigDecimal(response.getString(atributes[1])),
+                            null,
+                            producto
+                        );
+                    }
+
                     default -> throw new IllegalArgumentException("Unexpected value: " + className);
-        
+
                 };
-    
+
             }
-    
+
             response.close();
-    
-            return (T)object;
-    
+
+            return (T) object;
+
         }
-    
-        public static <T> ArrayList<T> BuildMultiple(DatabaseController.Table className, ResultSet response) throws SQLException {
-    
+
+        public static <T> ArrayList<T> BuildMultiple(DatabaseController.Table className, ResultSet response)
+                throws SQLException, ParseException {
+
             String[] atributes;
             ArrayList<T> objects = new ArrayList<T>();
-    
-            while(response.next()) {
-    
-                objects.add((T)switch(className) {
-    
+
+            while (response.next()) {
+
+                objects.add((T) switch (className) {
+
                     case CLIENTE -> {
                         atributes = Cliente.toArrayAtributes();
-                        yield new Cliente
-                        (
+                        yield new Cliente(
                             response.getString(atributes[0]),
                             response.getString(atributes[1]),
                             response.getString(atributes[2])
                         );
                     }
-        
+
                     case FACTURA -> {
                         atributes = Factura.toArrayAtributes();
-        
-                        yield null /*new Factura
-                        (
+
+                        Cliente cliente = BackController.controller.Cliente(response.getString(atributes[2]));
+                        ArrayList<FacturaProducto> items = BackController.controller.FacturaProducto(response.getString(atributes[0]));
+
+                        yield new Factura(
                             response.getString(atributes[0]),
                             response.getDate(atributes[1]),
-                            response.getString(atributes[2]),
-                            response.getString(atributes[3])
-                        )*/;
-                    }
-        
-                    case PRODUCTO -> {
-                        atributes = Producto.toArrayAtributes();
-        
-                        yield new Producto
-                        (
-                            response.getString(atributes[0]),
-                            response.getString(atributes[1]),
-                            response.getString(atributes[2]),
-                            response.getInt(atributes[3]),
-                            response.getInt(atributes[4])
+                            cliente,
+                            items
                         );
                     }
-        
+
+                    case PRODUCTO -> {
+                        atributes = Producto.toArrayAtributes();
+
+                        yield new Producto(
+                                response.getString(atributes[0]),
+                                response.getString(atributes[1]),
+                                BackController.toBigDecimal(response.getString(atributes[2])),
+                                response.getInt(atributes[3]),
+                                response.getInt(atributes[4])
+                            );
+                    }
+
                     case USUARIO -> {
                         atributes = Usuario.toArrayAtributes();
-        
-                        yield new Usuario
-                        (
+
+                        yield new Usuario(
                             response.getString(atributes[0]),
                             response.getBoolean(atributes[1])
+                        );
+                    }
+
+                    case FACTURAPRODUCTO -> {
+                        atributes = FacturaProducto.toArrayAtributes();
+
+                        Producto producto = BackController.controller.Producto(response.getString(atributes[3]));
+
+                        yield new FacturaProducto(
+                            response.getInt(atributes[0]),
+                            BackController.toBigDecimal(response.getString(atributes[1])),
+                            null,
+                            producto
+                            
                         );
                     }
         

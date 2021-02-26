@@ -1,22 +1,22 @@
 package app.inventario;
 
+import java.math.BigDecimal;
+
 public class FacturaProducto extends General {
 
-    private String valor;
     private int cantidad;
-    private Producto producto;
+    private BigDecimal valor;
+    private Factura idfactura;
+    private Producto idproducto;
 
-    public FacturaProducto(String valor, int cantidad, Producto producto) {
-        this.valor = valor;
+    public FacturaProducto(int cantidad, BigDecimal valor, Factura idfactura, Producto idproducto) {
         this.cantidad = cantidad;
-        this.producto = producto;
-    }
-
-    public String getValor() {
-        return valor;
-    }
-    public void setValor(String valor) {
         this.valor = valor;
+        this.idfactura = idfactura;
+        this.idproducto = idproducto;
+
+        if(valor.compareTo(idproducto.getPrecio().multiply(new BigDecimal(cantidad))) != 0) this.valor = idproducto.getPrecio().multiply(new BigDecimal(cantidad));
+
     }
 
     public int getCantidad() {
@@ -26,11 +26,25 @@ public class FacturaProducto extends General {
         this.cantidad = cantidad;
     }
 
-    public Producto getProducto() {
-        return producto;
+    public BigDecimal getValor() {
+        return valor;
     }
-    public void setProducto(Producto producto) {
-        this.producto = producto;
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
+    }
+
+    public Factura getFactura() {
+        return idfactura;
+    }
+    public void setFactura(Factura idfactura) {
+        this.idfactura = idfactura;
+    }
+
+    public Producto getProducto() {
+        return idproducto;
+    }
+    public void setProducto(Producto idproducto) {
+        this.idproducto = idproducto;
     }
 
     public static String[] toArrayAtributes() {
@@ -42,7 +56,7 @@ public class FacturaProducto extends General {
     @Override
     public Object[] toArray() {
 
-        Object[] objects = { valor, cantidad, producto };
+        Object[] objects = { cantidad, valor, Integer.parseInt(idfactura.getIdfactura()), Integer.parseInt(idproducto.getIdproducto()) };
 
         return objects;
 

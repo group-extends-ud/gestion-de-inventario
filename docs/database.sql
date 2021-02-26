@@ -20,7 +20,7 @@ DROP TABLE IF EXISTS Usuario CASCADE
 
 CREATE TABLE Cliente
 (
-	IDCliente varchar(50) NOT NULL,
+	IDCliente SERIAL NOT NULL,
 	Nombre varchar(50) NOT NULL,
 	Apellido varchar(50) NOT NULL
 )
@@ -28,9 +28,9 @@ CREATE TABLE Cliente
 
 CREATE TABLE Factura
 (
-	IDFactura varchar(50) NOT NULL,
+	IDFactura SERIAL NOT NULL,
 	Fecha timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	IDCliente varchar(50) NULL
+	IDCliente integer NULL
 )
 ;
 
@@ -38,14 +38,14 @@ CREATE TABLE FacturaProducto
 (
 	Cantidad integer NOT NULL,
 	valor money NOT NULL,
-	IDFactura varchar(50) NOT NULL,
-	IDProducto varchar(50) NOT NULL
+	IDFactura integer NOT NULL,
+	IDProducto integer NOT NULL
 )
 ;
 
 CREATE TABLE Producto
 (
-	IDProducto varchar(50) NOT NULL,
+	IDProducto SERIAL NOT NULL,
 	Nombre varchar(50) NOT NULL,
 	Precio money NOT NULL,
 	Stock integer NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE Usuario
 (
 	UserName varchar(50) NOT NULL,
 	Pass varchar(50) NOT NULL,
-	IsAdmin boolean NOT NULL DEFAULT false
+	IsAdmin boolean NOT NULL DEFAULT FALSE
 )
 ;
 
@@ -89,7 +89,7 @@ ALTER TABLE Producto ADD CONSTRAINT PK_Producto
 ;
 
 ALTER TABLE Usuario ADD CONSTRAINT PK_Usuario
-	PRIMARY KEY (Email)
+	PRIMARY KEY (UserName)
 ;
 
 /* Create Foreign Key Constraints */

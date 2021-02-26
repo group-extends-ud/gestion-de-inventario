@@ -1,7 +1,7 @@
 package app.gui;
 
 import app.controllers.BackController;
-import app.inventario.Movimiento;
+import app.inventario.Factura;
 import app.inventario.Producto;
 import lib.sRAD.gui.component.VentanaEmergente;
 import lib.sRAD.gui.sComponent.*;
@@ -9,10 +9,11 @@ import lib.sRAD.gui.sComponent.*;
 import javax.swing.*;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 
-public class ViewAdmin extends View{
+public class ViewAdmin extends View {
 
-    protected ViewAdmin() {
+    protected ViewAdmin() throws SQLException, ParseException {
         super();
 
         pInventario = new SPanel(SPanel.INTERNO, 0, 0, 848, 608);
@@ -22,24 +23,22 @@ public class ViewAdmin extends View{
         SScrollPane spEstadistica = new SScrollPane(216, 90, 864, 624, pEstadistica);
 
         btRemove = new SButton(1140, 300, new ImageIcon("resources/delete.png"));
-        btRemove.addActionListener( (e) -> {
+        btRemove.addActionListener((e) -> {
             final int selected = tpTabs.getSelectedIndex();
             if (selected == 0 || selected == 2) {
                 removerMovimiento();
-            }
-            else {
+            } else {
                 removerItem();
             }
         });
         Controller.agregar(btRemove);
 
         btSetting = new SButton(1140, 400, new ImageIcon("resources/ajustar.png"));
-        btSetting.addActionListener( (e) -> {
+        btSetting.addActionListener((e) -> {
             final int selected = tpTabs.getSelectedIndex();
             if (selected == 0 || selected == 2) {
                 ajustarMovimiento();
-            }
-            else {
+            } else {
                 ajustarItem();
             }
         });
@@ -51,7 +50,7 @@ public class ViewAdmin extends View{
         actualizar();
     }
 
-    public void actualizar() {
+    public void actualizar() throws SQLException, ParseException {
         super.actualizar();
     }
 
@@ -96,7 +95,7 @@ public class ViewAdmin extends View{
             if (!tfID.getText().isEmpty() && !tfNombre.getText().isEmpty() && !tfPrecio.getText().isEmpty() && !tfStock.getText().isEmpty()
                     && !tfStockMin.getText().isEmpty()) {
                 try {
-                    BackController.updateProducto(new Producto(tfID.getText(), tfNombre.getText(), tfPrecio.getText(),
+                    BackController.updateProducto(new Producto(tfID.getText(), tfNombre.getText(), BackController.toBigDecimal(tfPrecio.getText()),
                             Integer.parseInt(tfStock.getText()), Integer.parseInt(tfStockMin.getText())));
                 } catch (Exception throwables) {
                     JOptionPane.showMessageDialog(null, "No se pudo modificar el producto indicado, por favor verifique" +
@@ -158,8 +157,8 @@ public class ViewAdmin extends View{
             if (!tfID.getText().isEmpty() && !tfProducto.getText().isEmpty() && !tfCantidad.getText().isEmpty() && !tfCostoUnitario.getText().isEmpty()
                     && !tfCostoTotal.getText().isEmpty()) {
                 try {
-                    BackController.updateMovimiento(new Movimiento(Integer.parseInt(tfID.getText()), Integer.parseInt(tfProducto.getText()),
-                            Integer.parseInt(tfCantidad.getText()), Integer.parseInt(tfCostoUnitario.getText()), Integer.parseInt(tfCostoTotal.getText())));
+                    /*BackController.controller.updateFactura(new Factura(Integer.parseInt(tfID.getText()), Integer.parseInt(tfProducto.getText()),
+                            Integer.parseInt(tfCantidad.getText()), Integer.parseInt(tfCostoUnitario.getText()), Integer.parseInt(tfCostoTotal.getText())));*/
                     actualizar();
                 } catch (Exception throwables) {
                     JOptionPane.showMessageDialog(null, "No se pudo modificar el movimiento indicado, por favor verifique" +
@@ -232,11 +231,14 @@ public class ViewAdmin extends View{
         btConfirm.addActionListener( (e) -> {
             if (!tfID.getText().isEmpty()) {
                 try {
-                    BackController.deleteMovimiento(tfID.getText());
+                    BackController.controller.deleteFactura(tfID.getText());
                     actualizar();
                 } catch (SQLException throwables) {
                     JOptionPane.showMessageDialog(null, "No se pudo eliminar el movimiento indicado, por favor verifique" +
                             " los datos ingresados", "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (ParseException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
                 }
             }
             else {
@@ -253,7 +255,7 @@ public class ViewAdmin extends View{
         ventana.lanzar();
     }
 
-    public static void init() {
+    public static void init() throws SQLException, ParseException {
         view = new ViewAdmin();
     }
 }

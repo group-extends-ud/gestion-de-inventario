@@ -33,7 +33,7 @@ public class Usuario extends General {
     @Override
     public Object[] toArray() {
 
-        Object[] objects = { isAdmin, userName };
+        Object[] objects = { userName, isAdmin };
 
         return objects;
 
