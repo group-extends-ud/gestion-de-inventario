@@ -191,8 +191,6 @@ public class DataBase {
 
         String query = "DELETE FROM " + table + " WHERE " + this.getIDTable(table) + " RETURNING *;";
 
-        System.out.println(query);
-
         Object[] objects = { id };
 
         return this.query(query, objects);

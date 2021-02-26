@@ -144,3 +144,23 @@ $update_stock$ LANGUAGE plpgsql;
 CREATE TRIGGER updateStock
     AFTER INSERT ON FacturaProducto
     FOR EACH ROW EXECUTE PROCEDURE updateStock();
+
+CREATE OR REPLACE FUNCTION deleteFactura() RETURNS TRIGGER AS $remove_factura$
+    DECLARE
+        items int;
+        id int;
+    BEGIN
+        FOR id IN SELECT idfactura FROM Factura
+            LOOP
+                SELECT COUNT(*) FROM FacturaProducto WHERE idFactura = id INTO items;
+                IF items = 0 THEN
+                    DELETE FROM Factura WHERE IDFactura = id;
+                END IF;
+        END LOOP;
+        RETURN NULL;
+    END;
+$remove_factura$ LANGUAGE plpgsql;
+
+CREATE TRIGGER deleteFactura
+    AFTER DELETE ON Producto
+    FOR EACH ROW EXECUTE PROCEDURE deleteFactura();
