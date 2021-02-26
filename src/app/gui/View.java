@@ -21,7 +21,7 @@ public class View {
     public static View view;
     // componentes
     protected STabbedPane tpTabs;
-    protected SPanel pMovimiento;
+    protected SPanel pFactura;
     protected SPanel pInventario;
     protected SPanel pEstadistica;
     protected SButton btAdd;
@@ -30,11 +30,11 @@ public class View {
     protected SButton btSetting;
 
     protected View() throws SQLException, ParseException {
-        pMovimiento = new SPanel(SPanel.INTERNO, 0, 0, 848, 608);
-        pInventario = new SPanel(SPanel.INTERNO, 0, 0, 848, 608);
-        pEstadistica = new SPanel(SPanel.INTERNO, 0, 0, 848, 608);
+        pFactura = new SPanel(SPanel.INTERNO, 0, 0, 848, 598);
+        pInventario = new SPanel(SPanel.INTERNO, 0, 0, 848, 598);
+        pEstadistica = new SPanel(SPanel.INTERNO, 0, 0, 848, 598);
 
-        SScrollPane spMovimiento = new SScrollPane(216, 90, 864, 624, pMovimiento);
+        SScrollPane spMovimiento = new SScrollPane(216, 90, 864, 624, pFactura);
         SScrollPane spInventario = new SScrollPane(216, 90, 864, 624, pInventario);
 
         tpTabs = new STabbedPane(STabbedPane.DECORADO, 216, 30, 866, 656);
@@ -46,7 +46,7 @@ public class View {
             int selected = tpTabs.getSelectedIndex();
             if (selected == 0 || selected == 2) {
                 try {
-                    addMovimiento();
+                    addFactura();
                 } catch (SQLException | ParseException e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
@@ -67,28 +67,51 @@ public class View {
     }
 
     public void actualizar() throws SQLException, ParseException {
-        // pMovimiento
-        pMovimiento.removeAll();
-        ArrayList<Factura> movimientos = BackController.controller.Factura();
-        if (movimientos != null && !movimientos.isEmpty()) {
-            SLabel encabezado = new SLabel(32, 32, 800, 28, "%20s%20s%20s%20s%20s".formatted("id", "id del producto",
-                    "cantidad", "costo unitario", "costo total"));
-            pMovimiento.add(encabezado);
-            for (int i = 0; i < movimientos.size(); i++) {
-                Factura movimiento = movimientos.get(i);
-                SLabel lMovimiento = new SLabel(32, i * 32 + 64, 800, 28,
-                        "%20d%20d%20d%20d%20d".formatted(movimiento.getIdfactura(), movimiento.getIdfactura(),
-                                movimiento.getCantidad(), 20, movimiento.getCostoTotal()));// getCostoUnitario aplicaría
-                                                                                           // por cada producto
-                pMovimiento.add(lMovimiento);
+        // pFactura --FALTA REVISAR--
+        pFactura.removeAll();
+        ArrayList<Factura> facturas = BackController.controller.Factura();
+        if (facturas != null && !facturas.isEmpty()) {
+            SLabel lID = new SLabel(32, 32, 68, 28, "ID");
+            SLabel lNombre = new SLabel(100, 32, 250, 28, "Cliente");
+            SLabel lPrecio = new SLabel(350, 32, 150, 28, "Precio Total");
+            SLabel lStock = new SLabel(550, 32, 100, 28, "Fecha");
+            SLabel lStockMinimo = new SLabel(700, 32, 100, 28, "Detalles");
+            pFactura.add(lID);
+            pFactura.add(lNombre);
+            pFactura.add(lPrecio);
+            pFactura.add(lStock);
+            pFactura.add(lStockMinimo);
+            //contenido
+            for (int i = 0; i < facturas.size(); i++) {
+                // por cada producto
+                Factura factura = facturas.get(i);
+                SLabel lProducto = new SLabel(32, i * 32 + 64, 68, 28, factura.getIdfactura().toString());
+                SLabel lProducto1 = new SLabel(100, i * 32 + 64, 250, 28, factura.getCliente().getNombre()+" "+
+                        factura.getCliente().getApellido());
+                SLabel lProducto2 = new SLabel(350, i * 32 + 64, 150, 28, toCOP(factura.getCostoTotal()), SLabel.RIGHT);
+                SLabel lProducto3 = new SLabel(550, i * 32 + 64, 100, 28, factura.getFecha()+"", SLabel.RIGHT);
+                SButton btDetail = new SButton(700, i * 32 + 64, 100, 28, "+");
+
+                pInventario.add(lProducto);
+                pInventario.add(lProducto1);
+                pInventario.add(lProducto2);
+                pInventario.add(lProducto3);
+                pInventario.add(btDetail);
             }
         }
-        pMovimiento.repaint();
+        if(facturas.size() > 17) {
+            pFactura.setSize(pFactura.getWidth(), facturas.size()*32+128);
+        }
+        else {
+            pFactura.setSize(pFactura.getWidth(), 598);
+        }
+        pFactura.repaint();
 
         // pInventario
         pInventario.removeAll();
         ArrayList<Producto> productos = BackController.controller.Producto();
         if (productos != null && !productos.isEmpty()) {
+            //encabezado
             SLabel lID = new SLabel(32, 32, 68, 28, "ID");
             SLabel lNombre = new SLabel(100, 32, 250, 28, "Nombre");
             SLabel lPrecio = new SLabel(350, 32, 150, 28, "Precio");
@@ -99,6 +122,7 @@ public class View {
             pInventario.add(lPrecio);
             pInventario.add(lStock);
             pInventario.add(lStockMinimo);
+            //contenido
             for (int i = 0; i < productos.size(); i++) {
                 // por cada producto
                 Producto producto = productos.get(i);
@@ -119,7 +143,7 @@ public class View {
             pInventario.setSize(pInventario.getWidth(), productos.size()*32+128);
         }
         else {
-            pInventario.setSize(pInventario.getWidth(), 608);
+            pInventario.setSize(pInventario.getWidth(), 598);
         }
         pInventario.repaint();
     }
@@ -180,7 +204,7 @@ public class View {
         ventana.lanzar();
     }
 
-    public void addMovimiento() throws SQLException, ParseException {
+    public void addFactura() throws SQLException, ParseException {
         VentanaEmergente ventana = new VentanaEmergente(Controller.controller, 340, 300);
 
         SLabel lInsertar = new SLabel(32, 32, 200, 28, "Inserte un movimiento");
@@ -243,7 +267,6 @@ public class View {
                             JOptionPane.ERROR_MESSAGE);
                 }
             } catch (HeadlessException | SQLException | ParseException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
             ventana.cerrar();
