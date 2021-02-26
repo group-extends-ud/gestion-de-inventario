@@ -151,7 +151,7 @@ public class BackController {
 
     }
 
-    public void deleteFactura(String id) throws SQLException {
+    public void deleteFactura(int id) throws SQLException {
 
         database.delete(DatabaseController.Table.FACTURA, id);
 
@@ -206,7 +206,7 @@ public class BackController {
 
     }
 
-    public static Producto getProductoMasVendido() throws SQLException, ParseException {
+    public static Object[] getProductoMasVendido() throws SQLException, ParseException {
 
         ArrayList<Producto> productos = controller.Producto();
 
@@ -229,19 +229,24 @@ public class BackController {
             }
         }
 
-
+        Object[] respuesta = new Object[2];
+        respuesta[1] = comparables[0][1];
 
         for(int i = 0; i < productos.size() - 1; ++i) {
             if(comparables[i][1] < comparables[i + 1][1]) {
                 producto = productos.get(i + 1);
+                respuesta[1] = comparables[i + 1][1];
             }
         }
 
-        return producto;
+        respuesta[0] = producto;
+
+
+        return respuesta;
 
     }
 
-    public static Producto getProductoMenosVendido() throws SQLException, ParseException {
+    public static Object[] getProductoMenosVendido() throws SQLException, ParseException {
 
         ArrayList<Producto> productos = controller.Producto();
 
@@ -264,15 +269,19 @@ public class BackController {
             }
         }
 
-
+        Object[] respuesta = new Object[2];
+        respuesta[1] = comparables[0][1];
 
         for(int i = 0; i < productos.size() - 1; ++i) {
             if(comparables[i][1] > comparables[i + 1][1]) {
                 producto = productos.get(i + 1);
+                respuesta[1] = comparables[i + 1][1];
             }
         }
 
-        return producto;
+        respuesta[0] = producto;
+
+        return respuesta;
 
     }
 

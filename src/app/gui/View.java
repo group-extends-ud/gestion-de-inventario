@@ -194,10 +194,13 @@ public class View {
         }
         pInventario.repaint();
 
+        Object[] mas = BackController.getProductoMasVendido();
+        Object[] menos = BackController.getProductoMenosVendido();
+
         //pEstadistica
         pEstadistica.removeAll();
-        SLabel masVendido = new SLabel(32, 32, 500, 28, "Producto más vendido: " + BackController.getProductoMasVendido().getNombre());
-        SLabel menosVendido = new SLabel(32, 60, 500, 28, "Producto menos vendido: " + BackController.getProductoMenosVendido().getNombre());
+        SLabel masVendido = new SLabel(32, 32, 500, 28, "Producto más vendido " + ((Producto)mas[0]).getNombre() + " con un total de " + mas[1]);
+        SLabel menosVendido = new SLabel(32, 60, 500, 28, "Producto menos vendido " + ((Producto)menos[0]).getNombre() + " con un total de " + menos[1]);
         pEstadistica.add(masVendido);
         pEstadistica.add(menosVendido);
         pEstadistica.repaint();
@@ -217,7 +220,7 @@ public class View {
             SButton btConfirm = new SButton(164, 62, 100, 32, "ELIMINAR");
             btConfirm.addActionListener( (e) -> {
                 try {
-                    BackController.controller.deleteFactura(factura.getIdfactura()+"");
+                    BackController.controller.deleteFactura(factura.getIdfactura());
                     actualizar();
                 } catch (SQLException | ParseException e1) {
                     JOptionPane.showMessageDialog(null, "No se pudo eliminar el movimiento indicado, por favor verifique" +
@@ -228,7 +231,7 @@ public class View {
             });
             pInterno.add(btConfirm);
         }
-
+        
         SButton btClose = new SButton(32, 62, 100, 32, "CERRAR");
         btClose.addActionListener( (e) -> ventana.cerrar());
         pInterno.add(btClose);
