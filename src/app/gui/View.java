@@ -12,10 +12,8 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.time.Instant;
 import java.util.ArrayList;
 
 import static lib.sRAD.logic.Extension.*;
@@ -134,8 +132,8 @@ public class View {
             SLabel lID = new SLabel(32, 32, 68, 28, "ID");
             SLabel lNombre = new SLabel(100, 32, 250, 28, "Nombre");
             SLabel lPrecio = new SLabel(350, 32, 100, 28, "Precio");
-            SLabel lStock = new SLabel(500, 32, 100, 28, "Stock");
-            SLabel lStockMinimo = new SLabel(650, 32, 100, 28, "Stock Minimo");
+            SLabel lStock = new SLabel(500, 32, 70, 28, "Stock");
+            SLabel lStockMinimo = new SLabel(630, 32, 200, 28, "Stock Minimo");
             pInventario.add(lID);
             pInventario.add(lNombre);
             pInventario.add(lPrecio);
@@ -149,10 +147,10 @@ public class View {
                 SLabel lProducto1 = new SLabel(100, i * 32 + 64, 250, 28, producto.getNombre());
                 SLabel lProducto2 = new SLabel(350, i * 32 + 64, 100, 28, toCOP(producto.getPrecio()), SLabel.RIGHT);
                 SLabel lProducto3 = new SLabel(500, i * 32 + 64, 100, 28, producto.getStock()+"", SLabel.RIGHT);
-                SLabel lProducto4 = new SLabel(650, i * 32 + 64, 100, 28, producto.getStockMinimo()+"", SLabel.RIGHT);
+                SLabel lProducto4 = new SLabel(640, i * 32 + 64, 100, 28, producto.getStockMinimo()+"", SLabel.RIGHT);
 
                 Image iAdd = new ImageIcon("resources/add.png").getImage().getScaledInstance(28, 28, Image.SCALE_DEFAULT);
-                SButton btAdd = new SButton(760, i * 32 + 64, new ImageIcon(iAdd));
+                SButton btAdd = new SButton(750, i * 32 + 64, new ImageIcon(iAdd));
                 btAdd.addActionListener((e)-> {
                     if(!(producto.getStock() <= 0)) {
                         addToCarrito(producto);
@@ -168,7 +166,7 @@ public class View {
 
                 if(isAdmin) {
                     Image iEliminar = new ImageIcon("resources/delete.png").getImage().getScaledInstance(28, 28, Image.SCALE_DEFAULT);
-                    SButton btEliminar = new SButton(790, i * 32 + 64, new ImageIcon(iEliminar));
+                    SButton btEliminar = new SButton(780, i * 32 + 64, new ImageIcon(iEliminar));
                     btEliminar.addActionListener((e)-> {
                         try {
                             BackController.deleteProducto(producto.getIdproducto());
@@ -179,7 +177,7 @@ public class View {
                     });
 
                     Image iAjustar = new ImageIcon("resources/ajustar.png").getImage().getScaledInstance(28, 28, Image.SCALE_DEFAULT);
-                    SButton btAjustar = new SButton(820, i * 32 + 64, new ImageIcon(iAjustar));
+                    SButton btAjustar = new SButton(810, i * 32 + 64, new ImageIcon(iAjustar));
                     btAjustar.addActionListener((e)-> {
                         ajustarItem(producto.getIdproducto());
                     });
