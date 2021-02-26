@@ -58,14 +58,10 @@ public class Controller extends SFrame {
     }
 
     protected static void ingresar(Usuario usuario) throws SQLException, ParseException {
-
         controller.remove(controller.lCajas);
         controller.remove(controller.pLogin);
-        if (usuario.isAdmin()) {
-            ViewAdmin.init();
-        } else {
-            View.init();
-        }
+        View.init(usuario.isAdmin());
+
         controller.add(controller.lLineas);
         controller.repaint();
     }
