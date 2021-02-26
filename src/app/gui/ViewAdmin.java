@@ -20,7 +20,6 @@ public class ViewAdmin extends View {
 
     protected ViewAdmin() throws SQLException, ParseException {
         super();
-        SScrollPane spInventario = new SScrollPane(216, 90, 864, 624, pInventario);
         SScrollPane spEstadistica = new SScrollPane(216, 90, 864, 624, pEstadistica);
 
         btRemove = new SButton(1140, 300, new ImageIcon("resources/delete.png"));
@@ -45,7 +44,6 @@ public class ViewAdmin extends View {
         });
         Controller.agregar(btSetting);
 
-        tpTabs.addTab("Inventario", spInventario);
         tpTabs.addTab("Estadística", spEstadistica);
 
         actualizar();
