@@ -72,6 +72,7 @@ public class View {
     }
 
     public void actualizar() throws SQLException, ParseException {
+
         // pFactura --FALTA REVISAR--
         pFactura.removeAll();
         ArrayList<Factura> facturas = BackController.controller.Factura();
@@ -88,8 +89,10 @@ public class View {
             pFactura.add(lStockMinimo);
             //contenido
             for (int i = 0; i < facturas.size(); i++) {
+
                 // por cada producto
                 Factura factura = facturas.get(i);
+
                 SLabel lProducto = new SLabel(32, i * 32 + 64, 68, 28, factura.getIdfactura().toString());
                 SLabel lProducto1 = new SLabel(100, i * 32 + 64, 250, 28,
                         ((factura.getCliente() != null) ? factura.getCliente().getNombre() : "") + " " +
@@ -216,7 +219,44 @@ public class View {
         ventana.lanzar();
     }
 
-    public void avisar() {
+    public void avisar(Producto faltante) {
+
+        VentanaEmergente ventana = new VentanaEmergente(Controller.controller, 340, 300);
+
+        SLabel lInsertar = new SLabel(32, 32, 300, 40, "Quedan pocos en stock de:");
+        ventana.add(lInsertar);
+
+        SLabel lNombre = new SLabel(64, 64, 168, 28, "Nombre:");
+        ventana.add(lNombre);
+
+        SLabel tfNombre = new SLabel(200, 62, 100, 32, faltante.getNombre());
+        ventana.add(tfNombre);
+
+        SLabel lPrecio = new SLabel(64, 104, 168, 28, "Precio:");
+        ventana.add(lPrecio);
+
+        SLabel tfPrecio = new SLabel(200, 102, 100, 32, toCOP(faltante.getPrecio()));
+        ventana.add(tfPrecio);
+
+        SLabel lStock = new SLabel(64, 144, 168, 28, "Stock:");
+        ventana.add(lStock);
+
+        SLabel tfStock = new SLabel(200, 142, 100, 32, faltante.getStock() + "");
+        ventana.add(tfStock);
+
+        SLabel lStockMin = new SLabel(64, 184, 168, 28, "Stock mínimo:");
+        ventana.add(lStockMin);
+
+        SLabel tfStockMin = new SLabel(200, 182, 100, 32, faltante.getStockMinimo() + "");
+        ventana.add(tfStockMin);
+
+        SButton btConfirm = new SButton(50, 232, 100, 32, "ACEPTAR");
+        btConfirm.addActionListener((e) -> {
+            ventana.cerrar();
+        });
+        ventana.add(btConfirm);
+
+        ventana.lanzar();
 
     }
 
