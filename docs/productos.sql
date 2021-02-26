@@ -8,3 +8,12 @@ INSERT INTO producto(idproducto, nombre, precio, stock, stockminimo) VALUES(7,'L
 INSERT INTO producto(idproducto, nombre, precio, stock, stockminimo) VALUES(8,'Cebollas', 2900.0, 5, 3);
 INSERT INTO producto(idproducto, nombre, precio, stock, stockminimo) VALUES(9,'Patatas', 2500, 15, 10);
 INSERT INTO producto(idproducto, nombre, precio, stock, stockminimo) VALUES(10,'Tomates', 3600.0, 15, 10);
+INSERT INTO producto(idproducto, nombre, precio, stock, stockminimo) VALUES(11,'Naranjas', 3500.0, 15, 10);
+INSERT INTO producto(idproducto, nombre, precio, stock, stockminimo) VALUES(12,'Plátanos', 2700.0, 15, 10);
+INSERT INTO producto(idproducto, nombre, precio, stock, stockminimo) VALUES(13,'Manzanas', 7000.0, 15, 10);
+INSERT INTO producto(idproducto, nombre, precio, stock, stockminimo) VALUES(14,'Ternera', 16400.0, 15, 10);
+INSERT INTO producto(idproducto, nombre, precio, stock, stockminimo) VALUES(15,'Queso fresco', 11600.0, 15, 10);
+INSERT INTO producto(idproducto, nombre, precio, stock, stockminimo) VALUES(16,'Huevos (docena)', 5200.0, 15, 10);
+INSERT INTO producto(idproducto, nombre, precio, stock, stockminimo) VALUES(17,'Arroz (1Kg)', 3300.0, 15, 10);
+INSERT INTO producto(idproducto, nombre, precio, stock, stockminimo) VALUES(18,'Pan (1kg)', 3000.0, 15, 10);
+INSERT INTO producto(idproducto, nombre, precio, stock, stockminimo) VALUES(19,'Leche', 2600.0, 15, 10);

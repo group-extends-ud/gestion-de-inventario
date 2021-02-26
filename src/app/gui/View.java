@@ -115,6 +115,12 @@ public class View {
                 pInventario.add(lProducto4);
             }
         }
+        if(productos.size() > 17) {
+            pInventario.setSize(pInventario.getWidth(), productos.size()*32+128);
+        }
+        else {
+            pInventario.setSize(pInventario.getWidth(), 608);
+        }
         pInventario.repaint();
     }
 
