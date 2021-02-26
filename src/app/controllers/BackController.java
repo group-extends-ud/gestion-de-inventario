@@ -42,6 +42,11 @@ public class BackController {
         return null;
     }
 
+    public static Producto getProducto(Integer id) {
+        //por implementar
+        return null;
+    }
+
     public ArrayList<Producto> Producto() throws SQLException, ParseException {
 
         return database.<Producto>getAll(DatabaseController.Table.PRODUCTO);

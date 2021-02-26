@@ -149,21 +149,10 @@ public class View {
                 SLabel lProducto3 = new SLabel(500, i * 32 + 64, 100, 28, producto.getStock()+"", SLabel.RIGHT);
                 SLabel lProducto4 = new SLabel(650, i * 32 + 64, 100, 28, producto.getStockMinimo()+"", SLabel.RIGHT);
 
-                Image iEliminar = new ImageIcon("resources/delete.png").getImage().getScaledInstance(28, 28, Image.SCALE_DEFAULT);
-                SButton btEliminar = new SButton(760, i * 32 + 64, new ImageIcon(iEliminar));
-                btEliminar.addActionListener((e)-> {
-                    try {
-                        BackController.deleteProducto(producto.getIdproducto());
-                        actualizar();
-                    } catch (SQLException | ParseException throwables) {
-                        throwables.printStackTrace();
-                    }
-                });
-
-                Image iAjustar = new ImageIcon("resources/ajustar.png").getImage().getScaledInstance(28, 28, Image.SCALE_DEFAULT);
-                SButton btAjustar = new SButton(790, i * 32 + 64, new ImageIcon(iAjustar));
-                btAjustar.addActionListener((e)-> {
-                    ajustarItem(producto.getIdproducto());
+                Image iAdd = new ImageIcon("resources/add.png").getImage().getScaledInstance(28, 28, Image.SCALE_DEFAULT);
+                SButton btAdd = new SButton(760, i * 32 + 64, new ImageIcon(iAdd));
+                btAdd.addActionListener((e)-> {
+                    addToCarrito(producto);
                 });
 
                 pInventario.add(lProducto);
@@ -171,7 +160,26 @@ public class View {
                 pInventario.add(lProducto2);
                 pInventario.add(lProducto3);
                 pInventario.add(lProducto4);
+                pInventario.add(btAdd);
+
                 if(isAdmin) {
+                    Image iEliminar = new ImageIcon("resources/delete.png").getImage().getScaledInstance(28, 28, Image.SCALE_DEFAULT);
+                    SButton btEliminar = new SButton(790, i * 32 + 64, new ImageIcon(iEliminar));
+                    btEliminar.addActionListener((e)-> {
+                        try {
+                            BackController.deleteProducto(producto.getIdproducto());
+                            actualizar();
+                        } catch (SQLException | ParseException throwables) {
+                            throwables.printStackTrace();
+                        }
+                    });
+
+                    Image iAjustar = new ImageIcon("resources/ajustar.png").getImage().getScaledInstance(28, 28, Image.SCALE_DEFAULT);
+                    SButton btAjustar = new SButton(820, i * 32 + 64, new ImageIcon(iAjustar));
+                    btAjustar.addActionListener((e)-> {
+                        ajustarItem(producto.getIdproducto());
+                    });
+
                     pInventario.add(btEliminar);
                     pInventario.add(btAjustar);
                 }
@@ -194,24 +202,22 @@ public class View {
         pEstadistica.repaint();
     }
 
-    public void removerItem() {
+    private void addToCarrito(Producto producto) {
         VentanaEmergente ventana = new VentanaEmergente(Controller.controller, 340, 180);
 
-        SLabel lInsertar = new SLabel(32, 32, 200, 28, "Eliminar un producto");
-        ventana.add(lInsertar);
+        SLabel lCantidad = new SLabel(64, 64, 168, 28, "Ingrese cantidad de "+producto.getNombre()+" que desea agregar al carrito");
+        ventana.add(lCantidad);
 
-        SLabel lID = new SLabel(64, 64, 168, 28, "ID:");
-        ventana.add(lID);
+        STextField tfCantidad = new STextField(200, 62, 100, 32);
+        ventana.add(tfCantidad);
 
-        STextField tfID = new STextField(200, 62, 100, 32);
-        ventana.add(tfID);
-
-        SButton btConfirm = new SButton(50, 112, 100, 32, "ELIMINAR");
+        SButton btConfirm = new SButton(50, 112, 100, 32, "AÑADIR");
         btConfirm.addActionListener( (e) -> {
-            if (!tfID.getText().isEmpty()) {
+            if (!tfCantidad.getText().isEmpty()) {
                 try {
-                    BackController.deleteProducto(Integer.parseInt(tfID.getText()));
-                } catch (SQLException throwables) {
+                    carrito.add(new FacturaProducto(Integer.parseInt(tfCantidad.getText()), -1, producto));
+                    actualizar();
+                } catch (SQLException | ParseException throwables) {
                     JOptionPane.showMessageDialog(null, "No se pudo eliminar el producto indicado, por favor verifique" +
                             " los datos ingresados", "Error", JOptionPane.ERROR_MESSAGE);
                 }
