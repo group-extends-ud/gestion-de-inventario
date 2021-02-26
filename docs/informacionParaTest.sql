@@ -21,6 +21,7 @@ INSERT INTO producto(nombre, precio, stock, stockMinimo) VALUES('Leche', 2600.0,
 
 --clientes
 INSERT INTO cliente(nombre, apellido) VALUES('DEFAULT', 'N/A');
+
 --facturas
 INSERT INTO factura(IDCliente) VALUES(1);
 INSERT INTO facturaproducto(Cantidad, valor, IDFactura, IDProducto) VALUES(1, 1200, 1, 1);

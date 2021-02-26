@@ -5,24 +5,15 @@ import java.math.BigDecimal;
 public class FacturaProducto extends General {
 
     private int cantidad;
-    private BigDecimal valor;
+    private double valor;
     private Integer idfactura;
     private Producto idproducto;
 
-    public FacturaProducto(int cantidad, BigDecimal valor, Integer idfactura, Producto idproducto) {
+    public FacturaProducto(int cantidad, Integer idfactura, Producto idproducto) {
         this.cantidad = cantidad;
-        this.valor = valor;
         this.idfactura = idfactura;
         this.idproducto = idproducto;
-
-        boolean noCoinciden = false;
-        if(valor != null)
-            noCoinciden = valor.compareTo(BigDecimal.valueOf(idproducto.getPrecio()).multiply(new BigDecimal(cantidad))) != 0;
-
-        if(!noCoinciden) {
-            this.valor = BigDecimal.valueOf(idproducto.getPrecio()).multiply(new BigDecimal(cantidad));
-        }
-
+        this.valor = idproducto.getPrecio() * cantidad;
     }
 
     public int getCantidad() {
@@ -32,11 +23,8 @@ public class FacturaProducto extends General {
         this.cantidad = cantidad;
     }
 
-    public BigDecimal getValor() {
+    public double getValor() {
         return valor;
-    }
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
     }
 
     public Integer getFactura() {
