@@ -15,14 +15,12 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static lib.sRAD.logic.Extension.*;
 
 public class View {
     public static View view;
-    // componentes
+    // componentes gráficos
     protected STabbedPane tpTabs;
     protected SPanel pFactura;
     protected SPanel pInventario;
@@ -31,8 +29,12 @@ public class View {
     protected SButton btClose;
     protected SButton btRemove;
     protected SButton btSetting;
+    // componentes lógicos
+    protected ArrayList<FacturaProducto> carrito;
 
     protected View() throws SQLException, ParseException {
+        carrito = new ArrayList<>();
+
         pFactura = new SPanel(SPanel.INTERNO, 0, 0, 848, 598);
         pInventario = new SPanel(SPanel.INTERNO, 0, 0, 848, 598);
         pEstadistica = new SPanel(SPanel.INTERNO, 0, 0, 848, 598);
@@ -73,7 +75,7 @@ public class View {
         // pFactura --FALTA REVISAR--
         pFactura.removeAll();
         ArrayList<Factura> facturas = BackController.controller.Factura();
-        if (facturas != null && !facturas.isEmpty()) {
+        if (facturas.get(0) != null && !facturas.isEmpty()) {
             SLabel lID = new SLabel(32, 32, 68, 28, "ID");
             SLabel lNombre = new SLabel(100, 32, 250, 28, "Cliente");
             SLabel lPrecio = new SLabel(350, 32, 150, 28, "Precio Total");
@@ -89,10 +91,11 @@ public class View {
                 // por cada producto
                 Factura factura = facturas.get(i);
                 SLabel lProducto = new SLabel(32, i * 32 + 64, 68, 28, factura.getIdfactura().toString());
-                SLabel lProducto1 = new SLabel(100, i * 32 + 64, 250, 28, ((factura.getCliente() != null)? factura.getCliente().getNombre(): "")+" "+
-                        ((factura.getCliente() != null)? factura.getCliente().getApellido() : ""));
+                SLabel lProducto1 = new SLabel(100, i * 32 + 64, 250, 28,
+                        ((factura.getCliente() != null) ? factura.getCliente().getNombre() : "") + " " +
+                        ((factura.getCliente() != null) ? factura.getCliente().getApellido() : ""));
                 SLabel lProducto2 = new SLabel(350, i * 32 + 64, 150, 28, toCOP(factura.getCostoTotal()), SLabel.RIGHT);
-                SLabel lProducto3 = new SLabel(550, i * 32 + 64, 100, 28, factura.getFecha()+"", SLabel.RIGHT);
+                SLabel lProducto3 = new SLabel(550, i * 32 + 64, 100, 28, factura.getFecha() + "", SLabel.RIGHT);
                 SButton btDetail = new SButton(700, i * 32 + 64, 100, 28, "+");
 
                 pInventario.add(lProducto);
@@ -208,60 +211,34 @@ public class View {
     }
 
     public void addFactura() throws SQLException, ParseException {
-        VentanaEmergente ventana = new VentanaEmergente(Controller.controller, 340, 300);
+        VentanaEmergente ventana = new VentanaEmergente(Controller.controller, 340, 210);
         ArrayList<FacturaProducto> facturas = new ArrayList<>();
 
         SLabel lInsertar = new SLabel(32, 32, 200, 28, "Inserte un movimiento");
         ventana.add(lInsertar);
 
-        SLabel lTipo = new SLabel(64, 64, 168, 28, "Añadir producto (nombre):");
-        ventana.add(lTipo);
+        SLabel lCliente = new SLabel(64, 64, 168, 28, "Cliente:");
+        ventana.add(lCliente);
 
-        SLabel lPrecioText = new SLabel(64, 104, 168, 28, "Precio:");
+        STextField tfCliente = new STextField(200, 62, 100, 32);
+        ventana.add(tfCliente);
+
+        SLabel lPrecioText = new SLabel(64, 104, 168, 28, "Precio Total:");
         ventana.add(lPrecioText);
 
-        AtomicReference<Double> precio = new AtomicReference<>(0.0);
-        AtomicReference<Double> precioTotal = new AtomicReference<>(0.0);
-        AtomicInteger cantidad = new AtomicInteger();
-
-        SLabel lPrecio = new SLabel(200, 102, 100, 32, "");
-        ventana.add(lPrecio);
-
-        SLabel lCantidad = new SLabel(64, 144, 168, 28, "Cantidad:");
-        ventana.add(lCantidad);
-
-        SLabel lPrecioTotal = new SLabel(200, 182, 100, 32, "");
+        double precioTotal = 0.0;
+        for (int i = 0; i < carrito.size(); i++) {
+            precioTotal += carrito.get(i).getValor();
+        }
+        SLabel lPrecioTotal = new SLabel(200, 102, 100, 32, toCOP(precioTotal));
         ventana.add(lPrecioTotal);
 
-        STextField tfCantidad = new STextField(200, 142, 100, 32);
-        ventana.add(tfCantidad);
-
-        SLabel lPrecioTotalText = new SLabel(64, 184, 168, 28, "Precio Total:");
-        ventana.add(lPrecioTotalText);
-
-        String[] opciones = BackController.getNombresProductos();
-        SComboBox cbTipo = new SComboBox(SComboBox.DECORADO, 200, 62, 100, 32, opciones);
-        cbTipo.addActionListener((e) -> {
-            try {
-                precio.set(BackController.getPrecio(Integer.parseInt(cbTipo.getItemAt(cbTipo.getSelectedIndex()).toString())));
-            } catch (SQLException | ParseException e1) {
-                e1.printStackTrace();
-            }
-            lPrecio.setText(toCOP(precio.get()));
-        });
-        ventana.add(cbTipo);
-
-        SButton btConfirm = new SButton(50, 232, 100, 32, "INSERTAR");
+        SButton btConfirm = new SButton(50, 152, 100, 32, "INSERTAR");
         btConfirm.addActionListener((e) -> {
             try {
-                if (facturas.size() != 0) {
-                    BackController.insertarMovimiento(cbTipo.getItemAt(cbTipo.getSelectedIndex()).toString(),
-                            cantidad.get());
-                    actualizar();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Por favor ingrese al menos un producto", "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                }
+                BackController.insert(new Factura(null, Date.from(Instant.now()), BackController.getCliente(tfCliente.getText()), carrito));
+                carrito.clear();
+                actualizar();
             } catch (HeadlessException | SQLException | ParseException e1) {
                 JOptionPane.showMessageDialog(null, "No se pudo registrar la factura", "Error", JOptionPane.ERROR_MESSAGE);
                 e1.printStackTrace();
@@ -270,26 +247,7 @@ public class View {
         });
         ventana.add(btConfirm);
 
-        SButton btAdd = new SButton(50, 232, 100, 32, "AÑADIR");
-        btAdd.addActionListener((e) -> {
-            try {
-                if (cantidad.get() > 0 && cantidad.get() > BackController
-                        .getStock(Integer.parseInt(cbTipo.getItemAt(cbTipo.getSelectedIndex()).toString()))) {
-                    BackController.insertarMovimiento(cbTipo.getItemAt(cbTipo.getSelectedIndex()).toString(),
-                            cantidad.get());
-                    actualizar();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Por favor ingrese valores válidos", "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (HeadlessException | SQLException | ParseException e1) {
-                e1.printStackTrace();
-            }
-            ventana.cerrar();
-        });
-        ventana.add(btAdd);
-
-        SButton btClose = new SButton(190, 232, 100, 32, "CERRAR");
+        SButton btClose = new SButton(190, 152, 100, 32, "CERRAR");
         btClose.addActionListener( (e) -> ventana.cerrar());
         ventana.add(btClose);
 

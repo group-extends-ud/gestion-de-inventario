@@ -142,10 +142,8 @@ public class BackController {
 
     }
 
-    public void Factura(Factura factura) throws SQLException, ParseException {
-
-        database.insert(DatabaseController.Table.FACTURA, factura);
-
+    public static void insert(Factura factura) throws SQLException, ParseException {
+        controller.database.insert(DatabaseController.Table.FACTURA, factura);
     }
 
     public void updateFactura(Factura factura) throws SQLException {
@@ -219,12 +217,6 @@ public class BackController {
     public static int getStock(int idProducto) throws SQLException, ParseException {
 
         return controller.Producto(idProducto).getStock();
-
-    }
-
-    public static void insertarMovimiento(String idProducto, int cantidad) {
-
-        // controller.Factura();
 
     }
 
@@ -664,7 +656,6 @@ class DatabaseController {
 
                         yield new FacturaProducto(
                             response.getInt(atributes[0]),
-                            BackController.toBigDecimal(response.getString(atributes[1])),
                             null,
                             producto
                         );
@@ -743,10 +734,8 @@ class DatabaseController {
 
                         yield new FacturaProducto(
                             response.getInt(atributes[0]),
-                            BackController.toBigDecimal(response.getString(atributes[1])),
                             null,
                             producto
-                            
                         );
                     }
         

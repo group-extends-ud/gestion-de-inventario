@@ -13,7 +13,7 @@ public class Factura extends General {
     private ArrayList<FacturaProducto> items;
 
     public Factura(Integer idfactura, Date fecha, Cliente cliente, ArrayList<FacturaProducto> items) {
-        if(idfactura != 1)
+        if(idfactura != -1)
             this.idfactura = idfactura;
         else this.idfactura = null;
         this.fecha = fecha;
@@ -71,12 +71,11 @@ public class Factura extends General {
         return items.size();
     }
 
-    public long getCostoTotal() {
-        long costoTotal = 0;
+    public double getCostoTotal() {
+        double costoTotal = 0;
         for(FacturaProducto item : items) {
-            costoTotal += item.getValor().longValue();
+            costoTotal += item.getValor();
         }
-
         return costoTotal;
     }
 
