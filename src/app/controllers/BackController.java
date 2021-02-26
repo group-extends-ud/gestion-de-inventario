@@ -171,8 +171,10 @@ public class BackController {
 
     }
 
-    public static int validarIngreso(String user, String password) {
-        return 1;
+    public static Usuario validarIngreso(String userName, String password) throws SQLException, ParseException {
+
+        return (getPassword(userName, password))? controller.Usuario(userName) : null;
+
     }
 
     public static void insertarProducto(String nombre, Double precio, int stock, int stockMinimo) throws SQLException {
@@ -223,6 +225,21 @@ public class BackController {
         return price;
 
     }
+
+    private static boolean getPassword(String userName, String password) throws SQLException {
+
+        boolean isUser = false;
+
+        ResultSet response = database.getDataBase().getByID("Usuario", userName);
+
+        while(response.next()) {
+            isUser = response.getString("Pass").equals(password);
+        }
+
+
+        return isUser;
+
+    }
 }
 
 class DatabaseController {
@@ -235,6 +252,10 @@ class DatabaseController {
 
     public DatabaseController(String user, String password) throws ClassNotFoundException, SQLException {
         this.database = new DataBase(user, password);
+    }
+
+    public DataBase getDataBase() {
+        return database;
     }
 
     public <T> ArrayList<T> getAll(Table table) throws SQLException, ParseException {

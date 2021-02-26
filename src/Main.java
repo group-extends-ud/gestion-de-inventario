@@ -1,8 +1,5 @@
 import app.gui.Controller;
-import app.inventario.FacturaProducto;
-import app.inventario.Producto;
 
-import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.ParseException;
 

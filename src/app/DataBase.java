@@ -193,6 +193,8 @@ public class DataBase {
 
             case "Factura" -> "idfactura = ?";
 
+            case "Usuario" -> "username = ?";
+
             default -> throw new IllegalArgumentException("Unexpected value: " + table);
 
         };

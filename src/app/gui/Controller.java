@@ -1,6 +1,7 @@
 package app.gui;
 
 import app.controllers.BackController;
+import app.inventario.Usuario;
 import lib.sRAD.gui.component.MainBar;
 import lib.sRAD.gui.sComponent.*;
 
@@ -56,14 +57,14 @@ public class Controller extends SFrame {
         repaint();
     }
 
-    protected static void ingresar(int estado) throws SQLException, ParseException {
+    protected static void ingresar(Usuario usuario) throws SQLException, ParseException {
 
         controller.remove(controller.lCajas);
         controller.remove(controller.pLogin);
-        if (estado == 2) {
-            View.init();
-        } else {
+        if (usuario.isAdmin()) {
             ViewAdmin.init();
+        } else {
+            View.init();
         }
         controller.add(controller.lLineas);
         controller.repaint();
@@ -108,8 +109,15 @@ class PLogin extends SPanel {
 
         SButton btIniciar = new SButton(120, 400, 200, 50, "Iniciar sesión");
         btIniciar.addActionListener(e -> {
-            int estado = BackController.validarIngreso(tfUsuario.getText(), tfPassword.getClave());
-            if(estado > 0) {
+            Usuario estado = null;
+            try {
+                estado = BackController.validarIngreso(tfUsuario.getText(), tfPassword.getClave());
+            } catch (SQLException | ParseException e2) {
+                // TODO Auto-generated catch block
+                e2.printStackTrace();
+            }
+
+            if(estado != null) {
                 try {
                     Controller.ingresar(estado);
                 } catch (SQLException | ParseException e1) {
