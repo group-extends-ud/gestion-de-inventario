@@ -11,6 +11,7 @@ import lib.sRAD.gui.sComponent.*;
 import javax.swing.*;
 
 import java.awt.*;
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -204,11 +205,22 @@ public class View {
         SLabel masVendido = new SLabel(32, 32, 500, 28, "Producto más vendido " + ((Producto)mas[0]).getNombre() + " con un total de " + mas[1]);
         SLabel menosVendido = new SLabel(32, 60, 500, 28, "Producto menos vendido " + ((Producto)menos[0]).getNombre() + " con un total de " + menos[1]);
 
-        SLabel jsons = new SLabel(32, 92, 500, 28, "¿Quieres Guardar en Json?");
+        SLabel jsons = new SLabel(32, 92, 300, 28, "¿Desea guardar datos en Json?");
+        SButton btGuardar = new SButton(64, 130, 100, 32, "GUARDAR");
+        btGuardar.addActionListener( (e) -> {
+            try {
+                BackController.controller.jsonAll();
+                JOptionPane.showMessageDialog(null, "Guardado exitosamente", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException | ParseException | IOException throwables) {
+                throwables.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error al guardar", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
         pEstadistica.add(masVendido);
         pEstadistica.add(menosVendido);
         pEstadistica.add(jsons);
+        pEstadistica.add(btGuardar);
         pEstadistica.repaint();
     }
 
@@ -237,7 +249,7 @@ public class View {
             });
             pInterno.add(btConfirm);
         }
-        
+
         SButton btClose = new SButton(32, 62, 100, 32, "CERRAR");
         btClose.addActionListener( (e) -> ventana.cerrar());
         pInterno.add(btClose);
