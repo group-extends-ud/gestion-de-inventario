@@ -32,8 +32,11 @@ public class View {
     protected SButton btSetting;
     // componentes lógicos
     protected ArrayList<FacturaProducto> carrito;
+    // otros
+    private Boolean isAdmin;
 
-    protected View() throws SQLException, ParseException {
+    protected View(Boolean isAdmin) throws SQLException, ParseException {
+        this.isAdmin = isAdmin;
         carrito = new ArrayList<>();
 
         pFactura = new SPanel(SPanel.INTERNO, 0, 0, 848, 598);
@@ -54,7 +57,6 @@ public class View {
                 try {
                     addFactura();
                 } catch (SQLException | ParseException e1) {
-                    // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
             } else {
@@ -68,6 +70,15 @@ public class View {
         Controller.agregar(btClose);
 
         Controller.agregar(tpTabs);
+
+        if(isAdmin){
+            for(Producto faltante : BackController.controller.getProductosFaltantes()) {
+                avisar(faltante);
+            }
+
+            SScrollPane spEstadistica = new SScrollPane(216, 90, 864, 624, pEstadistica);
+            tpTabs.addTab("Estadística", spEstadistica);
+        }
 
         actualizar();
     }
@@ -160,8 +171,10 @@ public class View {
                 pInventario.add(lProducto2);
                 pInventario.add(lProducto3);
                 pInventario.add(lProducto4);
-                pInventario.add(btEliminar);
-                pInventario.add(btAjustar);
+                if(isAdmin) {
+                    pInventario.add(btEliminar);
+                    pInventario.add(btAjustar);
+                }
             }
         }
         if(productos.size() > 17) {
@@ -179,6 +192,82 @@ public class View {
         pEstadistica.add(masVendido);
         pEstadistica.add(menosVendido);
         pEstadistica.repaint();
+    }
+
+    public void removerItem() {
+        VentanaEmergente ventana = new VentanaEmergente(Controller.controller, 340, 180);
+
+        SLabel lInsertar = new SLabel(32, 32, 200, 28, "Eliminar un producto");
+        ventana.add(lInsertar);
+
+        SLabel lID = new SLabel(64, 64, 168, 28, "ID:");
+        ventana.add(lID);
+
+        STextField tfID = new STextField(200, 62, 100, 32);
+        ventana.add(tfID);
+
+        SButton btConfirm = new SButton(50, 112, 100, 32, "ELIMINAR");
+        btConfirm.addActionListener( (e) -> {
+            if (!tfID.getText().isEmpty()) {
+                try {
+                    BackController.deleteProducto(Integer.parseInt(tfID.getText()));
+                } catch (SQLException throwables) {
+                    JOptionPane.showMessageDialog(null, "No se pudo eliminar el producto indicado, por favor verifique" +
+                            " los datos ingresados", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Por favor ingrese valores válidos", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            ventana.cerrar();
+        });
+        ventana.add(btConfirm);
+
+        SButton btClose = new SButton(190, 112, 100, 32, "CERRAR");
+        btClose.addActionListener( (e) -> ventana.cerrar());
+        ventana.add(btClose);
+
+        ventana.lanzar();
+    }
+
+    public void removerMovimiento() {
+        VentanaEmergente ventana = new VentanaEmergente(Controller.controller, 340, 180);
+
+        SLabel lInsertar = new SLabel(32, 32, 200, 28, "Eliminar un movimiento");
+        ventana.add(lInsertar);
+
+        SLabel lID = new SLabel(64, 64, 168, 28, "ID:");
+        ventana.add(lID);
+
+        STextField tfID = new STextField(200, 62, 100, 32);
+        ventana.add(tfID);
+
+        SButton btConfirm = new SButton(50, 112, 100, 32, "ELIMINAR");
+        btConfirm.addActionListener( (e) -> {
+            if (!tfID.getText().isEmpty()) {
+                try {
+                    BackController.controller.deleteFactura(tfID.getText());
+                    actualizar();
+                } catch (SQLException throwables) {
+                    JOptionPane.showMessageDialog(null, "No se pudo eliminar el movimiento indicado, por favor verifique" +
+                            " los datos ingresados", "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (ParseException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Por favor ingrese valores válidos", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            ventana.cerrar();
+        });
+        ventana.add(btConfirm);
+
+        SButton btClose = new SButton(190, 112, 100, 32, "CERRAR");
+        btClose.addActionListener( (e) -> ventana.cerrar());
+        ventana.add(btClose);
+
+        ventana.lanzar();
     }
 
     private void ajustarMovimiento(int id) {
@@ -444,8 +533,8 @@ public class View {
         ventana.lanzar();
     }
 
-    public static void init() throws SQLException, ParseException {
-        view = new View();
+    public static void init(Boolean isAdmin) throws SQLException, ParseException {
+        view = new View(isAdmin);
     }
 
 }
