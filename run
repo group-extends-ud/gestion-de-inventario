@@ -1,5 +1,0 @@
-#!/bin/bash
-
-mvn package dependency:copy-dependencies
-java -cp target/dependency/postgresql-42.2.16.jar:target/dependency/gson-2.8.6.jar:target/Inventario-1.0.jar Main jema 2152
-
