@@ -108,6 +108,7 @@ public class View {
                 SLabel lProducto2 = new SLabel(350, i * 32 + 64, 150, 28, toCOP(factura.getCostoTotal()), SLabel.RIGHT);
                 SLabel lProducto3 = new SLabel(550, i * 32 + 64, 100, 28, factura.getFecha() + "", SLabel.RIGHT);
                 SButton btDetail = new SButton(700, i * 32 + 64, 100, 28, "detalles");
+                btDetail.addActionListener((e) -> abrirDetalles(factura));
 
                 pFactura.add(lIDFactura);
                 pFactura.add(lProducto1);
@@ -205,10 +206,52 @@ public class View {
         pEstadistica.repaint();
     }
 
+    private void abrirDetalles(Factura factura) {
+        VentanaEmergente ventana = new VentanaEmergente(Controller.controller, 520, 300);
+
+        SPanel pInterno = new SPanel(SPanel.INTERNO, 0, 0, 506, 300);
+        SScrollPane scroll = new SScrollPane(0, 0, 516, 296, pInterno);
+        ventana.add(scroll);
+
+        SLabel lCarro = new SLabel(32, 32, 168, 28, "Detalles de factura");
+        pInterno.add(lCarro);
+
+        SButton btConfirm = new SButton(50, 62, 100, 32, "ELIMINAR");
+        btConfirm.addActionListener( (e) -> {
+            try {
+                BackController.controller.deleteFactura(factura.getIdfactura()+"");
+                actualizar();
+            } catch (SQLException | ParseException e1) {
+                JOptionPane.showMessageDialog(null, "No se pudo eliminar el movimiento indicado, por favor verifique" +
+                        " los datos ingresados", "Error", JOptionPane.ERROR_MESSAGE);
+                e1.printStackTrace();
+            }
+            ventana.cerrar();
+        });
+        pInterno.add(btConfirm);
+
+        SButton btClose = new SButton(190, 62, 100, 32, "CERRAR");
+        btClose.addActionListener( (e) -> ventana.cerrar());
+        pInterno.add(btClose);
+
+        for(int i=0; i<factura.getItems().size(); i++) {
+            FacturaProducto f = factura.getItems().get(i);
+            SLabel lNombre = new SLabel(32, 104+32*i, 700, 28, "Nombre: "+f.getProducto().getNombre()+
+                    ", cantidad: "+f.getCantidad()+ ",Valor: "+f.getValor());
+            pInterno.add(lNombre);
+        }
+        pInterno.setSize(pInterno.getWidth(), 184+32*factura.getItems().size());
+
+        ventana.lanzar();
+    }
+
     private void addToCarrito(Producto producto) {
         VentanaEmergente ventana = new VentanaEmergente(Controller.controller, 340, 180);
 
-        SLabel lCantidad = new SLabel(64, 64, 168, 28, "Ingrese cantidad de "+producto.getNombre()+" que desea agregar al carrito");
+        SLabel lCarro = new SLabel(32, 32, 168, 28, "Insertar al carrito");
+        ventana.add(lCarro);
+
+        SLabel lCantidad = new SLabel(64, 64, 168, 28, "Ingrese cantidad: ");
         ventana.add(lCantidad);
 
         STextField tfCantidad = new STextField(200, 62, 100, 32);
@@ -223,46 +266,6 @@ public class View {
                 } catch (SQLException | ParseException throwables) {
                     JOptionPane.showMessageDialog(null, "No se pudo eliminar el producto indicado, por favor verifique" +
                             " los datos ingresados", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-            else {
-                JOptionPane.showMessageDialog(null, "Por favor ingrese valores válidos", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            ventana.cerrar();
-        });
-        ventana.add(btConfirm);
-
-        SButton btClose = new SButton(190, 112, 100, 32, "CERRAR");
-        btClose.addActionListener( (e) -> ventana.cerrar());
-        ventana.add(btClose);
-
-        ventana.lanzar();
-    }
-
-    public void removerMovimiento() {
-        VentanaEmergente ventana = new VentanaEmergente(Controller.controller, 340, 180);
-
-        SLabel lInsertar = new SLabel(32, 32, 200, 28, "Eliminar un movimiento");
-        ventana.add(lInsertar);
-
-        SLabel lID = new SLabel(64, 64, 168, 28, "ID:");
-        ventana.add(lID);
-
-        STextField tfID = new STextField(200, 62, 100, 32);
-        ventana.add(tfID);
-
-        SButton btConfirm = new SButton(50, 112, 100, 32, "ELIMINAR");
-        btConfirm.addActionListener( (e) -> {
-            if (!tfID.getText().isEmpty()) {
-                try {
-                    BackController.controller.deleteFactura(tfID.getText());
-                    actualizar();
-                } catch (SQLException throwables) {
-                    JOptionPane.showMessageDialog(null, "No se pudo eliminar el movimiento indicado, por favor verifique" +
-                            " los datos ingresados", "Error", JOptionPane.ERROR_MESSAGE);
-                } catch (ParseException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
                 }
             }
             else {
