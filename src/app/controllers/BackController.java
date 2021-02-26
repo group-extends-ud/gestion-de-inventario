@@ -187,6 +187,25 @@ public class BackController {
 
     }
 
+    private boolean productosFaltantes(Producto producto) throws SQLException, ParseException {
+
+        return producto.getStock() <= producto.getStockMinimo();
+    }
+
+    public ArrayList<Producto> getProductosFaltantes() throws SQLException, ParseException {
+
+        ArrayList<Producto> productos = Producto();
+
+        ArrayList<Producto> faltantes = new ArrayList<Producto>();
+
+        for(Producto producto : productos) {
+            if(productosFaltantes(producto)) faltantes.add(producto);
+        }
+
+        return faltantes;
+
+    }
+
     public static Usuario validarIngreso(String userName, String password) throws SQLException, ParseException {
 
         return (getPassword(userName, password)) ? controller.Usuario(userName) : null;

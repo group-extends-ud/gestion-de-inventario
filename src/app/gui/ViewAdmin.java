@@ -20,6 +20,11 @@ public class ViewAdmin extends View {
 
     protected ViewAdmin() throws SQLException, ParseException {
         super();
+
+        for(Producto faltante : BackController.controller.getProductosFaltantes()) {
+            avisar(faltante);
+        }
+
         SScrollPane spEstadistica = new SScrollPane(216, 90, 864, 624, pEstadistica);
 
         btRemove = new SButton(1140, 300, new ImageIcon("resources/delete.png"));
