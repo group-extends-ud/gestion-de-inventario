@@ -80,29 +80,27 @@ public class View {
             SLabel lNombre = new SLabel(100, 32, 250, 28, "Cliente");
             SLabel lPrecio = new SLabel(350, 32, 150, 28, "Precio Total");
             SLabel lStock = new SLabel(550, 32, 100, 28, "Fecha");
-            SLabel lStockMinimo = new SLabel(700, 32, 100, 28, "Detalles");
             pFactura.add(lID);
             pFactura.add(lNombre);
             pFactura.add(lPrecio);
             pFactura.add(lStock);
-            pFactura.add(lStockMinimo);
             //contenido
             for (int i = 0; i < facturas.size(); i++) {
                 // por cada producto
                 Factura factura = facturas.get(i);
-                SLabel lProducto = new SLabel(32, i * 32 + 64, 68, 28, factura.getIdfactura().toString());
+                SLabel lIDFactura = new SLabel(32, i * 32 + 64, 68, 28, factura.getIdfactura().toString());
                 SLabel lProducto1 = new SLabel(100, i * 32 + 64, 250, 28,
                         ((factura.getCliente() != null) ? factura.getCliente().getNombre() : "") + " " +
                         ((factura.getCliente() != null) ? factura.getCliente().getApellido() : ""));
                 SLabel lProducto2 = new SLabel(350, i * 32 + 64, 150, 28, toCOP(factura.getCostoTotal()), SLabel.RIGHT);
                 SLabel lProducto3 = new SLabel(550, i * 32 + 64, 100, 28, factura.getFecha() + "", SLabel.RIGHT);
-                SButton btDetail = new SButton(700, i * 32 + 64, 100, 28, "+");
+                SButton btDetail = new SButton(700, i * 32 + 64, 100, 28, "detalles");
 
-                pInventario.add(lProducto);
-                pInventario.add(lProducto1);
-                pInventario.add(lProducto2);
-                pInventario.add(lProducto3);
-                pInventario.add(btDetail);
+                pFactura.add(lIDFactura);
+                pFactura.add(lProducto1);
+                pFactura.add(lProducto2);
+                pFactura.add(lProducto3);
+                pFactura.add(btDetail);
             }
         }
         if(facturas.size() > 17) {
