@@ -151,7 +151,7 @@ public class BackController {
 
     }
 
-    public void deleteFactura(String id) throws SQLException {
+    public void deleteFactura(int id) throws SQLException {
 
         database.delete(DatabaseController.Table.FACTURA, id);
 

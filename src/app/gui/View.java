@@ -219,7 +219,7 @@ public class View {
         SButton btConfirm = new SButton(50, 62, 100, 32, "ELIMINAR");
         btConfirm.addActionListener( (e) -> {
             try {
-                BackController.controller.deleteFactura(factura.getIdfactura()+"");
+                BackController.controller.deleteFactura(factura.getIdfactura());
                 actualizar();
             } catch (SQLException | ParseException e1) {
                 JOptionPane.showMessageDialog(null, "No se pudo eliminar el movimiento indicado, por favor verifique" +
