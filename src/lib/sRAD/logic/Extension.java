@@ -14,6 +14,11 @@ public class Extension {
         }
     }
 
+    public static Boolean isNumber(char character) {
+        return character == '0' || character == '1' || character == '2' || character == '3' || character == '4' || character == '5'
+                || character == '6' || character == '7' || character == '8' || character == '9';
+    }
+
     public static Boolean isOperator(char character) {
         return character == '+' || character == '-' || character == '*' || character == '^' || character == '/';
     }

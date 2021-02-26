@@ -2,6 +2,7 @@ package app.gui;
 
 import app.controllers.BackController;
 import app.inventario.Factura;
+import app.inventario.Producto;
 import lib.sRAD.gui.component.VentanaEmergente;
 import lib.sRAD.gui.sComponent.*;
 
@@ -30,6 +31,9 @@ public class View {
 
     protected View() throws SQLException, ParseException {
         pMovimiento = new SPanel(SPanel.INTERNO, 0, 0, 848, 608);
+        pInventario = new SPanel(SPanel.INTERNO, 0, 0, 848, 608);
+        pEstadistica = new SPanel(SPanel.INTERNO, 0, 0, 848, 608);
+
         SScrollPane spMovimiento = new SScrollPane(216, 90, 864, 624, pMovimiento);
 
         tpTabs = new STabbedPane(STabbedPane.DECORADO, 216, 30, 866, 656);
@@ -78,6 +82,24 @@ public class View {
             }
         }
         pMovimiento.repaint();
+
+        // pInventario
+        pInventario.removeAll();
+        ArrayList<Producto> productos = BackController.controller.Producto();
+        if (productos != null && !productos.isEmpty()) {
+            SLabel encabezado = new SLabel(32, 32, 800, 28, "%20s%20s%20s%20s%20s".formatted("ID", "Nombre",
+                    "Precio", "Stock", "Stock minimo"));
+            pInventario.add(encabezado);
+            for (int i = 0; i < productos.size(); i++) {
+                // por cada producto
+                Producto producto = productos.get(i);
+                SLabel lProducto = new SLabel(32, i * 32 + 64, 800, 28,
+                        "%20d%20s%20s%20d%20d".formatted(producto.getIdproducto(), producto.getNombre(), toCOP(producto.getPrecio()), producto.getStock(),
+                                producto.getStockMinimo()));
+                pInventario.add(lProducto);
+            }
+        }
+        pInventario.repaint();
     }
 
     public void addItem() {
@@ -117,8 +139,8 @@ public class View {
                 try {
                     BackController.insertarProducto(tfNombre.getText(), Double.valueOf(tfPrecio.getText()),
                             Integer.parseInt(tfStock.getText()), Integer.parseInt(tfStockMin.getText()));
-                } catch (NumberFormatException | SQLException e1) {
-                    // TODO Auto-generated catch block
+                    actualizar();
+                } catch (NumberFormatException | SQLException | ParseException e1) {
                     e1.printStackTrace();
                 }
             } else {

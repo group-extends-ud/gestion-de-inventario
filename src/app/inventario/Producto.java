@@ -6,10 +6,10 @@ public class Producto extends General {
 
     private Integer idproducto;
     private String nombre;
-    private BigDecimal precio;
+    private double precio;
     private int stock, stockminimo;
 
-    public Producto(Integer idproducto, String nombre, BigDecimal precio, int stock, int stockminimo) {
+    public Producto(Integer idproducto, String nombre, double precio, int stock, int stockminimo) {
         this.idproducto = idproducto;
         this.nombre = nombre;
         this.precio = precio;
@@ -31,10 +31,10 @@ public class Producto extends General {
         this.nombre = nombre;
     }
 
-    public BigDecimal getPrecio() {
+    public double getPrecio() {
         return precio;
     }
-    public void setPrecio(BigDecimal precio) {
+    public void setPrecio(double precio) {
         this.precio = precio;
     }
 

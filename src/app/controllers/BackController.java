@@ -20,6 +20,8 @@ import app.inventario.General;
 import app.inventario.Producto;
 import app.inventario.Usuario;
 
+import static lib.sRAD.logic.Extension.isNumber;
+
 public class BackController {
 
     public static BackController controller;
@@ -33,6 +35,11 @@ public class BackController {
 
     public static void init(String[] args) throws ClassNotFoundException, SQLException {
         controller = new BackController(args[0], args[1]);
+    }
+
+    public static Cliente getCliente(String nombre) {
+        //por implementar
+        return null;
     }
 
     public ArrayList<Producto> Producto() throws SQLException, ParseException {
@@ -142,7 +149,6 @@ public class BackController {
     }
 
     public void updateFactura(Factura factura) throws SQLException {
-
         database.update(DatabaseController.Table.FACTURA, factura);
 
     }
@@ -190,7 +196,7 @@ public class BackController {
     }
 
     public static void insertarProducto(String nombre, Double precio, int stock, int stockMinimo) throws SQLException {
-        controller.Producto(new Producto(null, nombre, new BigDecimal(precio), stockMinimo, stockMinimo));
+        controller.Producto(new Producto(null, nombre, precio, stock, stockMinimo));
     }
 
     public static String[] getNombresProductos() throws SQLException, ParseException {
@@ -207,9 +213,7 @@ public class BackController {
     }
 
     public static double getPrecio(int idProducto) throws SQLException, ParseException {
-
-        return controller.Producto(idProducto).getPrecio().doubleValue();
-
+        return controller.Producto(idProducto).getPrecio();
     }
 
     public static int getStock(int idProducto) throws SQLException, ParseException {
@@ -632,7 +636,7 @@ class DatabaseController {
                         yield new Producto(
                             response.getInt(atributes[0]),
                             response.getString(atributes[1]),
-                            BackController.toBigDecimal(response.getString(atributes[2])),
+                            Double.valueOf(response.getString(atributes[2])),
                             response.getInt(atributes[3]),
                             response.getInt(atributes[4])
                         );
@@ -711,7 +715,7 @@ class DatabaseController {
                         yield new Producto(
                                 response.getInt(atributes[0]),
                                 response.getString(atributes[1]),
-                                BackController.toBigDecimal(response.getString(atributes[2])),
+                                toDouble(response.getString(atributes[2])),
                                 response.getInt(atributes[3]),
                                 response.getInt(atributes[4])
                             );
@@ -752,6 +756,19 @@ class DatabaseController {
     
         }
     
+    }
+
+    private static Double toDouble(String valueInEuro) {
+        var valor = "";
+        for(int i=0; i< valueInEuro.length(); i++) {
+            if(valueInEuro.charAt(i) == ',') {
+                valor += ".";
+            }
+            else if(isNumber(valueInEuro.charAt(i))) {
+                valor += valueInEuro.charAt(i);
+            }
+        }
+        return Double.valueOf(valor);
     }
 
 }
