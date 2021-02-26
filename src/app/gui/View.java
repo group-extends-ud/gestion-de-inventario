@@ -75,7 +75,7 @@ public class View {
         // pFactura --FALTA REVISAR--
         pFactura.removeAll();
         ArrayList<Factura> facturas = BackController.controller.Factura();
-        if (facturas.get(0) != null && !facturas.isEmpty()) {
+        if (!facturas.isEmpty() && facturas.get(0)!=null) {
             SLabel lID = new SLabel(32, 32, 68, 28, "ID");
             SLabel lNombre = new SLabel(100, 32, 250, 28, "Cliente");
             SLabel lPrecio = new SLabel(350, 32, 150, 28, "Precio Total");
