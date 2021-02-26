@@ -95,15 +95,15 @@ ALTER TABLE Usuario ADD CONSTRAINT PK_Usuario
 /* Create Foreign Key Constraints */
 
 ALTER TABLE Factura ADD CONSTRAINT FK_Factura_Cliente
-	FOREIGN KEY (IDCliente) REFERENCES Cliente (IDCliente) ON DELETE No Action ON UPDATE No Action
+	FOREIGN KEY (IDCliente) REFERENCES Cliente (IDCliente) ON DELETE CASCADE ON UPDATE CASCADE
 ;
 
 ALTER TABLE FacturaProducto ADD CONSTRAINT FK_FacturaProducto_Factura
-	FOREIGN KEY (IDFactura) REFERENCES Factura (IDFactura) ON DELETE No Action ON UPDATE No Action
+	FOREIGN KEY (IDFactura) REFERENCES Factura (IDFactura) ON DELETE CASCADE ON UPDATE CASCADE
 ;
 
 ALTER TABLE FacturaProducto ADD CONSTRAINT FK_FacturaProducto_Producto
-	FOREIGN KEY (IDProducto) REFERENCES Producto (IDProducto) ON DELETE No Action ON UPDATE No Action
+	FOREIGN KEY (IDProducto) REFERENCES Producto (IDProducto) ON DELETE CASCADE ON UPDATE CASCADE
 ;
 
 /* Create Table Comments, Sequences for Autonumber Columns */
@@ -130,7 +130,7 @@ COMMENT ON TABLE Cliente
 
 /* Create Triggers */
 
-CREATE OR REPLACE FUNCTION updateStock() RETURNS TRIGGER AS $add_reg$
+CREATE OR REPLACE FUNCTION updateStock() RETURNS TRIGGER AS $update_stock$
     DECLARE
         newCantidad int;
 	BEGIN
@@ -139,7 +139,7 @@ CREATE OR REPLACE FUNCTION updateStock() RETURNS TRIGGER AS $add_reg$
 
         RETURN NULL;
     END;
-$add_reg$ LANGUAGE plpgsql;
+$update_stock$ LANGUAGE plpgsql;
 
 CREATE TRIGGER updateStock
     AFTER INSERT ON FacturaProducto
