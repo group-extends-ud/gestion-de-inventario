@@ -87,16 +87,30 @@ public class View {
         pInventario.removeAll();
         ArrayList<Producto> productos = BackController.controller.Producto();
         if (productos != null && !productos.isEmpty()) {
-            SLabel encabezado = new SLabel(32, 32, 800, 28, "%20s%20s%20s%20s%20s".formatted("ID", "Nombre",
-                    "Precio", "Stock", "Stock minimo"));
-            pInventario.add(encabezado);
+            SLabel lID = new SLabel(32, 32, 68, 28, "ID");
+            SLabel lNombre = new SLabel(100, 32, 250, 28, "Nombre");
+            SLabel lPrecio = new SLabel(350, 32, 150, 28, "Precio");
+            SLabel lStock = new SLabel(550, 32, 100, 28, "Stock");
+            SLabel lStockMinimo = new SLabel(700, 32, 100, 28, "Stock Minimo");
+            pInventario.add(lID);
+            pInventario.add(lNombre);
+            pInventario.add(lPrecio);
+            pInventario.add(lStock);
+            pInventario.add(lStockMinimo);
             for (int i = 0; i < productos.size(); i++) {
                 // por cada producto
                 Producto producto = productos.get(i);
-                SLabel lProducto = new SLabel(32, i * 32 + 64, 800, 28,
-                        "%20d%20s%20s%20d%20d".formatted(producto.getIdproducto(), producto.getNombre(), toCOP(producto.getPrecio()), producto.getStock(),
-                                producto.getStockMinimo()));
+                SLabel lProducto = new SLabel(32, i * 32 + 64, 68, 28, producto.getIdproducto().toString());
+                SLabel lProducto1 = new SLabel(100, i * 32 + 64, 250, 28, producto.getNombre());
+                SLabel lProducto2 = new SLabel(350, i * 32 + 64, 150, 28, toCOP(producto.getPrecio()), SLabel.RIGHT);
+                SLabel lProducto3 = new SLabel(550, i * 32 + 64, 100, 28, producto.getStock()+"", SLabel.RIGHT);
+                SLabel lProducto4 = new SLabel(700, i * 32 + 64, 100, 28, producto.getStockMinimo()+"", SLabel.RIGHT);
+
                 pInventario.add(lProducto);
+                pInventario.add(lProducto1);
+                pInventario.add(lProducto2);
+                pInventario.add(lProducto3);
+                pInventario.add(lProducto4);
             }
         }
         pInventario.repaint();
@@ -202,7 +216,6 @@ public class View {
             try {
                 precio.set(BackController.getPrecio(Integer.parseInt(cbTipo.getItemAt(cbTipo.getSelectedIndex()).toString())));
             } catch (SQLException | ParseException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
             lPrecio.setText(toCOP(precio.get()));

@@ -46,6 +46,10 @@ public class SLabel extends JLabel {
         setProperties(x, y, width, height, text, fontText, darkWhite, LEFT, null);
     }
 
+    public SLabel (int x, int y, int width, int height, String text, int hAlignment) {
+        setProperties(x, y, width, height, text, fontText, darkWhite, hAlignment, null);
+    }
+
     public SLabel (int x, int y, int width, int height, String text, Font font) {
         setProperties(x, y, width, height, text, font, darkWhite, LEFT, null);
     }
