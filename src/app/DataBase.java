@@ -91,7 +91,7 @@ public class DataBase {
 
     }
 
-    public ResultSet getByID(String table, String id) throws SQLException {
+    public ResultSet getByID(String table, Object id) throws SQLException {
 
         String query = "SELECT * FROM " + table + " WHERE " + this.getIDTable(table) + ';';
 
@@ -101,7 +101,7 @@ public class DataBase {
 
     }
 
-    public ResultSet getRelation(String table, String idFactura)throws SQLException {
+    public ResultSet getRelation(String table, int idFactura)throws SQLException {
 
         String query = "SELECT * FROM " + table + " WHERE " + this.getIDFacturaProducto()[0] + ';';
 
@@ -111,7 +111,7 @@ public class DataBase {
 
     }
 
-    public ResultSet getUniqueRelation(String table, String idFactura, String idProducto) throws SQLException {
+    public ResultSet getUniqueRelation(String table, int idFactura, int idProducto) throws SQLException {
 
         String[] keys = this.getIDFacturaProducto();
 
@@ -173,11 +173,11 @@ public class DataBase {
 
     }
 
-    public ResultSet delete(String table, String id) throws SQLException {
+    public ResultSet delete(String table, Object id) throws SQLException {
 
         String query = "DELETE FROM " + table + " WHERE " + this.getIDTable(table) + " RETURNING *;";
 
-        String[] objects = { id };
+        Object[] objects = { id };
 
         return this.query(query, objects);
 

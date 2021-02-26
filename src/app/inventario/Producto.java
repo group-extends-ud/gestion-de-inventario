@@ -4,11 +4,12 @@ import java.math.BigDecimal;
 
 public class Producto extends General {
 
-    private String idproducto, nombre;
+    private Integer idproducto;
+    private String nombre;
     private BigDecimal precio;
     private int stock, stockminimo;
 
-    public Producto(String idproducto, String nombre, BigDecimal precio, int stock, int stockminimo) {
+    public Producto(Integer idproducto, String nombre, BigDecimal precio, int stock, int stockminimo) {
         this.idproducto = idproducto;
         this.nombre = nombre;
         this.precio = precio;
@@ -16,10 +17,10 @@ public class Producto extends General {
         this.stockminimo = stockminimo;
     }
 
-    public String getIdproducto() {
+    public Integer getIdproducto() {
         return idproducto;
     }
-    public void setIdproducto(String idproducto) {
+    public void setIdproducto(Integer idproducto) {
         this.idproducto = idproducto;
     }
 
@@ -60,7 +61,7 @@ public class Producto extends General {
     @Override
     public Object[] toArray() {
 
-        Object[] objects = { Integer.parseInt(idproducto), nombre, precio, stock, stockminimo };
+        Object[] objects = { idproducto, nombre, precio, stock, stockminimo };
 
         return objects;
 

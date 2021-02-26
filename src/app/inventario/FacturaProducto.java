@@ -6,10 +6,10 @@ public class FacturaProducto extends General {
 
     private int cantidad;
     private BigDecimal valor;
-    private Factura idfactura;
+    private Integer idfactura;
     private Producto idproducto;
 
-    public FacturaProducto(int cantidad, BigDecimal valor, Factura idfactura, Producto idproducto) {
+    public FacturaProducto(int cantidad, BigDecimal valor, Integer idfactura, Producto idproducto) {
         this.cantidad = cantidad;
         this.valor = valor;
         this.idfactura = idfactura;
@@ -33,10 +33,10 @@ public class FacturaProducto extends General {
         this.valor = valor;
     }
 
-    public Factura getFactura() {
+    public Integer getFactura() {
         return idfactura;
     }
-    public void setFactura(Factura idfactura) {
+    public void setFactura(Integer idfactura) {
         this.idfactura = idfactura;
     }
 
@@ -56,7 +56,7 @@ public class FacturaProducto extends General {
     @Override
     public Object[] toArray() {
 
-        Object[] objects = { cantidad, valor, Integer.parseInt(idfactura.getIdfactura()), Integer.parseInt(idproducto.getIdproducto()) };
+        Object[] objects = { cantidad, valor, idfactura, idproducto.getIdproducto() };
 
         return objects;
 

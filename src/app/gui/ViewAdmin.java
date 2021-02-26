@@ -95,7 +95,7 @@ public class ViewAdmin extends View {
             if (!tfID.getText().isEmpty() && !tfNombre.getText().isEmpty() && !tfPrecio.getText().isEmpty() && !tfStock.getText().isEmpty()
                     && !tfStockMin.getText().isEmpty()) {
                 try {
-                    BackController.updateProducto(new Producto(tfID.getText(), tfNombre.getText(), BackController.toBigDecimal(tfPrecio.getText()),
+                    BackController.updateProducto(new Producto(Integer.parseInt(tfID.getText()), tfNombre.getText(), BackController.toBigDecimal(tfPrecio.getText()),
                             Integer.parseInt(tfStock.getText()), Integer.parseInt(tfStockMin.getText())));
                 } catch (Exception throwables) {
                     JOptionPane.showMessageDialog(null, "No se pudo modificar el producto indicado, por favor verifique" +
@@ -195,7 +195,7 @@ public class ViewAdmin extends View {
         btConfirm.addActionListener( (e) -> {
             if (!tfID.getText().isEmpty()) {
                 try {
-                    BackController.deleteProducto(tfID.getText());
+                    BackController.deleteProducto(Integer.parseInt(tfID.getText()));
                 } catch (SQLException throwables) {
                     JOptionPane.showMessageDialog(null, "No se pudo eliminar el producto indicado, por favor verifique" +
                             " los datos ingresados", "Error", JOptionPane.ERROR_MESSAGE);

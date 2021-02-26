@@ -2,18 +2,19 @@ package app.inventario;
 
 public class Cliente extends General {
 
-    private String idcliente, nombre, apellido;
+    private Integer idcliente;
+    private String nombre, apellido;
 
-    public Cliente(String idcliente, String nombre, String apellido) {
+    public Cliente(Integer idcliente, String nombre, String apellido) {
         this.idcliente = idcliente;
         this.nombre = nombre;
         this.apellido = apellido;
     }
 
-    public String getIdcliente() {
+    public Integer getIdcliente() {
         return idcliente;
     }
-    public void setId(String idcliente) {
+    public void setId(Integer idcliente) {
         this.idcliente = idcliente;
     }
 
@@ -40,7 +41,7 @@ public class Cliente extends General {
     @Override
     public Object[] toArray() {
 
-        Object[] objects = { Integer.parseInt(idcliente), nombre, apellido };
+        Object[] objects = { idcliente, nombre, apellido };
 
         return objects;
 

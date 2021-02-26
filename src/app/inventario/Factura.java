@@ -7,26 +7,26 @@ import java.util.Date;
 
 public class Factura extends General {
 
-    private String idfactura;
+    private Integer idfactura;
     private Date fecha;
     private Cliente idcliente;
     private ArrayList<FacturaProducto> items;
 
-    public Factura(String idfactura, Date fecha, Cliente cliente, ArrayList<FacturaProducto> items) {
+    public Factura(Integer idfactura, Date fecha, Cliente cliente, ArrayList<FacturaProducto> items) {
         this.idfactura = idfactura;
         this.fecha = fecha;
         this.idcliente = cliente;
         this.items = items;
 
         for(FacturaProducto item : items) {
-            item.setFactura(this);
+            item.setFactura(this.idfactura);
         }
     }
 
-    public String getIdfactura() {
+    public Integer getIdfactura() {
         return idfactura;
     }
-    public void setIdfactura(String idfactura) {
+    public void setIdfactura(Integer idfactura) {
         this.idfactura = idfactura;
     }
 
@@ -80,7 +80,7 @@ public class Factura extends General {
 
     public Object[] toArray() {
 
-        Object[] objects = { Integer.parseInt(idfactura), fecha, (idcliente != null)? idcliente.getIdcliente(): null };
+        Object[] objects = { idfactura, fecha, (idcliente != null)? idcliente.getIdcliente(): null };
 
         return objects;
 

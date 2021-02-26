@@ -1,5 +1,8 @@
 package app.controllers;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,16 +10,25 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 
+import com.google.gson.Gson;
+
 import app.DataBase;
-import app.inventario.*;
+import app.inventario.Cliente;
+import app.inventario.Factura;
+import app.inventario.FacturaProducto;
+import app.inventario.General;
+import app.inventario.Producto;
+import app.inventario.Usuario;
 
 public class BackController {
 
     public static BackController controller;
     private static DatabaseController database;
+    private static Gson gson;
 
     private BackController(String user, String password) throws ClassNotFoundException, SQLException {
         database = new DatabaseController(user, password);
+        gson = new Gson();
     }
 
     public static void init(String[] args) throws ClassNotFoundException, SQLException {
@@ -29,7 +41,7 @@ public class BackController {
 
     }
 
-    public Producto Producto(String id) throws SQLException, ParseException {
+    public Producto Producto(int id) throws SQLException, ParseException {
 
         return database.<Producto>getById(DatabaseController.Table.PRODUCTO, id);
 
@@ -47,7 +59,7 @@ public class BackController {
 
     }
 
-    public static void deleteProducto(String id) throws SQLException {
+    public static void deleteProducto(int id) throws SQLException {
         database.delete(DatabaseController.Table.PRODUCTO, id);
     }
 
@@ -57,7 +69,7 @@ public class BackController {
 
     }
 
-    public Cliente Cliente(String id) throws SQLException, ParseException {
+    public Cliente Cliente(int id) throws SQLException, ParseException {
 
         return database.<Cliente>getById(DatabaseController.Table.CLIENTE, id);
 
@@ -75,7 +87,7 @@ public class BackController {
 
     }
 
-    public void deleteCliente(String id) throws SQLException {
+    public void deleteCliente(int id) throws SQLException {
 
         database.delete(DatabaseController.Table.CLIENTE, id);
 
@@ -117,7 +129,7 @@ public class BackController {
 
     }
 
-    public Factura Factura(String id) throws SQLException, ParseException {
+    public Factura Factura(int id) throws SQLException, ParseException {
 
         return database.<Factura>getById(DatabaseController.Table.FACTURA, id);
 
@@ -141,13 +153,13 @@ public class BackController {
 
     }
 
-    public ArrayList<FacturaProducto> FacturaProducto(String idFactura) throws SQLException, ParseException {
+    public ArrayList<FacturaProducto> FacturaProducto(int idFactura) throws SQLException, ParseException {
 
         return database.getRelation(idFactura);
 
     }
 
-    public FacturaProducto FacturaProducto(String idFactura, String idProducto) throws SQLException, ParseException {
+    public FacturaProducto FacturaProducto(int idFactura, int idProducto) throws SQLException, ParseException {
 
         return database.getRelationUnique(idFactura, idProducto);
 
@@ -173,7 +185,7 @@ public class BackController {
 
     public static Usuario validarIngreso(String userName, String password) throws SQLException, ParseException {
 
-        return (getPassword(userName, password))? controller.Usuario(userName) : null;
+        return (getPassword(userName, password)) ? controller.Usuario(userName) : null;
 
     }
 
@@ -183,32 +195,32 @@ public class BackController {
 
     public static String[] getNombresProductos() throws SQLException, ParseException {
 
-        ArrayList<Producto> provisional = controller.Producto(); 
+        ArrayList<Producto> provisional = controller.Producto();
 
         String[] productos = new String[provisional.size()];
 
-        for(int i = 0; i < provisional.size(); ++i) {
-            productos[i]= provisional.get(i).getNombre();
+        for (int i = 0; i < provisional.size(); ++i) {
+            productos[i] = provisional.get(i).getNombre();
         }
 
         return productos;
     }
 
-    public static double getPrecio(String idProducto) throws SQLException, ParseException {
+    public static double getPrecio(int idProducto) throws SQLException, ParseException {
 
         return controller.Producto(idProducto).getPrecio().doubleValue();
 
     }
 
-    public static int getStock(String idProducto) throws SQLException, ParseException {
-        
+    public static int getStock(int idProducto) throws SQLException, ParseException {
+
         return controller.Producto(idProducto).getStock();
-        
+
     }
 
     public static void insertarMovimiento(String idProducto, int cantidad) {
-        
-        //controller.Factura();
+
+        // controller.Factura();
 
     }
 
@@ -232,14 +244,192 @@ public class BackController {
 
         ResultSet response = database.getDataBase().getByID("Usuario", userName);
 
-        while(response.next()) {
+        while (response.next()) {
             isUser = response.getString("Pass").equals(password);
         }
-
 
         return isUser;
 
     }
+
+    public void jsonCliente() throws SQLException, ParseException, IOException {
+
+        ArrayList<Cliente> clientes = Cliente();
+
+        String json = gson.toJson(clientes).replaceAll("idcliente", "id");
+
+        Json.writeFile("Clientes", structureJson("Clientes", json));
+
+    }
+
+    public void jsonCliente(int id) throws SQLException, ParseException, IOException {
+
+        Cliente cliente = Cliente(id);
+
+        String json = gson.toJson(cliente).replaceAll("idcliente", "id");
+
+        Json.writeFile("Cliente", structureJson("Cliente", json));
+
+    }
+
+    public void jsonFactura() throws SQLException, ParseException, IOException {
+
+        ArrayList<Factura> facturas = Factura();
+
+        String json = gson.toJson(facturas);
+
+        for (Factura factura : facturas) {
+            for (FacturaProducto __ : factura.getItems()) {
+                json = json.replaceFirst("idfactura", "id").replaceFirst("idcliente", "Cliente")
+                        .replaceFirst("idcliente", "id").replace("\"idfactura\":" + factura.getIdfactura() + ",", "")
+                        .replaceFirst("idproducto", "Producto").replaceFirst("idproducto", "id");
+            }
+
+        }
+
+        Json.writeFile("Facturas", structureJson("Facturas", json));
+
+    }
+
+    public void jsonFactura(int id) throws SQLException, ParseException, IOException {
+
+        Factura factura = Factura(id);
+
+        String json = gson.toJson(factura);
+
+        for (FacturaProducto __ : factura.getItems()) {
+            json = json.replaceFirst("idfactura", "id").replaceFirst("idcliente", "Cliente")
+                    .replaceFirst("idcliente", "id").replace("\"idfactura\":" + factura.getIdfactura() + ",", "")
+                    .replaceFirst("idproducto", "Producto").replaceFirst("idproducto", "id");
+        }
+
+        Json.writeFile("Factura", structureJson("Factura", json));
+
+    }
+
+    public void jsonProducto() throws SQLException, ParseException, IOException {
+
+        ArrayList<Producto> productos = Producto();
+
+        String json = gson.toJson(productos).replaceAll("idproducto", "id");
+
+        Json.writeFile("Productos", structureJson("Productos", json));
+
+    }
+
+    public void jsonProducto(int id) throws SQLException, ParseException, IOException {
+
+        Producto producto = Producto(id);
+
+        String json = gson.toJson(producto).replaceAll("idproducto", "id");
+
+        Json.writeFile("Producto", structureJson("Producto", json));
+
+    }
+
+    public void jsonUsuario() throws SQLException, ParseException, IOException {
+
+        ArrayList<Usuario> usuarios = Usuario();
+
+        String json = gson.toJson(usuarios);
+
+        Json.writeFile("Usuarios", structureJson("Usuarios", json));
+
+    }
+
+    public void jsonUsuario(String userName) throws SQLException, ParseException, IOException {
+
+        Usuario usuario = Usuario(userName);
+
+        String json = gson.toJson(usuario);
+
+        Json.writeFile("Usuario", structureJson("Usuario", json));
+
+    }
+
+    public void jsonAll() throws SQLException, ParseException, IOException {
+
+        jsonCliente();
+        jsonFactura();
+        jsonProducto();
+        jsonUsuario();
+
+    }
+
+    private String structureJson(String name, String json) {
+
+        json = "{\"" + name + "\":" + json;
+        json += "}";
+
+        json = json.replaceAll(":", ": ").replace(",\"", ",\n\"");
+
+        json = json.replace("{", "{\n").replace("}", "\n}");
+        json = json.replace("[{", "[\n{").replace("}]", "}\n]").replace(",{", ",\n{");
+
+        char[] jsonChar = json.toCharArray();
+
+        String jsonString = "";
+        int count = 0;
+        boolean saltoLinea = false;
+
+        for (char x : jsonChar) {
+
+            if (x == '{' || x == '[')
+                count++;
+            else if (x == '}' || x == ']')
+                count--;
+            else if (x == '\n') {
+                saltoLinea = true;
+                jsonString += x;
+            }
+
+            if (saltoLinea) {
+                for (int i = 0; i < count; ++i) {
+                    jsonString += "\t";
+                }
+                saltoLinea = false;
+                continue;
+            }
+            jsonString += x;
+        }
+
+        jsonString = jsonString.replace("\t}", "}").replace("\t]", "]");
+
+        return jsonString;
+
+    }
+
+    private static class Json {
+
+        private static String createFile(String nombre) throws IOException {
+
+            String json = "Data/" + nombre + ".json";
+
+            File folder = new File(json.substring(0, 4));
+
+            File file = new File(json);
+
+            folder.mkdir();
+
+            if(!file.createNewFile()) {
+                if(file.delete()) file.createNewFile();
+            }
+
+            return json;
+
+        }
+
+        public static void writeFile(String nombre, String text) throws IOException {
+
+            FileWriter writer = new FileWriter(createFile(nombre));
+
+            writer.write(text);
+            writer.close();
+
+        }
+
+    }
+
 }
 
 class DatabaseController {
@@ -278,7 +468,7 @@ class DatabaseController {
 
     }
 
-    public ArrayList<FacturaProducto> getRelation(String idFactura) throws SQLException, ParseException {
+    public ArrayList<FacturaProducto> getRelation(int idFactura) throws SQLException, ParseException {
 
         ResultSet response = this.database.getRelation(FacturaProducto.class.getSimpleName(), idFactura);
 
@@ -286,7 +476,7 @@ class DatabaseController {
 
     }
 
-    public FacturaProducto getRelationUnique(String idFactura, String idProducto) throws SQLException, ParseException {
+    public FacturaProducto getRelationUnique(int idFactura, int idProducto) throws SQLException, ParseException {
 
         ResultSet response = this.database.getUniqueRelation(FacturaProducto.class.getSimpleName(), idFactura,
                 idProducto);
@@ -295,7 +485,7 @@ class DatabaseController {
 
     }
 
-    public <T> T getById(Table table, String id) throws SQLException, ParseException {
+    public <T> T getById(Table table, Object id) throws SQLException, ParseException {
 
         ResultSet response = switch (table) {
 
@@ -380,7 +570,7 @@ class DatabaseController {
 
     }
 
-    public void delete(Table table, String id) throws SQLException {
+    public void delete(Table table, Object id) throws SQLException {
 
         ResultSet response = switch (table) {
 
@@ -416,7 +606,7 @@ class DatabaseController {
                     case CLIENTE -> {
                         atributes = Cliente.toArrayAtributes();
                         yield new Cliente(
-                            response.getString(atributes[0]),
+                            response.getInt(atributes[0]),
                             response.getString(atributes[1]),
                             response.getString(atributes[2])
                         );
@@ -425,11 +615,11 @@ class DatabaseController {
                     case FACTURA -> {
                         atributes = Factura.toArrayAtributes();
 
-                        Cliente cliente = BackController.controller.Cliente(response.getString(atributes[2]));
-                        ArrayList<FacturaProducto> items = BackController.controller.FacturaProducto(response.getString(atributes[0]));
+                        Cliente cliente = BackController.controller.Cliente(response.getInt(atributes[2]));
+                        ArrayList<FacturaProducto> items = BackController.controller.FacturaProducto(response.getInt(atributes[0]));
 
                         yield new Factura(
-                            response.getString(atributes[0]),
+                            response.getInt(atributes[0]),
                             response.getDate(atributes[1]),
                             cliente,
                             items
@@ -440,7 +630,7 @@ class DatabaseController {
                         atributes = Producto.toArrayAtributes();
 
                         yield new Producto(
-                            response.getString(atributes[0]),
+                            response.getInt(atributes[0]),
                             response.getString(atributes[1]),
                             BackController.toBigDecimal(response.getString(atributes[2])),
                             response.getInt(atributes[3]),
@@ -460,7 +650,7 @@ class DatabaseController {
                     case FACTURAPRODUCTO -> {
                         atributes = FacturaProducto.toArrayAtributes();
 
-                        Producto producto = BackController.controller.Producto(response.getString(atributes[3]));
+                        Producto producto = BackController.controller.Producto(response.getInt(atributes[3]));
 
                         yield new FacturaProducto(
                             response.getInt(atributes[0]),
@@ -495,7 +685,7 @@ class DatabaseController {
                     case CLIENTE -> {
                         atributes = Cliente.toArrayAtributes();
                         yield new Cliente(
-                            response.getString(atributes[0]),
+                            response.getInt(atributes[0]),
                             response.getString(atributes[1]),
                             response.getString(atributes[2])
                         );
@@ -504,11 +694,11 @@ class DatabaseController {
                     case FACTURA -> {
                         atributes = Factura.toArrayAtributes();
 
-                        Cliente cliente = BackController.controller.Cliente(response.getString(atributes[2]));
-                        ArrayList<FacturaProducto> items = BackController.controller.FacturaProducto(response.getString(atributes[0]));
+                        Cliente cliente = BackController.controller.Cliente(response.getInt(atributes[2]));
+                        ArrayList<FacturaProducto> items = BackController.controller.FacturaProducto(response.getInt(atributes[0]));
 
                         yield new Factura(
-                            response.getString(atributes[0]),
+                            response.getInt(atributes[0]),
                             response.getDate(atributes[1]),
                             cliente,
                             items
@@ -519,7 +709,7 @@ class DatabaseController {
                         atributes = Producto.toArrayAtributes();
 
                         yield new Producto(
-                                response.getString(atributes[0]),
+                                response.getInt(atributes[0]),
                                 response.getString(atributes[1]),
                                 BackController.toBigDecimal(response.getString(atributes[2])),
                                 response.getInt(atributes[3]),
@@ -539,7 +729,7 @@ class DatabaseController {
                     case FACTURAPRODUCTO -> {
                         atributes = FacturaProducto.toArrayAtributes();
 
-                        Producto producto = BackController.controller.Producto(response.getString(atributes[3]));
+                        Producto producto = BackController.controller.Producto(response.getInt(atributes[3]));
 
                         yield new FacturaProducto(
                             response.getInt(atributes[0]),

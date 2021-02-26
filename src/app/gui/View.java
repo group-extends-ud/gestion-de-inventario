@@ -178,7 +178,7 @@ public class View {
         SComboBox cbTipo = new SComboBox(SComboBox.DECORADO, 200, 62, 100, 32, opciones);
         cbTipo.addActionListener((e) -> {
             try {
-                precio.set(BackController.getPrecio(cbTipo.getItemAt(cbTipo.getSelectedIndex()).toString()));
+                precio.set(BackController.getPrecio(Integer.parseInt(cbTipo.getItemAt(cbTipo.getSelectedIndex()).toString())));
             } catch (SQLException | ParseException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
@@ -191,7 +191,7 @@ public class View {
         btConfirm.addActionListener((e) -> {
             try {
                 if (cantidad.get() > 0 && cantidad.get() > BackController
-                        .getStock(cbTipo.getItemAt(cbTipo.getSelectedIndex()).toString())) {
+                        .getStock(Integer.parseInt(cbTipo.getItemAt(cbTipo.getSelectedIndex()).toString()))) {
                     BackController.insertarMovimiento(cbTipo.getItemAt(cbTipo.getSelectedIndex()).toString(),
                             cantidad.get());
                     actualizar();

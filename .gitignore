@@ -15,3 +15,6 @@ bin
 *.idea/
 *out/
 *target/
+
+# Both
+Data/
