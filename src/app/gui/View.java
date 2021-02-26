@@ -205,7 +205,10 @@ public class View {
     private void addToCarrito(Producto producto) {
         VentanaEmergente ventana = new VentanaEmergente(Controller.controller, 340, 180);
 
-        SLabel lCantidad = new SLabel(64, 64, 168, 28, "Ingrese cantidad de "+producto.getNombre()+" que desea agregar al carrito");
+        SLabel lCarro = new SLabel(32, 32, 168, 28, "Insertar al carrito");
+        ventana.add(lCarro);
+
+        SLabel lCantidad = new SLabel(64, 64, 168, 28, "Ingrese cantidad: ");
         ventana.add(lCantidad);
 
         STextField tfCantidad = new STextField(200, 62, 100, 32);
