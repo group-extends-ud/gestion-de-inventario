@@ -13,7 +13,9 @@ public class Factura extends General {
     private ArrayList<FacturaProducto> items;
 
     public Factura(Integer idfactura, Date fecha, Cliente cliente, ArrayList<FacturaProducto> items) {
-        this.idfactura = idfactura;
+        if(idfactura != 1)
+            this.idfactura = idfactura;
+        else this.idfactura = null;
         this.fecha = fecha;
         this.idcliente = cliente;
         this.items = items;

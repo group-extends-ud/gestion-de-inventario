@@ -2,6 +2,7 @@ package app.gui;
 
 import app.controllers.BackController;
 import app.inventario.Factura;
+import app.inventario.FacturaProducto;
 import app.inventario.Producto;
 import lib.sRAD.gui.component.VentanaEmergente;
 import lib.sRAD.gui.sComponent.*;
@@ -9,8 +10,10 @@ import lib.sRAD.gui.sComponent.*;
 import javax.swing.*;
 
 import java.awt.HeadlessException;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -206,11 +209,12 @@ public class View {
 
     public void addFactura() throws SQLException, ParseException {
         VentanaEmergente ventana = new VentanaEmergente(Controller.controller, 340, 300);
+        ArrayList<FacturaProducto> facturas = new ArrayList<>();
 
         SLabel lInsertar = new SLabel(32, 32, 200, 28, "Inserte un movimiento");
         ventana.add(lInsertar);
 
-        SLabel lTipo = new SLabel(64, 64, 168, 28, "Producto:");
+        SLabel lTipo = new SLabel(64, 64, 168, 28, "Añadir producto (nombre):");
         ventana.add(lTipo);
 
         SLabel lPrecioText = new SLabel(64, 104, 168, 28, "Precio:");
@@ -230,13 +234,6 @@ public class View {
         ventana.add(lPrecioTotal);
 
         STextField tfCantidad = new STextField(200, 142, 100, 32);
-        tfCantidad.addActionListener((e) -> {
-            if (isInt(tfCantidad.getText()) && Integer.parseInt(tfCantidad.getText()) > 0) {
-                cantidad.set(Integer.parseInt(tfCantidad.getText()));
-                precioTotal.set(cantidad.get() * precio.get());
-                lPrecioTotal.setText(toCOP(precioTotal.get()));
-            }
-        });
         ventana.add(tfCantidad);
 
         SLabel lPrecioTotalText = new SLabel(64, 184, 168, 28, "Precio Total:");
@@ -257,6 +254,25 @@ public class View {
         SButton btConfirm = new SButton(50, 232, 100, 32, "INSERTAR");
         btConfirm.addActionListener((e) -> {
             try {
+                if (facturas.size() != 0) {
+                    BackController.insertarMovimiento(cbTipo.getItemAt(cbTipo.getSelectedIndex()).toString(),
+                            cantidad.get());
+                    actualizar();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Por favor ingrese al menos un producto", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (HeadlessException | SQLException | ParseException e1) {
+                JOptionPane.showMessageDialog(null, "No se pudo registrar la factura", "Error", JOptionPane.ERROR_MESSAGE);
+                e1.printStackTrace();
+            }
+            ventana.cerrar();
+        });
+        ventana.add(btConfirm);
+
+        SButton btAdd = new SButton(50, 232, 100, 32, "AÑADIR");
+        btAdd.addActionListener((e) -> {
+            try {
                 if (cantidad.get() > 0 && cantidad.get() > BackController
                         .getStock(Integer.parseInt(cbTipo.getItemAt(cbTipo.getSelectedIndex()).toString()))) {
                     BackController.insertarMovimiento(cbTipo.getItemAt(cbTipo.getSelectedIndex()).toString(),
@@ -271,7 +287,7 @@ public class View {
             }
             ventana.cerrar();
         });
-        ventana.add(btConfirm);
+        ventana.add(btAdd);
 
         SButton btClose = new SButton(190, 232, 100, 32, "CERRAR");
         btClose.addActionListener( (e) -> ventana.cerrar());
