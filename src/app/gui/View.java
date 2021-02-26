@@ -217,24 +217,26 @@ public class View {
         SScrollPane scroll = new SScrollPane(0, 0, 516, 296, pInterno);
         ventana.add(scroll);
 
-        SLabel lCarro = new SLabel(32, 32, 168, 28, "Detalles de factura");
+        SLabel lCarro = new SLabel(202, 32, 168, 28, "Detalles de factura");
         pInterno.add(lCarro);
 
-        SButton btConfirm = new SButton(50, 62, 100, 32, "ELIMINAR");
-        btConfirm.addActionListener( (e) -> {
-            try {
-                BackController.controller.deleteFactura(factura.getIdfactura());
-                actualizar();
-            } catch (SQLException | ParseException e1) {
-                JOptionPane.showMessageDialog(null, "No se pudo eliminar el movimiento indicado, por favor verifique" +
-                        " los datos ingresados", "Error", JOptionPane.ERROR_MESSAGE);
-                e1.printStackTrace();
-            }
-            ventana.cerrar();
-        });
-        pInterno.add(btConfirm);
-
-        SButton btClose = new SButton(190, 62, 100, 32, "CERRAR");
+        if (isAdmin) {
+            SButton btConfirm = new SButton(164, 62, 100, 32, "ELIMINAR");
+            btConfirm.addActionListener( (e) -> {
+                try {
+                    BackController.controller.deleteFactura(factura.getIdfactura());
+                    actualizar();
+                } catch (SQLException | ParseException e1) {
+                    JOptionPane.showMessageDialog(null, "No se pudo eliminar el movimiento indicado, por favor verifique" +
+                            " los datos ingresados", "Error", JOptionPane.ERROR_MESSAGE);
+                    e1.printStackTrace();
+                }
+                ventana.cerrar();
+            });
+            pInterno.add(btConfirm);
+        }
+        
+        SButton btClose = new SButton(32, 62, 100, 32, "CERRAR");
         btClose.addActionListener( (e) -> ventana.cerrar());
         pInterno.add(btClose);
 
@@ -280,64 +282,6 @@ public class View {
         ventana.add(btConfirm);
 
         SButton btClose = new SButton(190, 112, 100, 32, "CERRAR");
-        btClose.addActionListener( (e) -> ventana.cerrar());
-        ventana.add(btClose);
-
-        ventana.lanzar();
-    }
-
-    private void ajustarMovimiento(int id) {
-        VentanaEmergente ventana = new VentanaEmergente(Controller.controller, 340, 340);
-        ArrayList<FacturaProducto> productos = new ArrayList<>();
-
-        SLabel lInsertar = new SLabel(32, 32, 200, 28, "Modificar un movimiento");
-        ventana.add(lInsertar);
-
-        SLabel lCliente = new SLabel(64, 104, 168, 28, "Cliente:");
-        ventana.add(lCliente);
-
-        STextField tfCliente = new STextField(200, 102, 100, 32);
-        ventana.add(tfCliente);
-
-        SLabel lCantidad = new SLabel(64, 144, 168, 28, "Cantidad:");
-        ventana.add(lCantidad);
-
-        STextField tfCantidad = new STextField(200, 142, 100, 32);
-        ventana.add(tfCantidad);
-
-        SLabel lCostoUnitario = new SLabel(64, 184, 168, 28, "Costo unitario:");
-        ventana.add(lCostoUnitario);
-
-        STextField tfCostoUnitario = new STextField(200, 182, 100, 32);
-        ventana.add(tfCostoUnitario);
-
-        SLabel lCostoTotal = new SLabel(64, 224, 168, 28, "Costo total:");
-        ventana.add(lCostoTotal);
-
-        STextField tfCostoTotal = new STextField(200, 222, 100, 32);
-        ventana.add(tfCostoTotal);
-
-        SButton btConfirm = new SButton(50, 272, 100, 32, "MODIFICAR");
-        btConfirm.addActionListener( (e) -> {
-            if (!tfCliente.getText().isEmpty() && !tfCantidad.getText().isEmpty() && !tfCostoUnitario.getText().isEmpty()
-                    && !tfCostoTotal.getText().isEmpty()) {
-                try {
-                    Cliente cliente = BackController.controller.Cliente(Integer.parseInt(tfCliente.getText()));
-                    BackController.controller.updateFactura(new Factura(id, Date.from(Instant.now()), cliente, productos));
-                    actualizar();
-                } catch (Exception throwables) {
-                    JOptionPane.showMessageDialog(null, "No se pudo modificar el movimiento indicado, por favor verifique" +
-                            " los datos ingresados", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-            else {
-                JOptionPane.showMessageDialog(null, "Por favor ingrese valores válidos", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            ventana.cerrar();
-        });
-        ventana.add(btConfirm);
-
-        SButton btClose = new SButton(190, 272, 100, 32, "CERRAR");
         btClose.addActionListener( (e) -> ventana.cerrar());
         ventana.add(btClose);
 
