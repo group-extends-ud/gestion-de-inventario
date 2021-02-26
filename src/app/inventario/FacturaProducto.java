@@ -15,7 +15,11 @@ public class FacturaProducto extends General {
         this.idfactura = idfactura;
         this.idproducto = idproducto;
 
-        if(valor.compareTo(BigDecimal.valueOf(idproducto.getPrecio()).multiply(new BigDecimal(cantidad))) != 0) {
+        boolean noCoinciden = false;
+        if(valor != null)
+            noCoinciden = valor.compareTo(BigDecimal.valueOf(idproducto.getPrecio()).multiply(new BigDecimal(cantidad))) != 0;
+
+        if(!noCoinciden) {
             this.valor = BigDecimal.valueOf(idproducto.getPrecio()).multiply(new BigDecimal(cantidad));
         }
 

@@ -80,7 +80,7 @@ public class Factura extends General {
 
     public Object[] toArray() {
 
-        Object[] objects = { idfactura, fecha, (idcliente != null)? idcliente.getIdcliente(): null };
+        Object[] objects = { idfactura, null, (idcliente != null)? idcliente.getIdcliente(): "" };
 
         return objects;
 

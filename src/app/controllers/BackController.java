@@ -54,7 +54,7 @@ public class BackController {
 
     }
 
-    public void Producto(Producto producto) throws SQLException {
+    public void Producto(Producto producto) throws SQLException, ParseException {
 
         database.insert(DatabaseController.Table.PRODUCTO, producto);
 
@@ -82,7 +82,7 @@ public class BackController {
 
     }
 
-    public void Cliente(Cliente cliente) throws SQLException {
+    public void Cliente(Cliente cliente) throws SQLException, ParseException {
 
         database.insert(DatabaseController.Table.CLIENTE, cliente);
 
@@ -112,7 +112,7 @@ public class BackController {
 
     }
 
-    public void Usuario(Usuario usuario) throws SQLException {
+    public void Usuario(Usuario usuario) throws SQLException, ParseException {
 
         database.insert(DatabaseController.Table.USUARIO, usuario);
 
@@ -142,7 +142,7 @@ public class BackController {
 
     }
 
-    public void Factura(Factura factura) throws SQLException {
+    public void Factura(Factura factura) throws SQLException, ParseException {
 
         database.insert(DatabaseController.Table.FACTURA, factura);
 
@@ -171,7 +171,7 @@ public class BackController {
 
     }
 
-    public void FacturaProducto(FacturaProducto facturaProducto) throws SQLException {
+    public void FacturaProducto(FacturaProducto facturaProducto) throws SQLException, ParseException {
 
         database.insert(DatabaseController.Table.FACTURAPRODUCTO, facturaProducto);
 
@@ -511,7 +511,7 @@ class DatabaseController {
 
     }
 
-    public void insert(Table table, General general) throws SQLException {
+    public void insert(Table table, General general) throws SQLException, ParseException {
 
         ResultSet response = switch (table) {
 
@@ -522,10 +522,16 @@ class DatabaseController {
                     general.toArray());
 
             case FACTURA -> {
-                database.insert(Factura.class.getSimpleName(), Factura.toArrayAtributes(),
+                ResultSet data = database.insert(Factura.class.getSimpleName(), Factura.toArrayAtributes(),
                     general.toArray());
 
+                Factura factura = null;
+
+                factura = BuildModels.<Factura>BuildOne(Table.FACTURA, data);
+
                 for(FacturaProducto item : ((Factura)general).getItems()) {
+                    item.setFactura(factura.getIdfactura());
+                    System.out.println(item.getFactura());
                     insert(Table.FACTURAPRODUCTO, item);
                 }
 
