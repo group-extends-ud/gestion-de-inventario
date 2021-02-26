@@ -1,13 +1,18 @@
 import app.gui.Controller;
-import app.DataBase;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.text.ParseException;
+
+import app.controllers.BackController;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException, IOException {
 
-        try {
-            DataBase.connect(args[0], args[1]);
-        } catch (Exception e) {}
+        BackController.init(args);
+
+        BackController.controller.jsonAll();
 
 	    Controller.init();
     }

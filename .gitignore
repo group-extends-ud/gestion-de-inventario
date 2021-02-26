@@ -1,6 +1,20 @@
+# LGsus 5G
 .classpath
 .project
 .settings
 .vscode
 target
 bin
+
+# JeanK
+*.class
+*.jar
+*.MF
+*.iml
+
+*.idea/
+*out/
+*target/
+
+# Both
+Data/

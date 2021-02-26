@@ -20,8 +20,17 @@ public class STextField extends JTextField {
         setProperties(x, y, width, height);
     }
 
+    public STextField(int x, int y, int width, int height, String text) {
+        setProperties(x, y, width, height, text);
+    }
+
     public void setProperties(int x, int y, int width, int height) {
         setProperties(x, y, width, height, true, Theme.fFg, Theme.bg2, fontText, DTII4Border, LEFT);
+    }
+
+    public void setProperties(int x, int y, int width, int height, String text) {
+        setProperties(x, y, width, height);
+        setText(text);
     }
 
     public void setProperties(int x, int y, int width, int height, Boolean editable, Color foreground, Color background, Font font,

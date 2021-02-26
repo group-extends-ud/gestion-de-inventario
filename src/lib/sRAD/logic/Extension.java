@@ -19,20 +19,62 @@ public class Extension {
     }
 
     public static String toCOP(int integer) {
-        String str = "$";
-        String number = Integer.toString(integer);
+        String str = "";
+        int num = integer;
+        int ajusteModulo = 0;
 
-        for (int i=0; i<number.length(); i++) {
-            if(number.length() % 3 == 0 && str.length()!=1) {
-                str += ","+number.charAt(i);
+        if(num < 0) {
+            str += "-";
+            num *= -1;
+            ajusteModulo++;
+        }
+        str += "$";
+        String number = Integer.toString(num);
+
+        while (!number.isEmpty()) {
+            if(number.length()% 3 == 0 && str.length() != 1+ajusteModulo) {
+                str += "."+number.charAt(0);
             }
             else {
-                str += number.charAt(i);
+                str += number.charAt(0);
             }
-            number = number.substring(1,number.length());
+            number = number.substring(1);
         }
 
         return str;
+    }
+
+    public static String toCOP(double valor) {
+        String str = "";
+        int num = (int) valor;
+        int ajusteModulo = 0;
+
+        if(num < 0) {
+            str += "-";
+            num *= -1;
+            ajusteModulo++;
+        }
+        str += "$";
+        String number = Integer.toString(num);
+
+        while (!number.isEmpty()) {
+            if(number.length()% 3 == 0 && str.length() != 1+ajusteModulo) {
+                str += "."+number.charAt(0);
+            }
+            else {
+                str += number.charAt(0);
+            }
+            number = number.substring(1);
+        }
+
+        String decimal =("%.2f".formatted(valor % 1)).substring(1 + ajusteModulo);
+        str += decimal;
+
+        return str;
+    }
+
+    public static String toPTJ(double porcentaje) {
+        return "%.2f".formatted(porcentaje*100) + "%";
     }
 
     public static Boolean isDouble(String str) {
