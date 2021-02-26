@@ -257,7 +257,7 @@ public class View {
         for(int i=0; i<factura.getItems().size(); i++) {
             FacturaProducto f = factura.getItems().get(i);
             SLabel lNombre = new SLabel(32, 104+32*i, 700, 28, "Nombre: "+f.getProducto().getNombre()+
-                    ", cantidad: "+f.getCantidad()+ ",Valor: "+f.getValor());
+                    ", cantidad: "+f.getCantidad()+ ",Valor: "+toCOP(f.getValor()));
             pInterno.add(lNombre);
         }
         pInterno.setSize(pInterno.getWidth(), 184+32*factura.getItems().size());
@@ -463,7 +463,7 @@ public class View {
         SLabel lInsertar = new SLabel(32, 32, 200, 28, "Inserte un movimiento");
         ventana.add(lInsertar);
 
-        SLabel lCliente = new SLabel(64, 64, 168, 28, "Cliente:");
+        SLabel lCliente = new SLabel(64, 64, 168, 28, "Id del cliente:");
         ventana.add(lCliente);
 
         STextField tfCliente = new STextField(200, 62, 100, 32);
