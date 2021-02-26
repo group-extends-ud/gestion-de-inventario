@@ -1,25 +1,26 @@
 package app.gui;
 
 import app.controllers.BackController;
+import app.inventario.Cliente;
 import app.inventario.Factura;
+import app.inventario.FacturaProducto;
 import app.inventario.Producto;
 import lib.sRAD.gui.component.VentanaEmergente;
 import lib.sRAD.gui.sComponent.*;
 
 import javax.swing.*;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.time.Instant;
+import java.util.ArrayList;
 
 public class ViewAdmin extends View {
 
     protected ViewAdmin() throws SQLException, ParseException {
         super();
-
-        pInventario = new SPanel(SPanel.INTERNO, 0, 0, 848, 608);
         SScrollPane spInventario = new SScrollPane(216, 90, 864, 624, pInventario);
-
-        pEstadistica = new SPanel(SPanel.INTERNO, 0, 0, 848, 608);
         SScrollPane spEstadistica = new SScrollPane(216, 90, 864, 624, pEstadistica);
 
         btRemove = new SButton(1140, 300, new ImageIcon("resources/delete.png"));
@@ -48,10 +49,6 @@ public class ViewAdmin extends View {
         tpTabs.addTab("Estadística", spEstadistica);
 
         actualizar();
-    }
-
-    public void actualizar() throws SQLException, ParseException {
-        super.actualizar();
     }
 
     private void ajustarItem() {
@@ -95,7 +92,7 @@ public class ViewAdmin extends View {
             if (!tfID.getText().isEmpty() && !tfNombre.getText().isEmpty() && !tfPrecio.getText().isEmpty() && !tfStock.getText().isEmpty()
                     && !tfStockMin.getText().isEmpty()) {
                 try {
-                    BackController.updateProducto(new Producto(Integer.parseInt(tfID.getText()), tfNombre.getText(), BackController.toBigDecimal(tfPrecio.getText()),
+                    BackController.updateProducto(new Producto(Integer.parseInt(tfID.getText()), tfNombre.getText(), Double.parseDouble(tfPrecio.getText()),
                             Integer.parseInt(tfStock.getText()), Integer.parseInt(tfStockMin.getText())));
                 } catch (Exception throwables) {
                     JOptionPane.showMessageDialog(null, "No se pudo modificar el producto indicado, por favor verifique" +
@@ -118,6 +115,7 @@ public class ViewAdmin extends View {
 
     private void ajustarMovimiento() {
         VentanaEmergente ventana = new VentanaEmergente(Controller.controller, 340, 340);
+        ArrayList<FacturaProducto> productos = new ArrayList<>();
 
         SLabel lInsertar = new SLabel(32, 32, 200, 28, "Modificar un movimiento");
         ventana.add(lInsertar);
@@ -128,11 +126,11 @@ public class ViewAdmin extends View {
         STextField tfID = new STextField(200, 62, 100, 32);
         ventana.add(tfID);
 
-        SLabel lProducto = new SLabel(64, 104, 168, 28, "ID producto:");
-        ventana.add(lProducto);
+        SLabel lCliente = new SLabel(64, 104, 168, 28, "Cliente:");
+        ventana.add(lCliente);
 
-        STextField tfProducto = new STextField(200, 102, 100, 32);
-        ventana.add(tfProducto);
+        STextField tfCliente = new STextField(200, 102, 100, 32);
+        ventana.add(tfCliente);
 
         SLabel lCantidad = new SLabel(64, 144, 168, 28, "Cantidad:");
         ventana.add(lCantidad);
@@ -154,11 +152,12 @@ public class ViewAdmin extends View {
 
         SButton btConfirm = new SButton(50, 272, 100, 32, "MODIFICAR");
         btConfirm.addActionListener( (e) -> {
-            if (!tfID.getText().isEmpty() && !tfProducto.getText().isEmpty() && !tfCantidad.getText().isEmpty() && !tfCostoUnitario.getText().isEmpty()
+            if (!tfID.getText().isEmpty() && !tfCliente.getText().isEmpty() && !tfCantidad.getText().isEmpty() && !tfCostoUnitario.getText().isEmpty()
                     && !tfCostoTotal.getText().isEmpty()) {
                 try {
-                    /*BackController.controller.updateFactura(new Factura(Integer.parseInt(tfID.getText()), Integer.parseInt(tfProducto.getText()),
-                            Integer.parseInt(tfCantidad.getText()), Integer.parseInt(tfCostoUnitario.getText()), Integer.parseInt(tfCostoTotal.getText())));*/
+                    Cliente cliente = BackController.getCliente(tfCliente.getText());
+                    BackController.controller.updateFactura(new Factura(Integer.parseInt(tfID.getText()), Date.from(Instant.now()),
+                            cliente, productos));
                     actualizar();
                 } catch (Exception throwables) {
                     JOptionPane.showMessageDialog(null, "No se pudo modificar el movimiento indicado, por favor verifique" +
