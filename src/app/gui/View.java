@@ -155,8 +155,10 @@ public class View {
 
         //pEstadistica
         pEstadistica.removeAll();
-        SButton prueba = new SButton(32, 32, 68, 28, "Holiwis");
-        pEstadistica.add(prueba);
+        SLabel masVendido = new SLabel(32, 32, 500, 28, "Producto más vendido: " + BackController.getProductoMasVendido().getNombre());
+        SLabel menosVendido = new SLabel(32, 60, 500, 28, "Producto menos vendido: " + BackController.getProductoMenosVendido().getNombre());
+        pEstadistica.add(masVendido);
+        pEstadistica.add(menosVendido);
         pEstadistica.repaint();
     }
 

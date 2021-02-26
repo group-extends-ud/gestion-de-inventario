@@ -189,7 +189,7 @@ public class DataBase {
 
     public ResultSet delete(String table, Object id) throws SQLException {
 
-        String query = "DELETE FROM " + table + " WHERE " + this.getIDTable(table) + " RETURNING *;";
+        String query = "DELETE FROM " + table + " WHERE " + this.getIDTable(table) + " CASCADE RETURNING *;";
 
         Object[] objects = { id };
 

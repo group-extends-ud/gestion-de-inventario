@@ -206,6 +206,76 @@ public class BackController {
 
     }
 
+    public static Producto getProductoMasVendido() throws SQLException, ParseException {
+
+        ArrayList<Producto> productos = controller.Producto();
+
+        Producto producto = productos.get(0);
+
+        int[][] comparables = new int[productos.size()][2];
+
+        for(int i = 0; i < productos.size(); ++i) {
+            comparables[i][0] = productos.get(i).getIdproducto();
+            comparables[i][1] = 0;
+        }
+
+        ArrayList<Factura> facturas = controller.Factura();
+
+        for(Factura factura : facturas) {
+            for(int i = 0; i < factura.getItems().size(); ++i) {
+                if(comparables[i][0] == factura.getItems().get(i).getProducto().getIdproducto()) {
+                    comparables[i][1] += factura.getItems().get(i).getCantidad();
+                }
+            }
+        }
+
+
+
+        for(int i = 0; i < productos.size() - 1; ++i) {
+            if(comparables[i][1] < comparables[i + 1][1]) {
+                producto = productos.get(i + 1);
+            }
+        }
+
+        return producto;
+
+    }
+
+    public static Producto getProductoMenosVendido() throws SQLException, ParseException {
+
+        ArrayList<Producto> productos = controller.Producto();
+
+        Producto producto = productos.get(0);
+
+        int[][] comparables = new int[productos.size()][2];
+
+        for(int i = 0; i < productos.size(); ++i) {
+            comparables[i][0] = productos.get(i).getIdproducto();
+            comparables[i][1] = 0;
+        }
+
+        ArrayList<Factura> facturas = controller.Factura();
+
+        for(Factura factura : facturas) {
+            for(int i = 0; i < factura.getItems().size(); ++i) {
+                if(comparables[i][0] == factura.getItems().get(i).getProducto().getIdproducto()) {
+                    comparables[i][1] += factura.getItems().get(i).getCantidad();
+                }
+            }
+        }
+
+
+
+        for(int i = 0; i < productos.size() - 1; ++i) {
+            if(comparables[i][1] > comparables[i + 1][1]) {
+                producto = productos.get(i + 1);
+            }
+        }
+
+        return producto;
+
+    }
+
     public static Usuario validarIngreso(String userName, String password) throws SQLException, ParseException {
 
         return (getPassword(userName, password)) ? controller.Usuario(userName) : null;
