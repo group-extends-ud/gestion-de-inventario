@@ -35,9 +35,11 @@ public class View {
         pEstadistica = new SPanel(SPanel.INTERNO, 0, 0, 848, 608);
 
         SScrollPane spMovimiento = new SScrollPane(216, 90, 864, 624, pMovimiento);
+        SScrollPane spInventario = new SScrollPane(216, 90, 864, 624, pInventario);
 
         tpTabs = new STabbedPane(STabbedPane.DECORADO, 216, 30, 866, 656);
         tpTabs.addTab("Movimientos", spMovimiento);
+        tpTabs.addTab("Inventario", spInventario);
 
         btAdd = new SButton(1140, 200, new ImageIcon("resources/add.png"));
         btAdd.addActionListener((e) -> {
