@@ -16,8 +16,6 @@ public class Main {
 
         BackController.init(args);
 
-        BackController.controller.Factura();
-
 	    Controller.init();
     }
 }

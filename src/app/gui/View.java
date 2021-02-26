@@ -86,8 +86,8 @@ public class View {
                 // por cada producto
                 Factura factura = facturas.get(i);
                 SLabel lProducto = new SLabel(32, i * 32 + 64, 68, 28, factura.getIdfactura().toString());
-                SLabel lProducto1 = new SLabel(100, i * 32 + 64, 250, 28, factura.getCliente().getNombre()+" "+
-                        factura.getCliente().getApellido());
+                SLabel lProducto1 = new SLabel(100, i * 32 + 64, 250, 28, ((factura.getCliente() != null)? factura.getCliente().getNombre(): "")+" "+
+                        ((factura.getCliente() != null)? factura.getCliente().getApellido() : ""));
                 SLabel lProducto2 = new SLabel(350, i * 32 + 64, 150, 28, toCOP(factura.getCostoTotal()), SLabel.RIGHT);
                 SLabel lProducto3 = new SLabel(550, i * 32 + 64, 100, 28, factura.getFecha()+"", SLabel.RIGHT);
                 SButton btDetail = new SButton(700, i * 32 + 64, 100, 28, "+");
