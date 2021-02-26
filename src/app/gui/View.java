@@ -449,9 +449,9 @@ public class View {
 
     public void avisar(Producto faltante) {
 
-        VentanaEmergente ventana = new VentanaEmergente(Controller.controller, 340, 300);
+        VentanaEmergente ventana = new VentanaEmergente(Controller.controller, 450, 300);
 
-        SLabel lInsertar = new SLabel(32, 32, 300, 40, "Quedan pocos en stock de:");
+        SLabel lInsertar = new SLabel(32, 32, 400, 40, "Quedan pocos en stock de:");
         ventana.add(lInsertar);
 
         SLabel lNombre = new SLabel(64, 64, 168, 28, "Nombre:");
