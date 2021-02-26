@@ -43,6 +43,8 @@ public class DataBase {
 
         for(int i = 0; i < objects.length; ++i) {
 
+            if(objects[i] == "") objects[i] = null;
+
             try {
                 className = objects[i].getClass().getSimpleName();
             } catch (NullPointerException e) {
@@ -69,7 +71,7 @@ public class DataBase {
 
                 case "BigDecimal" -> statement.setBigDecimal(i + 1, (BigDecimal) (objects[i]));
             
-                default -> {}
+                default -> statement.setNull(i + 1, 0);
     
             }
 
@@ -85,7 +87,7 @@ public class DataBase {
 
     public ResultSet getAll(String table) throws SQLException {
 
-        String query = "SELECT * FROM " + table + ';';
+        String query = "SELECT * FROM " + table + " ORDER BY " + this.getIDTableIndex(table) + " asc;";
 
         return this.query(query);
 
@@ -103,7 +105,7 @@ public class DataBase {
 
     public ResultSet getRelation(String table, int idFactura)throws SQLException {
 
-        String query = "SELECT * FROM " + table + " WHERE " + this.getIDFacturaProducto()[0] + ';';
+        String query = "SELECT * FROM " + table + " WHERE " + this.getIDFacturaProducto()[0] + " ORDER BY " + this.getIDTableIndex(table) + " asc;";
 
         Object[] elements = { idFactura };
 
@@ -125,17 +127,29 @@ public class DataBase {
 
     public ResultSet insert(String table, String[] atributes, Object[] objects) throws SQLException {
 
-        Object[] provisional;
+        Object[] provisional = null;
 
-        for(int i = 0; i < objects.length; i++) {
+        for(int i = 0; i < objects.length; ++i) {
             if(objects[i] == null) {
                 objects = remueveElement(objects, i);
                 provisional = remueveElement(atributes, i);
                 atributes = new String[provisional.length];
+                i = 0;
                 for(int j = 0; j < provisional.length; ++j) {
                     atributes[j] = (String) provisional[j];
                 }
+            }
+        }
+
+        for(int i = 0; i < objects.length; ++i) {
+            if(atributes[i] == "fecha") {
+                objects = remueveElement(objects, i);
+                provisional = remueveElement(atributes, i);
+                atributes = new String[provisional.length];
                 i = 0;
+                for(int j = 0; j < provisional.length; ++j) {
+                    atributes[j] = (String) provisional[j];
+                }
             }
         }
 
@@ -201,6 +215,24 @@ public class DataBase {
 
     }
 
+    private String getIDTableIndex(String table) {
+
+        return switch(table) {
+
+            case "Cliente" -> "idcliente";
+
+            case "Producto" -> "idproducto";
+
+            case "Factura", "FacturaProducto" -> "idfactura";
+
+            case "Usuario" -> "username";
+
+            default -> throw new IllegalArgumentException("Unexpected value: " + table);
+
+        };
+
+    }
+
     private String[] getIDFacturaProducto() {
 
         String[] ids = { this.getIDTable("Factura"), this.getIDTable("Producto") };
@@ -210,10 +242,10 @@ public class DataBase {
 
     private Object[]  remueveElement(Object[] objects, int i) {
         Object[] newObjects = new Object[objects.length - 1];
-         if (i > 0){
+         if (i > 0) {
                System.arraycopy(objects, 0, newObjects, 0, i);
          }
-         if (newObjects.length > i){
+         if (newObjects.length > i) {
           System.arraycopy(objects, i + 1, newObjects, i, newObjects.length - i);
          }
          return newObjects;

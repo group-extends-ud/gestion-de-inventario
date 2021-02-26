@@ -37,7 +37,7 @@ public class BackController {
         controller = new BackController(args[0], args[1]);
     }
 
-    public static Cliente getCliente(String nombre) {
+    public static Producto getProducto(Integer id) {
         //por implementar
         return null;
     }
@@ -54,7 +54,7 @@ public class BackController {
 
     }
 
-    public void Producto(Producto producto) throws SQLException {
+    public void Producto(Producto producto) throws SQLException, ParseException {
 
         database.insert(DatabaseController.Table.PRODUCTO, producto);
 
@@ -82,7 +82,7 @@ public class BackController {
 
     }
 
-    public void Cliente(Cliente cliente) throws SQLException {
+    public void Cliente(Cliente cliente) throws SQLException, ParseException {
 
         database.insert(DatabaseController.Table.CLIENTE, cliente);
 
@@ -112,7 +112,7 @@ public class BackController {
 
     }
 
-    public void Usuario(Usuario usuario) throws SQLException {
+    public void Usuario(Usuario usuario) throws SQLException, ParseException {
 
         database.insert(DatabaseController.Table.USUARIO, usuario);
 
@@ -142,10 +142,8 @@ public class BackController {
 
     }
 
-    public void Factura(Factura factura) throws SQLException {
-
-        database.insert(DatabaseController.Table.FACTURA, factura);
-
+    public static void insert(Factura factura) throws SQLException, ParseException {
+        controller.database.insert(DatabaseController.Table.FACTURA, factura);
     }
 
     public void updateFactura(Factura factura) throws SQLException {
@@ -153,7 +151,7 @@ public class BackController {
 
     }
 
-    public void deleteFactura(String id) throws SQLException {
+    public void deleteFactura(int id) throws SQLException {
 
         database.delete(DatabaseController.Table.FACTURA, id);
 
@@ -171,7 +169,7 @@ public class BackController {
 
     }
 
-    public void FacturaProducto(FacturaProducto facturaProducto) throws SQLException {
+    public void FacturaProducto(FacturaProducto facturaProducto) throws SQLException, ParseException {
 
         database.insert(DatabaseController.Table.FACTURAPRODUCTO, facturaProducto);
 
@@ -189,13 +187,116 @@ public class BackController {
 
     }
 
+    private boolean productosFaltantes(Producto producto) throws SQLException, ParseException {
+
+        return producto.getStock() <= producto.getStockMinimo();
+    }
+
+    public ArrayList<Producto> getProductosFaltantes() throws SQLException, ParseException {
+
+        ArrayList<Producto> productos = Producto();
+
+        ArrayList<Producto> faltantes = new ArrayList<Producto>();
+
+        for(Producto producto : productos) {
+            if(productosFaltantes(producto)) faltantes.add(producto);
+        }
+
+        return faltantes;
+
+    }
+
+    public static Object[] getProductoMasVendido() throws SQLException, ParseException {
+
+        ArrayList<Producto> productos = controller.Producto();
+
+        Producto producto = productos.get(0);
+
+        int[][] comparables = new int[productos.size()][2];
+
+        for(int i = 0; i < productos.size(); ++i) {
+            comparables[i][0] = productos.get(i).getIdproducto();
+            comparables[i][1] = 0;
+        }
+
+        ArrayList<Factura> facturas = controller.Factura();
+
+        for(Factura factura : facturas) {
+            for(int i = 0; i < factura.getItems().size(); ++i) {
+                for(int j = 0; j < productos.size(); ++j) {
+                    if(comparables[j][0] == factura.getItems().get(i).getProducto().getIdproducto()) {
+                        comparables[j][1] += factura.getItems().get(i).getCantidad();
+                    }
+                }
+            }
+        }
+
+        Object[] respuesta = new Object[2];
+        respuesta[1] = comparables[0][1];
+
+        for(int i = 0; i < productos.size() - 1; ++i) {
+            if(comparables[i][1] < comparables[i + 1][1]) {
+                producto = productos.get(i + 1);
+                respuesta[1] = comparables[i + 1][1];
+            }
+        }
+
+        respuesta[0] = producto;
+
+
+        return respuesta;
+
+    }
+
+    public static Object[] getProductoMenosVendido() throws SQLException, ParseException {
+
+        ArrayList<Producto> productos = controller.Producto();
+
+        Producto producto = productos.get(0);
+
+        int[][] comparables = new int[productos.size()][2];
+
+        for(int i = 0; i < productos.size(); ++i) {
+            comparables[i][0] = productos.get(i).getIdproducto();
+            comparables[i][1] = 0;
+        }
+
+        ArrayList<Factura> facturas = controller.Factura();
+
+        for(Factura factura : facturas) {
+            for(int i = 0; i < factura.getItems().size(); ++i) {
+                for(int j = 0; j < productos.size(); ++j) {
+                    if(comparables[j][0] == factura.getItems().get(i).getProducto().getIdproducto()) {
+                        comparables[j][1] += factura.getItems().get(i).getCantidad();
+                    }
+                }
+            }
+        }
+
+        Object[] respuesta = new Object[2];
+        respuesta[1] = comparables[0][1];
+
+        for(int i = 0; i < productos.size() - 1; ++i) {
+            if(comparables[i][1] > comparables[i + 1][1]) {
+                producto = productos.get(i + 1);
+                respuesta[1] = comparables[i + 1][1];
+            }
+        }
+
+        respuesta[0] = producto;
+
+
+        return respuesta;
+
+    }
+
     public static Usuario validarIngreso(String userName, String password) throws SQLException, ParseException {
 
         return (getPassword(userName, password)) ? controller.Usuario(userName) : null;
 
     }
 
-    public static void insertarProducto(String nombre, Double precio, int stock, int stockMinimo) throws SQLException {
+    public static void insertarProducto(String nombre, Double precio, int stock, int stockMinimo) throws SQLException, ParseException {
         controller.Producto(new Producto(null, nombre, precio, stock, stockMinimo));
     }
 
@@ -219,12 +320,6 @@ public class BackController {
     public static int getStock(int idProducto) throws SQLException, ParseException {
 
         return controller.Producto(idProducto).getStock();
-
-    }
-
-    public static void insertarMovimiento(String idProducto, int cantidad) {
-
-        // controller.Factura();
 
     }
 
@@ -511,7 +606,7 @@ class DatabaseController {
 
     }
 
-    public void insert(Table table, General general) throws SQLException {
+    public void insert(Table table, General general) throws SQLException, ParseException {
 
         ResultSet response = switch (table) {
 
@@ -522,10 +617,15 @@ class DatabaseController {
                     general.toArray());
 
             case FACTURA -> {
-                database.insert(Factura.class.getSimpleName(), Factura.toArrayAtributes(),
+                ResultSet data = database.insert(Factura.class.getSimpleName(), Factura.toArrayAtributes(),
                     general.toArray());
 
+                Factura factura = null;
+
+                factura = BuildModels.<Factura>BuildOne(Table.FACTURA, data);
+
                 for(FacturaProducto item : ((Factura)general).getItems()) {
+                    item.setFactura(factura.getIdfactura());
                     insert(Table.FACTURAPRODUCTO, item);
                 }
 
@@ -636,7 +736,7 @@ class DatabaseController {
                         yield new Producto(
                             response.getInt(atributes[0]),
                             response.getString(atributes[1]),
-                            Double.valueOf(response.getString(atributes[2])),
+                            toDouble(response.getString(atributes[2])),
                             response.getInt(atributes[3]),
                             response.getInt(atributes[4])
                         );
@@ -658,7 +758,6 @@ class DatabaseController {
 
                         yield new FacturaProducto(
                             response.getInt(atributes[0]),
-                            BackController.toBigDecimal(response.getString(atributes[1])),
                             null,
                             producto
                         );
@@ -737,10 +836,8 @@ class DatabaseController {
 
                         yield new FacturaProducto(
                             response.getInt(atributes[0]),
-                            BackController.toBigDecimal(response.getString(atributes[1])),
                             null,
                             producto
-                            
                         );
                     }
         

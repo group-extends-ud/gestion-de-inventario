@@ -95,15 +95,15 @@ ALTER TABLE Usuario ADD CONSTRAINT PK_Usuario
 /* Create Foreign Key Constraints */
 
 ALTER TABLE Factura ADD CONSTRAINT FK_Factura_Cliente
-	FOREIGN KEY (IDCliente) REFERENCES Cliente (IDCliente) ON DELETE No Action ON UPDATE No Action
+	FOREIGN KEY (IDCliente) REFERENCES Cliente (IDCliente) ON DELETE CASCADE ON UPDATE CASCADE
 ;
 
 ALTER TABLE FacturaProducto ADD CONSTRAINT FK_FacturaProducto_Factura
-	FOREIGN KEY (IDFactura) REFERENCES Factura (IDFactura) ON DELETE No Action ON UPDATE No Action
+	FOREIGN KEY (IDFactura) REFERENCES Factura (IDFactura) ON DELETE CASCADE ON UPDATE CASCADE
 ;
 
 ALTER TABLE FacturaProducto ADD CONSTRAINT FK_FacturaProducto_Producto
-	FOREIGN KEY (IDProducto) REFERENCES Producto (IDProducto) ON DELETE No Action ON UPDATE No Action
+	FOREIGN KEY (IDProducto) REFERENCES Producto (IDProducto) ON DELETE CASCADE ON UPDATE CASCADE
 ;
 
 /* Create Table Comments, Sequences for Autonumber Columns */
@@ -127,3 +127,40 @@ COMMENT ON TABLE Producto
 COMMENT ON TABLE Cliente
 	IS 'Tabla que almacena los usuarios Empleado o Administrador de la tienda'
 ;
+
+/* Create Triggers */
+
+CREATE OR REPLACE FUNCTION updateStock() RETURNS TRIGGER AS $update_stock$
+    DECLARE
+        newCantidad int;
+	BEGIN
+	    SELECT stock FROM Producto WHERE IDProducto = NEW.IDProducto INTO newCantidad;
+	    UPDATE Producto SET Stock = newCantidad - NEW.Cantidad WHERE IDProducto = NEW.IDProducto;
+
+        RETURN NULL;
+    END;
+$update_stock$ LANGUAGE plpgsql;
+
+CREATE TRIGGER updateStock
+    AFTER INSERT ON FacturaProducto
+    FOR EACH ROW EXECUTE PROCEDURE updateStock();
+
+CREATE OR REPLACE FUNCTION deleteFactura() RETURNS TRIGGER AS $remove_factura$
+    DECLARE
+        items int;
+        id int;
+    BEGIN
+        FOR id IN SELECT idfactura FROM Factura
+            LOOP
+                SELECT COUNT(*) FROM FacturaProducto WHERE idFactura = id INTO items;
+                IF items = 0 THEN
+                    DELETE FROM Factura WHERE IDFactura = id;
+                END IF;
+        END LOOP;
+        RETURN NULL;
+    END;
+$remove_factura$ LANGUAGE plpgsql;
+
+CREATE TRIGGER deleteFactura
+    AFTER DELETE ON Producto
+    FOR EACH ROW EXECUTE PROCEDURE deleteFactura();

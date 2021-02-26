@@ -12,8 +12,6 @@ public class Main {
 
         BackController.init(args);
 
-        BackController.controller.jsonAll();
-
 	    Controller.init();
     }
 }
