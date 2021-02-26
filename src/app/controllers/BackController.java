@@ -223,10 +223,10 @@ public class BackController {
 
         for(Factura factura : facturas) {
             for(int i = 0; i < factura.getItems().size(); ++i) {
-                if(comparables[i][0] == factura.getItems().get(i).getProducto().getIdproducto()) {
-                    comparables[i][1] += factura.getItems().get(i).getCantidad();
-                    System.out.println(factura.getItems().get(i).getProducto().getIdproducto());
-                    System.out.println(factura.getItems().get(i).getCantidad());
+                for(int j = 0; j < productos.size(); ++i) {
+                    if(comparables[j][0] == factura.getItems().get(i).getProducto().getIdproducto()) {
+                        comparables[j][1] += factura.getItems().get(i).getCantidad();
+                    }
                 }
             }
         }
