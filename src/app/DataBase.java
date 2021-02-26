@@ -105,7 +105,7 @@ public class DataBase {
 
     public ResultSet getRelation(String table, int idFactura)throws SQLException {
 
-        String query = "SELECT * FROM " + table + " WHERE " + this.getIDFacturaProducto()[0] + ';';
+        String query = "SELECT * FROM " + table + " WHERE " + this.getIDFacturaProducto()[0] + " ORDER BY " + this.getIDTableIndex(table) + " asc;";
 
         Object[] elements = { idFactura };
 
@@ -223,7 +223,7 @@ public class DataBase {
 
             case "Producto" -> "idproducto";
 
-            case "Factura" -> "idfactura";
+            case "Factura", "FacturaProducto" -> "idfactura";
 
             case "Usuario" -> "username";
 
