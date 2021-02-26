@@ -50,7 +50,7 @@ public class FacturaProducto extends General {
     @Override
     public Object[] toArray() {
 
-        Object[] objects = { cantidad, valor, idfactura, idproducto.getIdproducto() };
+        Object[] objects = { cantidad, new BigDecimal(valor), idfactura, idproducto.getIdproducto() };
 
         return objects;
 

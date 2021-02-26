@@ -37,11 +37,6 @@ public class BackController {
         controller = new BackController(args[0], args[1]);
     }
 
-    public static Cliente getCliente(String nombre) {
-        //por implementar
-        return null;
-    }
-
     public static Producto getProducto(Integer id) {
         //por implementar
         return null;
@@ -617,7 +612,6 @@ class DatabaseController {
 
                 for(FacturaProducto item : ((Factura)general).getItems()) {
                     item.setFactura(factura.getIdfactura());
-                    System.out.println(item.getFactura());
                     insert(Table.FACTURAPRODUCTO, item);
                 }
 

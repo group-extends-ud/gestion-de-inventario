@@ -315,7 +315,7 @@ public class View {
             if (!tfCliente.getText().isEmpty() && !tfCantidad.getText().isEmpty() && !tfCostoUnitario.getText().isEmpty()
                     && !tfCostoTotal.getText().isEmpty()) {
                 try {
-                    Cliente cliente = BackController.getCliente(tfCliente.getText());
+                    Cliente cliente = BackController.controller.Cliente(Integer.parseInt(tfCliente.getText()));
                     BackController.controller.updateFactura(new Factura(id, Date.from(Instant.now()), cliente, productos));
                     actualizar();
                 } catch (Exception throwables) {
@@ -519,7 +519,7 @@ public class View {
         btConfirm.addActionListener((e) -> {
             try {
                 if(finalPrecioTotal >0.0) {
-                    BackController.insert(new Factura(null, Date.from(Instant.now()), BackController.getCliente(tfCliente.getText()), carrito));
+                    BackController.insert(new Factura(-1, null, BackController.controller.Cliente(Integer.parseInt(tfCliente.getText())), carrito));
                     carrito.clear();
                     actualizar();
                 }
