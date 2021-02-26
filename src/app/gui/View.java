@@ -451,13 +451,13 @@ public class View {
 
         VentanaEmergente ventana = new VentanaEmergente(Controller.controller, 450, 300);
 
-        SLabel lInsertar = new SLabel(32, 32, 400, 40, "Quedan pocos en stock de:");
+        SLabel lInsertar = new SLabel(32, 32, 250, 40, "Quedan pocos en stock de:");
         ventana.add(lInsertar);
 
         SLabel lNombre = new SLabel(64, 64, 168, 28, "Nombre:");
         ventana.add(lNombre);
 
-        SLabel tfNombre = new SLabel(200, 62, 100, 32, faltante.getNombre());
+        SLabel tfNombre = new SLabel(200, 62, 400, 32, faltante.getNombre());
         ventana.add(tfNombre);
 
         SLabel lPrecio = new SLabel(64, 104, 168, 28, "Precio:");
