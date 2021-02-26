@@ -146,6 +146,12 @@ public class View {
             pInventario.setSize(pInventario.getWidth(), 598);
         }
         pInventario.repaint();
+
+        //pEstadistica
+        pEstadistica.removeAll();
+        SButton prueba = new SButton(32, 32, 68, 28, "Holiwis");
+        pEstadistica.add(prueba);
+        pEstadistica.repaint();
     }
 
     public void addItem() {
@@ -202,6 +208,10 @@ public class View {
         ventana.add(btClose);
 
         ventana.lanzar();
+    }
+
+    public void avisar() {
+
     }
 
     public void addFactura() throws SQLException, ParseException {
