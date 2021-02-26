@@ -195,7 +195,7 @@ public class BackController {
 
     }
 
-    public static void insertarProducto(String nombre, Double precio, int stock, int stockMinimo) throws SQLException {
+    public static void insertarProducto(String nombre, Double precio, int stock, int stockMinimo) throws SQLException, ParseException {
         controller.Producto(new Producto(null, nombre, precio, stock, stockMinimo));
     }
 
