@@ -193,10 +193,13 @@ public class View {
         }
         pInventario.repaint();
 
+        Object[] mas = BackController.getProductoMasVendido();
+        Object[] menos = BackController.getProductoMenosVendido();
+
         //pEstadistica
         pEstadistica.removeAll();
-        SLabel masVendido = new SLabel(32, 32, 500, 28, "Producto más vendido: " + BackController.getProductoMasVendido().getNombre());
-        SLabel menosVendido = new SLabel(32, 60, 500, 28, "Producto menos vendido: " + BackController.getProductoMenosVendido().getNombre());
+        SLabel masVendido = new SLabel(32, 32, 500, 28, "Producto más vendido " + ((Producto)mas[0]).getNombre() + " con un total de " + mas[1]);
+        SLabel menosVendido = new SLabel(32, 60, 500, 28, "Producto menos vendido " + ((Producto)menos[0]).getNombre() + " con un total de " + menos[1]);
         pEstadistica.add(masVendido);
         pEstadistica.add(menosVendido);
         pEstadistica.repaint();
