@@ -87,7 +87,7 @@ public class DataBase {
 
     public ResultSet getAll(String table) throws SQLException {
 
-        String query = "SELECT * FROM " + table + ';';
+        String query = "SELECT * FROM " + table + " ORDER BY " + this.getIDTableIndex(table) + " asc;";
 
         return this.query(query);
 
@@ -208,6 +208,24 @@ public class DataBase {
             case "Factura" -> "idfactura = ?";
 
             case "Usuario" -> "username = ?";
+
+            default -> throw new IllegalArgumentException("Unexpected value: " + table);
+
+        };
+
+    }
+
+    private String getIDTableIndex(String table) {
+
+        return switch(table) {
+
+            case "Cliente" -> "idcliente";
+
+            case "Producto" -> "idproducto";
+
+            case "Factura" -> "idfactura";
+
+            case "Usuario" -> "username";
 
             default -> throw new IllegalArgumentException("Unexpected value: " + table);
 
