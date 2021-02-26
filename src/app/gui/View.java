@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 
+import static lib.sRAD.gui.component.Resource.LSS;
 import static lib.sRAD.gui.component.Resource.WSFS;
 import static lib.sRAD.logic.Extension.*;
 
@@ -88,10 +89,10 @@ public class View {
         pFactura.removeAll();
         ArrayList<Factura> facturas = BackController.controller.Factura();
         if (!facturas.isEmpty() && facturas.get(0)!=null) {
-            SLabel lID = new SLabel(32, 32, 68, 28, "ID", WSFS);
-            SLabel lNombre = new SLabel(100, 32, 250, 28, "Cliente", WSFS);
-            SLabel lPrecio = new SLabel(350, 32, 150, 28, "Precio Total", WSFS);
-            SLabel lStock = new SLabel(550, 32, 100, 28, "Fecha", WSFS);
+            SLabel lID = new SLabel(32, 32, 68, 28, "ID", LSS);
+            SLabel lNombre = new SLabel(100, 32, 250, 28, "Cliente", LSS);
+            SLabel lPrecio = new SLabel(350, 32, 150, 28, "Precio Total", LSS);
+            SLabel lStock = new SLabel(550, 32, 100, 28, "Fecha", LSS);
             pFactura.add(lID);
             pFactura.add(lNombre);
             pFactura.add(lPrecio);
@@ -130,11 +131,11 @@ public class View {
         ArrayList<Producto> productos = BackController.controller.Producto();
         if (productos != null && !productos.isEmpty()) {
             //encabezado
-            SLabel lID = new SLabel(32, 32, 68, 28, "ID", WSFS);
-            SLabel lNombre = new SLabel(100, 32, 250, 28, "Nombre", WSFS);
-            SLabel lPrecio = new SLabel(350, 32, 100, 28, "Precio", WSFS);
-            SLabel lStock = new SLabel(500, 32, 70, 28, "Stock", WSFS);
-            SLabel lStockMinimo = new SLabel(630, 32, 200, 28, "Stock Minimo", WSFS);
+            SLabel lID = new SLabel(32, 32, 68, 28, "ID", LSS);
+            SLabel lNombre = new SLabel(100, 32, 250, 28, "Nombre", LSS);
+            SLabel lPrecio = new SLabel(350, 32, 100, 28, "Precio", LSS);
+            SLabel lStock = new SLabel(500, 32, 70, 28, "Stock", LSS);
+            SLabel lStockMinimo = new SLabel(630, 32, 200, 28, "Stock Minimo", LSS);
             pInventario.add(lID);
             pInventario.add(lNombre);
             pInventario.add(lPrecio);
