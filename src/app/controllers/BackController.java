@@ -223,6 +223,7 @@ public class BackController {
 
         for(Factura factura : facturas) {
             for(int i = 0; i < factura.getItems().size(); ++i) {
+                System.out.println(factura.getItems().size());
                 if(comparables[i][0] == factura.getItems().get(i).getProducto().getIdproducto()) {
                     comparables[i][1] += factura.getItems().get(i).getCantidad();
                 }
